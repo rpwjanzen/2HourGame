@@ -84,10 +84,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Island.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Ship.cs" />
+    <Compile Include="ShipMover.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
