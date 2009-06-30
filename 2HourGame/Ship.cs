@@ -18,6 +18,23 @@ namespace _2HourGame {
 
     public Ship(Game game) : base(game) { }
 
+    public void Offset(float dx, float dy) {
+      this.Position = new Vector2(this.Position.X + dx, this.Position.Y + dy);
+    }
+
+    public void Offset(Vector2 o) {
+      this.Position += o;
+    }
+
+    public void RotateRadians(float radians) {
+      this.Rotation += radians;
+      this.Rotation %= MathHelper.TwoPi;
+    }
+
+    public void RotateDegrees(float degrees) {
+      this.RotateRadians(MathHelper.ToRadians(degrees);
+    }
+
     protected override void LoadContent() {
       spriteBatch = new SpriteBatch(this.GraphicsDevice);
       shipTexture = this.Game.Content.Load<Texture2D>("Ship");

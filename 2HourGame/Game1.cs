@@ -21,6 +21,7 @@ namespace _2HourGame {
     public Game1() {
       graphics = new GraphicsDeviceManager(this);
       Content.RootDirectory = "Content";
+
     }
 
     /// <summary>
