@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2HourGame", "2HourGame.csproj", "{63975D81-1A03-4312-91B8-C3BFD22F3E54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63975D81-1A03-4312-91B8-C3BFD22F3E54}.Debug|x86.ActiveCfg = Debug|x86
+		{63975D81-1A03-4312-91B8-C3BFD22F3E54}.Debug|x86.Build.0 = Debug|x86
+		{63975D81-1A03-4312-91B8-C3BFD22F3E54}.Release|x86.ActiveCfg = Release|x86
+		{63975D81-1A03-4312-91B8-C3BFD22F3E54}.Release|x86.Build.0 = Release|x86
+		{27B644BF-79AB-4BE3-900D-9DD98DD81ABB}.Debug|x86.ActiveCfg = Debug|x86
+		{27B644BF-79AB-4BE3-900D-9DD98DD81ABB}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
