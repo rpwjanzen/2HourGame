@@ -20,7 +20,7 @@ namespace _2HourGame {
 
     protected override void LoadContent() {
       spriteBatch = new SpriteBatch(this.GraphicsDevice);
-      islandTexture = this.Game.Content.Load<Texture2D>("Island");
+      islandTexture = this.Game.Content.Load<Texture2D>("island");
       origin = new Vector2(islandTexture.Width / 2, islandTexture.Height / 2);
       base.LoadContent();
     }

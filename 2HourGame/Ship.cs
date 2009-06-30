@@ -37,7 +37,7 @@ namespace _2HourGame {
 
     protected override void LoadContent() {
       spriteBatch = new SpriteBatch(this.GraphicsDevice);
-      shipTexture = this.Game.Content.Load<Texture2D>("Ship");
+      shipTexture = this.Game.Content.Load<Texture2D>("boat");
       origin = new Vector2(shipTexture.Width / 2, shipTexture.Height / 2);
       base.LoadContent();
     }
