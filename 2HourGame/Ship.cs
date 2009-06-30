@@ -32,7 +32,7 @@ namespace _2HourGame {
     }
 
     public void RotateDegrees(float degrees) {
-      this.RotateRadians(MathHelper.ToRadians(degrees);
+      this.RotateRadians(MathHelper.ToRadians(degrees));
     }
 
     protected override void LoadContent() {

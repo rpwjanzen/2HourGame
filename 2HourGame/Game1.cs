@@ -20,8 +20,22 @@ namespace _2HourGame {
 
     public Game1() {
       graphics = new GraphicsDeviceManager(this);
+      graphics.PreferredBackBufferWidth = 1280;
+      graphics.PreferredBackBufferHeight = 720;
+
       Content.RootDirectory = "Content";
 
+
+      Ship playerOneShip = new Ship(this);
+      playerOneShip.Position = new Vector2(1280 / 4, 720 / 4);
+      this.Components.Add(playerOneShip);
+
+      Island playerOneIsland = new Island(this);
+      playerOneIsland.Position = new Vector2(1280 / 4, 720 / 4);
+      this.Components.Add(playerOneIsland);
+
+      ShipMover playerOneShipMover = new ShipMover(this, playerOneShip, PlayerIndex.One);
+      this.Components.Add(playerOneShipMover);
     }
 
     /// <summary>
