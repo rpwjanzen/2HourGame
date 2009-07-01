@@ -16,7 +16,9 @@ namespace _2HourGame {
     Texture2D shipTexture;
     Vector2 origin;
 
-    public Ship(Game game) : base(game) { }
+    public Ship(Game game) : base(game) {
+        Color = Color.White;
+    }
 
     public void Offset(float dx, float dy) {
       this.Position = new Vector2(this.Position.X + dx, this.Position.Y + dy);

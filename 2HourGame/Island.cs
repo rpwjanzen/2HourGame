@@ -16,7 +16,10 @@ namespace _2HourGame {
     SpriteBatch spriteBatch;
     Vector2 origin;
 
-    public Island(Game game) : base(game) { }
+    public Island(Game game) : base(game) 
+    {
+        this.Color = Color.White;
+    }
 
     protected override void LoadContent() {
       spriteBatch = new SpriteBatch(this.GraphicsDevice);

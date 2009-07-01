@@ -25,22 +25,32 @@ namespace _2HourGame {
 
       Content.RootDirectory = "Content";
 
+    }
 
-      Ship playerOneShip = new Ship(this);
-      playerOneShip.Position = new Vector2(1280 / 4, 720 / 4);
-      this.Components.Add(playerOneShip);
+    protected override void Initialize()
+    {
+        Ship playerOneShip = new Ship(this);
+        playerOneShip.Position = new Vector2((1280 / 4) + 150, (720 / 4) + 150);
+        this.Components.Add(playerOneShip);
 
-      Island playerOneIsland = new Island(this);
-      playerOneIsland.Position = new Vector2(1280 / 4, 720 / 4);
-      this.Components.Add(playerOneIsland);
+        Island playerOneIsland = new Island(this);
+        playerOneIsland.Position = new Vector2(1280 / 4, 720 / 4);
+        this.Components.Add(playerOneIsland);
 
-      ShipMover playerOneShipMover = new ShipMover(this, playerOneShip, PlayerIndex.One);
-      this.Components.Add(playerOneShipMover);
+        ShipMover playerOneShipMover = new ShipMover(this, playerOneShip, PlayerIndex.One);
+        this.Components.Add(playerOneShipMover);
+
+        base.Initialize();
     }
 
     protected override void Draw(GameTime gameTime) {
       this.GraphicsDevice.Clear(Color.CornflowerBlue);
       base.Draw(gameTime);
+    }
+
+    protected override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
     }
 
   }
