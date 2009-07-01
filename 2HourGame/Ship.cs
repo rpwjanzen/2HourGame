@@ -11,6 +11,7 @@ namespace _2HourGame {
     public Vector2 Position { get; set; }
     public float Rotation { get; set; }
     public float Radius { get; set; }
+    public float Speed { get; set; }
 
     SpriteBatch spriteBatch;
     Texture2D shipTexture;
