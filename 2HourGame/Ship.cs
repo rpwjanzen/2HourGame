@@ -35,11 +35,12 @@ namespace _2HourGame {
         }
 
         public void Offset(float dx, float dy) {
-            this.Position = new Vector2(this.Position.X + dx, this.Position.Y + dy);
+            this.Offset(new Vector2(dx, dy));
         }
 
         public void Offset(Vector2 o) {
             this.Position += o;
+            this.EnsureInBounds();
         }
 
         public void RotateRadians(float radians) {
@@ -49,6 +50,16 @@ namespace _2HourGame {
 
         public void RotateDegrees(float degrees) {
             this.RotateRadians(MathHelper.ToRadians(degrees));
+        }
+
+        void EnsureInBounds() {
+            float x = this.Position.X;
+            float y = this.Position.Y;
+            x = Math.Max(x, 0 + this.Bounds.Radius);
+            x = Math.Min(x, 1280 - this.Bounds.Radius);
+            y = Math.Max(y, 0 + this.Bounds.Radius);
+            y = Math.Min(y, 720 - this.Bounds.Radius);
+            this.Position = new Vector2(x, y);
         }
 
         protected override void LoadContent() {

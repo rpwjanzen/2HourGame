@@ -28,16 +28,6 @@ namespace _2HourGame {
             return a.Bounds.Intersects(b.Bounds);
         }
 
-        bool CollidesWithBorder(Ship s) {
-            // make a rectangle so we can simplify the detection part later
-            // position in ship is center-based, in Rectangle is upper-left corner based
-            Rectangle r = new Rectangle((int) (s.Position.X - s.Bounds.Radius), (int) (s.Position.Y - s.Bounds.Radius), (int) s.Bounds.Radius * 2, (int) s.Bounds.Radius * 2);
-            return r.Top < 0
-                || r.Bottom > 720
-                || r.Left < 0
-                || r.Right > 1280;
-        }
-
         protected override void LoadContent() {
             spriteBatch = new SpriteBatch(this.GraphicsDevice);
             boundingTexture = this.Game.Content.Load<Texture2D>("boundingCircle");
@@ -77,15 +67,6 @@ namespace _2HourGame {
                                 collidingObjects.Add(b);
                             }
                         }
-                    }
-                }
-            }
-            
-            // TODO ship <-> border collision
-            foreach (Ship s in ships) {
-                if (CollidesWithBorder(s)) {
-                    if (!collidingObjects.Contains(s)) {
-                        collidingObjects.Add(s);
                     }
                 }
             }
