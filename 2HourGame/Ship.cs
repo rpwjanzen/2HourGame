@@ -7,24 +7,31 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame {
     class Ship : DrawableGameComponent {
-        public Color Color { get; set; }
+        public Color Color { get; private set; }
         public Vector2 Position {
             get { return Bounds.Center; }
             private set { this.Bounds.Center = value; }
         }
-        public float Rotation { get; set; }
-        public float Speed { get; set; }
+        public float Rotation { get; private set; }
+        public float Speed { get; private set; }
         public BoundingCircle Bounds { get; private set; }
 
         SpriteBatch spriteBatch;
         Texture2D shipTexture;
         Vector2 origin;
+        float maxSpeed = 1f;
 
         public Ship(Game game, Vector2 position)
             : base(game) {
             Color = Color.White;
             this.Bounds = new BoundingCircle();
             this.Position = position;
+        }
+
+        public void Accelerate(float amount) {
+            this.Speed += amount;
+            this.Speed = Math.Min(this.Speed, maxSpeed);
+            this.Speed = this.Speed < 0 ? 0 : this.Speed;
         }
 
         public void Offset(float dx, float dy) {

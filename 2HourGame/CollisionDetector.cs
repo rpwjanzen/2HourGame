@@ -29,6 +29,8 @@ namespace _2HourGame {
         }
 
         bool CollidesWithBorder(Ship s) {
+            // make a rectangle so we can simplify the detection part later
+            // position in ship is center-based, in Rectangle is upper-left corner based
             Rectangle r = new Rectangle((int) (s.Position.X - s.Bounds.Radius), (int) (s.Position.Y - s.Bounds.Radius), (int) s.Bounds.Radius * 2, (int) s.Bounds.Radius * 2);
             return r.Top < 0
                 || r.Bottom > 720

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame {
-    class Island : DrawableGameComponent {
+    class House : DrawableGameComponent {
         public Color Color { get; private set; }
         public Vector2 Position {
             get { return Bounds.Center; }
@@ -19,7 +19,7 @@ namespace _2HourGame {
         SpriteBatch spriteBatch;
         Vector2 origin;
 
-        public Island(Game game, Vector2 position)
+        public House(Game game, Vector2 position)
             : base(game) {
             this.Color = Color.White;
             this.Bounds = new BoundingCircle();
@@ -28,7 +28,7 @@ namespace _2HourGame {
 
         protected override void LoadContent() {
             spriteBatch = new SpriteBatch(this.GraphicsDevice);
-            islandTexture = this.Game.Content.Load<Texture2D>("island");
+            islandTexture = this.Game.Content.Load<Texture2D>("house");
             origin = new Vector2(islandTexture.Width / 2, islandTexture.Height / 2);
             this.Bounds.Radius = Math.Max(origin.X, origin.Y);
             base.LoadContent();
