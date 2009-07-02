@@ -28,16 +28,17 @@ namespace _2HourGame {
         }
 
         protected override void Initialize() {
-            Ship playerOneShip = new Ship(this);
-            playerOneShip.Position = new Vector2((1280 / 4), (720 / 4) + 100);
+            Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100));
             this.Components.Add(playerOneShip);
 
-            Island playerOneIsland = new Island(this);
-            playerOneIsland.Position = new Vector2(1280 / 4 - 100, 720 / 4);
+            Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4));
             this.Components.Add(playerOneIsland);
 
             ShipMover playerOneShipMover = new ShipMover(this, playerOneShip, PlayerIndex.One);
             this.Components.Add(playerOneShipMover);
+
+            CollisionDetector collisionDetector = new CollisionDetector(this, new[] { playerOneIsland }, new[] { playerOneShip });
+            this.Components.Add(collisionDetector);
 
             base.Initialize();
         }

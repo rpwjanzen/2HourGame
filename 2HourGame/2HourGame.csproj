@@ -84,6 +84,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoundingCircle.cs" />
+    <Compile Include="CollisionDetector.cs" />
     <Compile Include="Island.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

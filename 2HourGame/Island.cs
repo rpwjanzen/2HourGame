@@ -8,23 +8,29 @@ using Microsoft.Xna.Framework.Graphics;
 namespace _2HourGame {
     class Island : DrawableGameComponent {
         public Color Color { get; set; }
-        public Vector2 Position { get; set; }
+        public Vector2 Position {
+            get { return Bounds.Center; }
+            private set { Bounds.Center = value; }
+        }
         public float Rotation { get; set; }
-        public float Radius { get; set; }
+        public BoundingCircle Bounds { get; private set; }
 
         Texture2D islandTexture;
         SpriteBatch spriteBatch;
         Vector2 origin;
 
-        public Island(Game game)
+        public Island(Game game, Vector2 position)
             : base(game) {
             this.Color = Color.White;
+            this.Bounds = new BoundingCircle();
+            this.Position = position;
         }
 
         protected override void LoadContent() {
             spriteBatch = new SpriteBatch(this.GraphicsDevice);
             islandTexture = this.Game.Content.Load<Texture2D>("island");
             origin = new Vector2(islandTexture.Width / 2, islandTexture.Height / 2);
+            this.Bounds.Radius = Math.Max(origin.X, origin.Y);
             base.LoadContent();
         }
 
