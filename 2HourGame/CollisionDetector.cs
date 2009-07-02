@@ -20,12 +20,20 @@ namespace _2HourGame {
             this.ships = ships;            
         }
 
-        public bool Collides(Island island, Ship ship) {
+        bool Collides(Island island, Ship ship) {
             return island.Bounds.Intersects(ship.Bounds);
         }
 
-        public bool Collides(Ship a, Ship b) {
+        bool Collides(Ship a, Ship b) {
             return a.Bounds.Intersects(b.Bounds);
+        }
+
+        bool CollidesWithBorder(Ship s) {
+            Rectangle r = new Rectangle((int) (s.Position.X - s.Bounds.Radius), (int) (s.Position.Y - s.Bounds.Radius), (int) s.Bounds.Radius * 2, (int) s.Bounds.Radius * 2);
+            return r.Top < 0
+                || r.Bottom > 720
+                || r.Left < 0
+                || r.Right > 1280;
         }
 
         protected override void LoadContent() {
@@ -72,7 +80,13 @@ namespace _2HourGame {
             }
             
             // TODO ship <-> border collision
-
+            foreach (Ship s in ships) {
+                if (CollidesWithBorder(s)) {
+                    if (!collidingObjects.Contains(s)) {
+                        collidingObjects.Add(s);
+                    }
+                }
+            }
             base.Update(gameTime);
         }
 
