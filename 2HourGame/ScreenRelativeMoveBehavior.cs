@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace _2HourGame {
-    class ScreenMoveShipBehavior {
+    class ScreenRelativeMoveBehavior {
         //float maxRotation = 0.01f;
         //float maxAcceleration = 0.01f;
         //float maxSpeed = 1f;

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace _2HourGame {
-    class FixedMoveShipBehavior {
+    class ShipRelativeMoveBehavior {
         float maxRotation = 0.01f;
         float maxAcceleration = 0.01f;
 

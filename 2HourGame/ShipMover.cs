@@ -10,7 +10,7 @@ namespace _2HourGame {
         Ship ship;
         PlayerIndex playerIndex;
 
-        FixedMoveShipBehavior moveShipBehavior = new FixedMoveShipBehavior();
+        ShipRelativeMoveBehavior moveShipBehavior = new ShipRelativeMoveBehavior();
 
         public ShipMover(Game game, Ship ship, PlayerIndex playerIndex)
             : base(game) {
