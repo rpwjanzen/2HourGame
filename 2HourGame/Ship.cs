@@ -6,26 +6,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame {
-    class Ship : DrawableGameComponent {
-        public Color Color { get; private set; }
-        public Vector2 Position {
-            get { return Bounds.Center; }
-            private set { this.Bounds.Center = value; }
-        }
-        public float Rotation { get; private set; }
+    class Ship : GameObject {
         public float Speed { get; private set; }
-        public BoundingCircle Bounds { get; private set; }
-
-        SpriteBatch spriteBatch;
-        Texture2D shipTexture;
-        Vector2 origin;
         float maxSpeed = 1f;
 
         public Ship(Game game, Vector2 position)
-            : base(game) {
-            Color = Color.White;
-            this.Bounds = new BoundingCircle();
-            this.Position = position;
+            : base(game, position, "boat", 0.6f) {
         }
 
         public void Accelerate(float amount) {
@@ -61,22 +47,5 @@ namespace _2HourGame {
             y = Math.Min(y, 720 - this.Bounds.Radius);
             this.Position = new Vector2(x, y);
         }
-
-        protected override void LoadContent() {
-            spriteBatch = new SpriteBatch(this.GraphicsDevice);
-            shipTexture = this.Game.Content.Load<Texture2D>("boat");
-            origin = new Vector2(shipTexture.Width / 2, shipTexture.Height / 2);
-            this.Bounds.Radius = Math.Max(origin.X, origin.Y);
-            base.LoadContent();
-        }
-
-        public override void Draw(GameTime gameTime) {
-            spriteBatch.Begin();
-            spriteBatch.Draw(shipTexture, Position, null, Color, Rotation, origin, 1.0f, SpriteEffects.None, 0);
-            spriteBatch.End();
-
-            base.Draw(gameTime);
-        }
-
     }
 }

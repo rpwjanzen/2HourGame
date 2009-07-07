@@ -15,9 +15,11 @@ namespace _2HourGame {
         Texture2D boundingTexture;
         Vector2 origin;
 
-        public CollisionDetector(Game game, IEnumerable<Island> islands, IEnumerable<Ship> ships) : base(game) {
+        public CollisionDetector(Game game, IEnumerable<Island> islands, IEnumerable<Ship> ships)
+            : base(game)
+        {
             this.islands = islands;
-            this.ships = ships;            
+            this.ships = ships;
         }
 
         bool Collides(Island island, Ship ship) {
@@ -41,36 +43,80 @@ namespace _2HourGame {
         public override void Update(GameTime gameTime) {
             collidingObjects.Clear();
 
-            // island <-> ship collisions
-            foreach (Island i in islands) {
-                foreach (Ship s in ships) {
-                    if (this.Collides(i, s)) {
-                        if (!collidingObjects.Contains(i)) {
-                            collidingObjects.Add(i);
+            //// ship <-> ship collisions
+            //foreach (Ship a in ships) {
+            //    foreach (Ship b in ships) {
+            //        if (a != b) {
+            //            if (this.Collides(a, b)) {
+            //                if (!collidingObjects.Contains(a)) {
+            //                    collidingObjects.Add(a);
+            //                }
+            //                if (!collidingObjects.Contains(b)) {
+            //                    collidingObjects.Add(b);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+
+            // ship <-> ship collisions
+            // this will prevent from checking the same collision twice
+            for (int i = 0; i < ships.Count() - 1; i++) 
+            {
+                for (int j = i + 1; j < ships.Count(); j++) 
+                {
+                    Ship a = ships.ElementAt(i);
+                    Ship b = ships.ElementAt(j);
+                    if (this.Collides(a, b)) 
+                    {
+                        if (!collidingObjects.Contains(a))
+                        {
+                            collidingObjects.Add(a);
                         }
-                        if (!collidingObjects.Contains(s)) {
-                            collidingObjects.Add(s);
+                        if (!collidingObjects.Contains(b))
+                        {
+                            collidingObjects.Add(b);
                         }
                     }
                 }
             }
 
-            // ship <-> ship collisions
-            foreach (Ship a in ships) {
-                foreach (Ship b in ships) {
-                    if (a != b) {
-                        if (this.Collides(a, b)) {
-                            if (!collidingObjects.Contains(a)) {
-                                collidingObjects.Add(a);
-                            }
-                            if (!collidingObjects.Contains(b)) {
-                                collidingObjects.Add(b);
-                            }
+            // island <-> ship collisions
+            foreach (Island i in islands)
+            {
+                foreach (Ship s in ships)
+                {
+                    if (this.Collides(i, s))
+                    {
+                        if (!collidingObjects.Contains(i))
+                        {
+                            collidingObjects.Add(i);
                         }
+                        if (!collidingObjects.Contains(s))
+                        {
+                            collidingObjects.Add(s);
+                        }
+
+                        // I threw this in here for now, could be refactored
+                        handleShipIslandCollision(s, i);
                     }
                 }
             }
+
             base.Update(gameTime);
+        }
+
+        private void handleShipIslandCollision(Ship s, Island i)
+        {
+            s.Offset(s.Bounds.DifferenceVector(i.Bounds));
+        }
+
+        private void handleShipShipCollision(Ship s, Ship s2)
+        {
+            Vector2 sOffset = s.Bounds.DifferenceVector(s2.Bounds) / 2;
+            Vector2 s2Offset = sOffset;
+            s2Offset.X = -s2Offset.X;
+            s2Offset.Y = -s2Offset.Y;
         }
 
         /// <summary>

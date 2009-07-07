@@ -12,5 +12,14 @@ namespace _2HourGame {
         public bool Intersects(BoundingCircle bc) {
             return (bc.Center - this.Center).Length() < bc.Radius + this.Radius;
         }
+
+        public Vector2 DifferenceVector(BoundingCircle bc) {
+            Vector2 differenceAngle = Center - bc.Center;
+
+            float overlap = (Radius + bc.Radius) - differenceAngle.Length();
+            differenceAngle.Normalize();
+
+            return differenceAngle * overlap;
+        }
     }
 }

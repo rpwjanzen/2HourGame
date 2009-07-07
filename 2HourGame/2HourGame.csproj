@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="BoundingCircle.cs" />
     <Compile Include="CollisionDetector.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="ShipRelativeMoveBehavior.cs" />
     <Compile Include="House.cs" />
     <Compile Include="Island.cs" />
