@@ -8,8 +8,15 @@ using Microsoft.Xna.Framework.Graphics;
 namespace _2HourGame {
     class Island : GameObject {
 
-        public Island(Game game, Vector2 position)
-            : base(game, position, "island", 1f) {
+        private GameObject islandBuilding;
+
+        public int gold;
+
+        public Island(Game game, Vector2 position, GameObject islandBuilding, SpriteBatch spriteBatch, int gold)
+            : base(game, position, "island", 1f, Color.White, spriteBatch)
+        {
+            this.islandBuilding = islandBuilding;
+            this.gold = gold;
         }
     }
 }

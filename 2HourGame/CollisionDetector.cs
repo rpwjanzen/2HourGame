@@ -15,6 +15,8 @@ namespace _2HourGame {
         Texture2D boundingTexture;
         Vector2 origin;
 
+        bool drawCollisionCircles = false;
+
         public CollisionDetector(Game game, IEnumerable<Island> islands, IEnumerable<Ship> ships)
             : base(game)
         {
@@ -124,19 +126,24 @@ namespace _2HourGame {
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Draw(GameTime gameTime) {
-            spriteBatch.Begin();
-            foreach (Island i in islands) {
-                float scale = i.Bounds.Radius / (boundingTexture.Width / 2);
-                Color color = (collidingObjects.Contains(i)) ? Color.Red : Color.White;
-                spriteBatch.Draw(boundingTexture, i.Position, null, color, 0.0f, origin, scale, SpriteEffects.None, 0);
-            }
+            if (drawCollisionCircles)
+            {
+                spriteBatch.Begin();
+                foreach (Island i in islands)
+                {
+                    float scale = i.Bounds.Radius / (boundingTexture.Width / 2);
+                    Color color = (collidingObjects.Contains(i)) ? Color.Red : Color.White;
+                    spriteBatch.Draw(boundingTexture, i.Position, null, color, 0.0f, origin, scale, SpriteEffects.None, 0);
+                }
 
-            foreach (Ship s in ships) {
-                float scale = s.Bounds.Radius / (boundingTexture.Width / 2);
-                Color color = (collidingObjects.Contains(s)) ? Color.Red : Color.White;
-                spriteBatch.Draw(boundingTexture, s.Position, null, color, 0.0f, origin, scale, SpriteEffects.None, 0);
+                foreach (Ship s in ships)
+                {
+                    float scale = s.Bounds.Radius / (boundingTexture.Width / 2);
+                    Color color = (collidingObjects.Contains(s)) ? Color.Red : Color.White;
+                    spriteBatch.Draw(boundingTexture, s.Position, null, color, 0.0f, origin, scale, SpriteEffects.None, 0);
+                }
+                spriteBatch.End();
             }
-            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

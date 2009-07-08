@@ -23,20 +23,23 @@ namespace _2HourGame
         Texture2D texture;
         Vector2 origin;
 
+        public float zIndex;
+
         string contentName;
 
-        public GameObject(Game game, Vector2 position, string contentName, float boundsMultiplyer)
+        public GameObject(Game game, Vector2 position, string contentName, float boundsMultiplyer, Color color, SpriteBatch spriteBatch)
             : base(game) {
-            this.Color = Color.White;
+            this.Color = color;
             this.Bounds = new BoundingCircle();
             this.Position = position;
             this.contentName = contentName;
             this.boundsMultiplyer = boundsMultiplyer;
+            this.spriteBatch = spriteBatch;
+            zIndex = 0;
         }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(this.GraphicsDevice);
             texture = this.Game.Content.Load<Texture2D>(contentName);
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
             this.Bounds.Radius = Math.Max(origin.X, origin.Y) * boundsMultiplyer;
@@ -45,9 +48,9 @@ namespace _2HourGame
 
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin();
-            spriteBatch.Draw(texture, Position, null, Color, Rotation, origin, 1.0f, SpriteEffects.None, 0);
-            spriteBatch.End();
+            //spriteBatch.Begin();
+            spriteBatch.Draw(texture, Position, null, Color, Rotation, origin, 1.0f, SpriteEffects.None, zIndex);
+            //spriteBatch.End();
             base.Draw(gameTime);
         }
     }
