@@ -9,7 +9,9 @@ namespace _2HourGame {
     class Ship : GameObject {
         public float Speed { get; private set; }
         float maxSpeed = 1f;
-        int maxGold = 5;
+        public int maxGold = 5;
+        public int gold = 0;
+
 
         public Ship(Game game, Vector2 position, SpriteBatch spriteBatch)
             : base(game, position, "boat", 0.6f, Color.White, spriteBatch) {

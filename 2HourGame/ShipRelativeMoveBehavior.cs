@@ -21,6 +21,7 @@ namespace _2HourGame {
             ship.Accelerate(magnitude);
 
             // move the ship
+            // TODO, Use Elapsed Game Time to move the ship relative to game time
             ship.Offset((float)Math.Cos(ship.Rotation - (0.5 * Math.PI)) * ship.Speed, (float)Math.Sin(ship.Rotation - (0.5 * Math.PI)) * ship.Speed);
         }
     }

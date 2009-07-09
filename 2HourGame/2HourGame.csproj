@@ -87,6 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoundingCircle.cs" />
+    <Compile Include="CannonBallManager.cs" />
+    <Compile Include="CanonBall.cs" />
     <Compile Include="CollisionDetector.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GoldView.cs" />

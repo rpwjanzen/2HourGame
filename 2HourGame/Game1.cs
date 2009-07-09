@@ -31,6 +31,8 @@ namespace _2HourGame {
         protected override void Initialize() {
             spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
+            CannonBallManager cannonBallManager = new CannonBallManager(this, 0.001f, spriteBatch);
+
             Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), spriteBatch);
             playerOneShip.zIndex = 0f;
             this.Components.Add(playerOneShip);
@@ -39,16 +41,16 @@ namespace _2HourGame {
             playerOneHouse.zIndex = 0.1f;
             this.Components.Add(playerOneHouse);
 
-            Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4), playerOneHouse, spriteBatch, 0);
+            Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4), playerOneHouse, spriteBatch, 0, playerOneShip);
             playerOneIsland.zIndex = 0.2f;
             this.Components.Add(playerOneIsland);
 
-            ShipMover playerOneShipMover = new ShipMover(this, playerOneShip, PlayerIndex.One);
-            this.Components.Add(playerOneShipMover);
-
-            Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), null, spriteBatch, 25);
+            Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), null, spriteBatch, 11, null);
             goldIsland.zIndex = 0.2f;
             this.Components.Add(goldIsland);
+
+            ShipMover playerOneShipMover = new ShipMover(this, playerOneShip, PlayerIndex.One, new[] { playerOneIsland, goldIsland });
+            this.Components.Add(playerOneShipMover);
 
             CollisionDetector collisionDetector = new CollisionDetector(this, new[] { playerOneIsland, goldIsland }, new[] { playerOneShip });
             this.Components.Add(collisionDetector);

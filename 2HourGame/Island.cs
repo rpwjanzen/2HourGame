@@ -11,12 +11,14 @@ namespace _2HourGame {
         private GameObject islandBuilding;
 
         public int gold;
+        public Ship shipThatOwnedThisIsland;
 
-        public Island(Game game, Vector2 position, GameObject islandBuilding, SpriteBatch spriteBatch, int gold)
+        public Island(Game game, Vector2 position, GameObject islandBuilding, SpriteBatch spriteBatch, int gold, Ship shipThatOwnedThisIsland)
             : base(game, position, "island", 1f, Color.White, spriteBatch)
         {
             this.islandBuilding = islandBuilding;
             this.gold = gold;
+            this.shipThatOwnedThisIsland = shipThatOwnedThisIsland;
         }
     }
 }
