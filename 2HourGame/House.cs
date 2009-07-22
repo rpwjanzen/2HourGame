@@ -9,11 +9,10 @@ namespace _2HourGame {
     class House : DrawableGameComponent {
         public Color Color { get; private set; }
         public Vector2 Position {
-            get { return Bounds.Center; }
-            private set { Bounds.Center = value; }
+            get { throw new NotImplementedException(); }
+            private set { throw new NotImplementedException(); }
         }
         public float Rotation { get; private set; }
-        public BoundingCircle Bounds { get; private set; }
 
         Texture2D islandTexture;
         SpriteBatch spriteBatch;
@@ -22,7 +21,6 @@ namespace _2HourGame {
         public House(Game game, Vector2 position)
             : base(game) {
             this.Color = Color.White;
-            this.Bounds = new BoundingCircle();
             this.Position = position;
         }
 
@@ -30,7 +28,7 @@ namespace _2HourGame {
             spriteBatch = new SpriteBatch(this.GraphicsDevice);
             islandTexture = this.Game.Content.Load<Texture2D>("house");
             origin = new Vector2(islandTexture.Width / 2, islandTexture.Height / 2);
-            this.Bounds.Radius = Math.Max(origin.X, origin.Y);
+            //this.Bounds.Radius = Math.Max(origin.X, origin.Y);
             base.LoadContent();
         }
 

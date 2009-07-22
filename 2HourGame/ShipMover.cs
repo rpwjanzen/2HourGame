@@ -26,7 +26,8 @@ namespace _2HourGame {
                 moveShipBehavior.MoveShip(gs, ship);
             }
                 // Not connected
-            else { }
+            else {
+            }
 
             base.Update(gameTime);
         }

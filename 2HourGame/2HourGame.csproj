@@ -86,9 +86,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoundingCircle.cs" />
-    <Compile Include="CollisionDetector.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="PhysicsComponent.cs" />
     <Compile Include="ShipRelativeMoveBehavior.cs" />
     <Compile Include="House.cs" />
     <Compile Include="Island.cs" />
@@ -98,6 +97,7 @@
     <Compile Include="ScreenRelativeMoveBehavior.cs" />
     <Compile Include="Ship.cs" />
     <Compile Include="ShipMover.cs" />
+    <Compile Include="WorldBorder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
@@ -145,6 +145,16 @@
       <ProductName>Microsoft XNA Framework Redistributable 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Farseer Physics 2.1 XNA\FarseerPhysicsXNA.csproj">
+      <Project>{3CA74E02-3210-4BF8-85E9-024E9AD6F18D}</Project>
+      <Name>FarseerPhysicsXNA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleSamplesXNA\SimpleSamplesXNA.csproj">
+      <Project>{F7E1D8C1-5AB0-42A9-9AFE-8F3EEEBF1307}</Project>
+      <Name>SimpleSamplesXNA</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+using FarseerGames.FarseerPhysics;
 
 namespace _2HourGame {
     /// <summary>
@@ -22,23 +23,26 @@ namespace _2HourGame {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
-
-            Content.RootDirectory = "Content";
-
         }
 
         protected override void Initialize() {
-            Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100));
+            PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
+
+            PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
+            physicsComponent.Debug = true;
+
+            var worldBorder = new WorldBorder(new Rectangle(0, 0, 1280, 720), physicsSimulator);
+
+            Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), physicsSimulator);
             this.Components.Add(playerOneShip);
 
-            Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4));
+            Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4), physicsSimulator);
             this.Components.Add(playerOneIsland);
 
             ShipMover playerOneShipMover = new ShipMover(this, playerOneShip, PlayerIndex.One);
             this.Components.Add(playerOneShipMover);
 
-            CollisionDetector collisionDetector = new CollisionDetector(this, new[] { playerOneIsland }, new[] { playerOneShip });
-            this.Components.Add(collisionDetector);
+            this.Components.Add(physicsComponent);
 
             base.Initialize();
         }
@@ -47,10 +51,5 @@ namespace _2HourGame {
             this.GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Draw(gameTime);
         }
-
-        protected override void Update(GameTime gameTime) {
-            base.Update(gameTime);
-        }
-
     }
 }

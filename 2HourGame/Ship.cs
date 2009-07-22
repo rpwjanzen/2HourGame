@@ -4,48 +4,28 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerGames.FarseerPhysics;
 
 namespace _2HourGame {
-    class Ship : GameObject {
-        public float Speed { get; private set; }
-        float maxSpeed = 1f;
+    class Ship : GameObject {        
+        public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator)
+            : base(game, position, "boat", 0.6f, physicsSimulator) {
+        }
 
-        public Ship(Game game, Vector2 position)
-            : base(game, position, "boat", 0.6f) {
+        public void Accelerate(Vector2 amount) {
+            base.Body.ApplyImpulse(amount);
         }
 
         public void Accelerate(float amount) {
-            this.Speed += amount;
-            this.Speed = Math.Min(this.Speed, maxSpeed);
-            this.Speed = this.Speed < 0 ? 0 : this.Speed;
+            // calculate vector along direction the object is facing
+            var bodyRotation = base.Body.GetBodyRotationMatrix();
+            var v = bodyRotation.Up * amount;
+
+            base.Body.ApplyImpulse(new Vector2(v.X, v.Y));
         }
 
-        public void Offset(float dx, float dy) {
-            this.Offset(new Vector2(dx, dy));
-        }
-
-        public void Offset(Vector2 o) {
-            this.Position += o;
-            this.EnsureInBounds();
-        }
-
-        public void RotateRadians(float radians) {
-            this.Rotation += radians;
-            this.Rotation %= MathHelper.TwoPi;
-        }
-
-        public void RotateDegrees(float degrees) {
-            this.RotateRadians(MathHelper.ToRadians(degrees));
-        }
-
-        void EnsureInBounds() {
-            float x = this.Position.X;
-            float y = this.Position.Y;
-            x = Math.Max(x, 0 + this.Bounds.Radius);
-            x = Math.Min(x, 1280 - this.Bounds.Radius);
-            y = Math.Max(y, 0 + this.Bounds.Radius);
-            y = Math.Min(y, 720 - this.Bounds.Radius);
-            this.Position = new Vector2(x, y);
+        public void Rotate(float amount) {
+            //base.Body.ApplyAngularImpulse(amount);
         }
     }
 }
