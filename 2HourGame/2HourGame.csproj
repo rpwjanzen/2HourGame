@@ -86,7 +86,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CannonBallManager.cs" />
+    <Compile Include="CanonBall.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="GoldView.cs" />
     <Compile Include="PhysicsComponent.cs" />
     <Compile Include="ShipRelativeMoveBehavior.cs" />
     <Compile Include="House.cs" />

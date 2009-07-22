@@ -8,8 +8,16 @@ using FarseerGames.FarseerPhysics;
 
 namespace _2HourGame {
     class Ship : GameObject {        
-        public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator)
-            : base(game, position, "boat", 0.6f, physicsSimulator) {
+		float maxSpeed = 1f;
+		public int maxGold = 5;
+		public int gold = 0;
+
+        public float Speed {
+            get { return base.Body.LinearVelocity.Length(); }
+        }
+
+        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
+            : base(game, position, "boat", 0.6f, Color.White, spriteBatch, physicsSimulator) {
         }
 
         public void Accelerate(Vector2 amount) {

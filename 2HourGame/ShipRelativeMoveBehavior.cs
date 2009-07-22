@@ -11,7 +11,7 @@ namespace _2HourGame {
         float maxAccelerationForce = 1.0f;
 
         public void MoveShip(GamePadState gs, Ship ship) {
-            // accelerate / decelerate
+          // accelerate / decelerate
             //float magnitude = gs.ThumbSticks.Left.Y * maxAccelerationForce;
             //ship.Accelerate(magnitude);
             var leftStick = gs.ThumbSticks.Left;
