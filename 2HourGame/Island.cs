@@ -33,5 +33,9 @@ namespace _2HourGame {
         public void RemoveGold() {
             this.Gold--;
         }
+
+        public void AddGold(int amount) {
+            this.Gold += amount;
+        }
     }
 }

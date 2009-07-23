@@ -10,7 +10,7 @@ namespace _2HourGame {
     class Ship : GameObject {        
         int GoldCapacity { get; set; }
         int Gold { get; set; }
-        float Speed {
+        public float Speed {
             get { return base.Body.LinearVelocity.Length(); }
         }
         
@@ -45,7 +45,8 @@ namespace _2HourGame {
         }
 
         public void Accelerate(Vector2 amount) {
-            base.Body.ApplyImpulse(amount);
+            var v = base.Body.GetBodyRotationMatrix().Forward;
+            base.Body.ApplyImpulse(amount * new Vector2(v.X, v.Y));
         }
 
         public void Accelerate(float amount) {
@@ -70,7 +71,7 @@ namespace _2HourGame {
         }
 
         public void UnloadGoldToIsland(Island island) {
-            island.Gold += this.Gold;
+            island.AddGold(this.Gold);
             this.Gold = 0;
         }
 

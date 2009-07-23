@@ -13,10 +13,8 @@ namespace _2HourGame {
         ShipRelativeMoveBehavior moveShipBehavior = new ShipRelativeMoveBehavior();
 
         IEnumerable<Island> islands;
-        TimeSpan goldTimer;
         Island goldIsland;
         float goldIslandMinimumRange;
-        float goldPickupWaitSeconds;
 
         public ShipMover(Game game, Ship ship, PlayerIndex playerIndex, IEnumerable<Island> islands)
             : base(game) {
@@ -25,7 +23,6 @@ namespace _2HourGame {
             this.islands = islands;
             goldIsland = null;
             goldIslandMinimumRange = 50;
-            goldPickupWaitSeconds = 2;
         }
 
         public override void Update(GameTime gameTime) {
@@ -39,7 +36,7 @@ namespace _2HourGame {
                     Island closestInRangeIsland = GetClosestInRangeIsland();
                     if (closestInRangeIsland != null) {
                         if (closestInRangeIsland == ship.HomeIsland) {
-                            ship.UnloadGoldToIsland(i);
+                            ship.UnloadGoldToIsland(closestInRangeIsland);
                         } else {
                             if (goldIsland == null) {
                                 if (closestInRangeIsland != null && closestInRangeIsland != ship.HomeIsland) {
