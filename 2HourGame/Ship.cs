@@ -45,8 +45,7 @@ namespace _2HourGame {
         }
 
         public void Accelerate(Vector2 amount) {
-            var v = base.Body.GetBodyRotationMatrix().Forward;
-            base.Body.ApplyImpulse(amount * new Vector2(v.X, v.Y));
+            base.Body.ApplyImpulse(amount);
         }
 
         public void Accelerate(float amount) {
