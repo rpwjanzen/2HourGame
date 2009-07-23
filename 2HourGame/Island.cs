@@ -7,7 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerGames.FarseerPhysics;
 
 namespace _2HourGame {
-    class Island : GameObject {
+    class Island : PhysicsGameObject
+    {
 
 		private GameObject islandBuilding;
 
@@ -16,8 +17,8 @@ namespace _2HourGame {
             get { return this.Gold > 0; }
         }
 
-        public Island(Game game, Vector2 position, GameObject islandBuilding, SpriteBatch spriteBatch, int initialGold, PhysicsSimulator physicsSimulator)
-            : base(game, position, "island", 1f, Color.White, spriteBatch, physicsSimulator) {
+        public Island(Game game, Vector2 position, GameObject islandBuilding, SpriteBatch spriteBatch, int initialGold, PhysicsSimulator physicsSimulator, EffectManager effectManager)
+            : base(game, position, "island", 1f, Color.White, spriteBatch, physicsSimulator, null, effectManager) {
 			this.islandBuilding = islandBuilding;
 			this.Gold = initialGold;
         }

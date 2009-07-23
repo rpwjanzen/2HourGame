@@ -16,13 +16,15 @@ namespace _2HourGame {
         Island goldIsland;
         float goldIslandMinimumRange;
 
+        // we need to be able to add 
+
         public ShipMover(Game game, Ship ship, PlayerIndex playerIndex, IEnumerable<Island> islands)
             : base(game) {
             this.ship = ship;
             this.playerIndex = playerIndex;
             this.islands = islands;
             goldIsland = null;
-            goldIslandMinimumRange = 50;
+            goldIslandMinimumRange = 100;
         }
 
         public override void Update(GameTime gameTime) {

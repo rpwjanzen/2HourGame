@@ -8,10 +8,11 @@ using FarseerGames.FarseerPhysics;
 
 namespace _2HourGame
 {
-    class CanonBall : GameObject
+    class CanonBall : PhysicsGameObject
     {
-        public CanonBall(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
-            : base(game, position, "cannonBall", 1f, Color.White, spriteBatch, physicsSimulator) {
+        public CanonBall(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, EffectManager effectManger)
+            : base(game, position, "cannonBall", 1f, Color.White, spriteBatch, physicsSimulator, null, effectManger)
+        {
         }
 
         protected override void LoadContent() {

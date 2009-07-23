@@ -28,6 +28,9 @@ namespace _2HourGame {
 
         protected override void Initialize() {
 			spriteBatch = new SpriteBatch(this.GraphicsDevice);
+
+            EffectManager effectManager = new EffectManager(this, spriteBatch);
+
 			CannonBallManager cannonBallManager = new CannonBallManager(this, 0.001f, spriteBatch);
 
             PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
@@ -35,21 +38,22 @@ namespace _2HourGame {
             PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
             physicsComponent.Debug = true;
 
-            GameObject playerOneHouse = new GameObject(this, new Vector2(1280 / 4 - 80, 720 / 4 + 20), "house", 1f, Color.Blue, spriteBatch, physicsSimulator);
+            GameObject playerOneHouse = new GameObject(this, new Vector2(1280 / 4 - 80, 720 / 4 + 20), "house", 1f, Color.Blue, spriteBatch, null, effectManager);
             playerOneHouse.zIndex = 0.1f;
             this.Components.Add(playerOneHouse);
 
             var worldBorder = new WorldBorder(new Rectangle(0, 0, 1280, 720), physicsSimulator);
 
-            Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4), playerOneHouse, spriteBatch, 0, physicsSimulator);
+            Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4), playerOneHouse, spriteBatch, 0, physicsSimulator, effectManager);
             playerOneIsland.zIndex = 0.2f;
             this.Components.Add(playerOneIsland);
 
-            Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), spriteBatch, physicsSimulator, playerOneIsland);
+            Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), spriteBatch, physicsSimulator, playerOneIsland, effectManager);
+            playerOneShip.zIndex = 0.01f;
             this.Components.Add(playerOneShip);
 
 
-            Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), playerOneHouse, spriteBatch, 11, physicsSimulator);
+            Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), playerOneHouse, spriteBatch, 11, physicsSimulator, effectManager);
             goldIsland.zIndex = 0.2f;
             this.Components.Add(goldIsland);
 
