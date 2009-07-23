@@ -43,22 +43,20 @@ namespace _2HourGame {
             this.Gold = 0;
             this.HomeIsland = homeIsland;
         }
-
-        public void Accelerate(Vector2 amount) {
-            base.Body.ApplyImpulse(amount);
+        
+        public void Thrust(float amount) {
+            //get the forward vector
+            Vector2 forward = new Vector2(-base.Body.GetBodyMatrix().Up.X, -base.Body.GetBodyMatrix().Up.Y);
+            var thrust = forward * amount;
+            base.Body.ApplyForceAtLocalPoint(thrust, Vector2.Zero);
         }
 
         public void Accelerate(float amount) {
-            // calculate vector along direction the object is facing
-            var bodyRotation = base.Body.GetBodyRotationMatrix();
-            var v = bodyRotation.Up * amount;
-
-            base.Body.ApplyImpulse(new Vector2(v.X, v.Y));
-            throw new NotImplementedException();
+            this.Thrust(amount);
         }
 
         public void Rotate(float amount) {
-            //base.Body.ApplyAngularImpulse(amount);
+            base.Body.ApplyTorque(amount);
         }
 
         public void LoadGoldFromIsland(Island island, GameTime now) {

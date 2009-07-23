@@ -21,10 +21,9 @@ namespace _2HourGame
         public Color Color { get; private set; }
         public Vector2 Position { get { return geometry.Position; } }
         float Rotation { get { return this.geometry.Rotation; } }
-        
-        private Body body;
-        protected Body Body { get { return this.body; } }
-        
+
+        public Body Body { get; private set; }
+        public float Radius { get; private set; }
 
         private float boundsMultiplyer;
 
@@ -51,15 +50,15 @@ namespace _2HourGame
         {
             texture = this.Game.Content.Load<Texture2D>(@"Content\" + contentName);
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
-            var radius = Math.Max(origin.X, origin.Y) * boundsMultiplyer;
+            this.Radius = Math.Max(origin.X, origin.Y) * boundsMultiplyer;
             
-            this.body = BodyFactory.Instance.CreateCircleBody(radius, 1.0f);
-            this.body.Position = this.InitialPosition;
-            body.RotationalDragCoefficient = 0.65f;
-            body.LinearDragCoefficient = 0.95f;
-            physicsSimulator.Add(this.body);
+            this.Body = BodyFactory.Instance.CreateCircleBody(this.Radius, 1.0f);
+            this.Body.Position = this.InitialPosition;
+            this.Body.LinearDragCoefficient = 0.95f;
+            this.Body.RotationalDragCoefficient = 10000.0f;
+            physicsSimulator.Add(this.Body);
 
-            this.geometry = GeomFactory.Instance.CreateCircleGeom(this.body, radius, 12);
+            this.geometry = GeomFactory.Instance.CreateCircleGeom(this.Body, this.Radius, 12);
             physicsSimulator.Add(geometry);
 
             base.LoadContent();
