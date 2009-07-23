@@ -20,12 +20,18 @@ namespace _2HourGame
         public Vector2 Position { get { return geometry.Position; } }
         float Rotation { get { return this.geometry.Rotation; } }
 
+<<<<<<< HEAD:2HourGame/GameObject.cs
         protected Geom geometry;
         protected Body body;
-        public Body Body { get { return this.body; } }
-        public float Radius { get; private set; }
+        protected Body Body { get { return this.body; } }
         
         protected float boundsMultiplyer;
+=======
+        public Body Body { get; private set; }
+        public float Radius { get; private set; }
+
+        private float boundsMultiplyer;
+>>>>>>> 8a9427791b802c676963b00110ef1089131cf2c5:2HourGame/GameObject.cs
 
         SpriteBatch spriteBatch;
         Texture2D texture;
@@ -68,14 +74,27 @@ namespace _2HourGame
         {
             texture = this.Game.Content.Load<Texture2D>(@"Content\" + contentName);
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
+<<<<<<< HEAD:2HourGame/GameObject.cs
+
+            var radius = Math.Max(origin.X, origin.Y) * boundsMultiplyer;
+
+            this.body = BodyFactory.Instance.CreateCircleBody(radius, 1.0f);
+            this.body.Position = this.InitialPosition;
+            body.RotationalDragCoefficient = 0.65f;
+            body.LinearDragCoefficient = 0.95f;
+            this.geometry = GeomFactory.Instance.CreateCircleGeom(this.body, radius, 12);
+=======
             this.Radius = Math.Max(origin.X, origin.Y) * boundsMultiplyer;
             
-            this.body = BodyFactory.Instance.CreateCircleBody(this.Radius, 1.0f);
-            this.body.Position = this.InitialPosition;
-            this.body.LinearDragCoefficient = 0.95f;
-            this.body.RotationalDragCoefficient = 10000.0f;
+            this.Body = BodyFactory.Instance.CreateCircleBody(this.Radius, 1.0f);
+            this.Body.Position = this.InitialPosition;
+            this.Body.LinearDragCoefficient = 0.95f;
+            this.Body.RotationalDragCoefficient = 10000.0f;
+            physicsSimulator.Add(this.Body);
 
             this.geometry = GeomFactory.Instance.CreateCircleGeom(this.Body, this.Radius, 12);
+            physicsSimulator.Add(geometry);
+>>>>>>> 8a9427791b802c676963b00110ef1089131cf2c5:2HourGame/GameObject.cs
 
             base.LoadContent();
         }
