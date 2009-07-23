@@ -41,14 +41,15 @@ namespace _2HourGame {
 
             var worldBorder = new WorldBorder(new Rectangle(0, 0, 1280, 720), physicsSimulator);
 
-            Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), spriteBatch, physicsSimulator);
-            this.Components.Add(playerOneShip);
-
-            Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4), playerOneHouse, spriteBatch, 0, playerOneShip, physicsSimulator);
-			playerOneIsland.zIndex = 0.2f;
+            Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4), playerOneHouse, spriteBatch, 0, physicsSimulator);
+            playerOneIsland.zIndex = 0.2f;
             this.Components.Add(playerOneIsland);
 
-            Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), playerOneHouse, spriteBatch, 11, playerOneShip, physicsSimulator);
+            Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), spriteBatch, physicsSimulator, playerOneIsland);
+            this.Components.Add(playerOneShip);
+
+
+            Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), playerOneHouse, spriteBatch, 11, physicsSimulator);
             goldIsland.zIndex = 0.2f;
             this.Components.Add(goldIsland);
 

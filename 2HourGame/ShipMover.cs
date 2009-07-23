@@ -36,24 +36,17 @@ namespace _2HourGame {
                     goldIsland = null;
                 if (gs.Buttons.B == ButtonState.Pressed && ship.Speed <= 0.15) 
                 {
-                    Island closestInRangeIsland = getClosestInRangeIsland();
+                    Island closestInRangeIsland = GetClosestInRangeIsland();
                     if (closestInRangeIsland != null) {
-                        if (closestInRangeIsland.shipThatOwnedThisIsland == ship) {
-                            closestInRangeIsland.Gold += ship.gold;
-                            ship.gold = 0;
+                        if (closestInRangeIsland == ship.HomeIsland) {
+                            ship.UnloadGoldToIsland(i);
                         } else {
                             if (goldIsland == null) {
-                                if (closestInRangeIsland != null && closestInRangeIsland.shipThatOwnedThisIsland != ship) {
-                                    goldTimer = gameTime.TotalGameTime;
+                                if (closestInRangeIsland != null && closestInRangeIsland != ship.HomeIsland) {
                                     goldIsland = closestInRangeIsland;
                                 }
-                            } else if (gameTime.TotalGameTime.TotalSeconds - goldTimer.TotalSeconds > 2 &&
-                                goldIsland == getClosestInRangeIsland() &&
-                                goldIsland.Gold > 0 &&
-                                ship.gold < ship.maxGold) {
-                                goldIsland.Gold--;
-                                ship.gold++;
-                                goldTimer = gameTime.TotalGameTime;
+                            } else if (goldIsland == GetClosestInRangeIsland()) {
+                                ship.LoadGoldFromIsland(goldIsland, gameTime);
                             }
                         }
                     }
@@ -71,7 +64,7 @@ namespace _2HourGame {
             base.Update(gameTime);
         }
 
-        private Island getClosestInRangeIsland() 
+        private Island GetClosestInRangeIsland() 
         {
             Island closestIsland = null;
             float closestIslandDistance = int.MaxValue;

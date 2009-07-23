@@ -8,16 +8,40 @@ using FarseerGames.FarseerPhysics;
 
 namespace _2HourGame {
     class Ship : GameObject {        
-		float maxSpeed = 1f;
-		public int maxGold = 5;
-		public int gold = 0;
-
-        public float Speed {
+        int GoldCapacity { get; set; }
+        int Gold { get; set; }
+        float Speed {
             get { return base.Body.LinearVelocity.Length(); }
         }
+        
+        readonly float MaximumGoldTransferSpeed = 0.15f;
+        bool CanTransferGold {
+            get { return this.Speed < MaximumGoldTransferSpeed; }
+        }
 
-        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
+        readonly int MinimumSecondsBetweenLoadingGold = 2;
+        GameTime LastGoldLoadTime = new GameTime();
+
+        public Island HomeIsland { get; private set; }
+        
+        public int TotalGold {
+            get { return HomeIsland.Gold + this.Gold; }
+        }
+        public int CarriedGold {
+            get { return this.Gold; }
+        }
+        private bool IsFull {
+            get { return this.Gold < this.GoldCapacity; }
+        }
+        private bool LoadCooldownHasExpired(GameTime now) {
+            return now.TotalGameTime.TotalSeconds - LastGoldLoadTime.TotalGameTime.TotalSeconds > MinimumSecondsBetweenLoadingGold;
+        }
+
+        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland)
             : base(game, position, "boat", 0.6f, Color.White, spriteBatch, physicsSimulator) {
+            this.GoldCapacity = 5;
+            this.Gold = 0;
+            this.HomeIsland = homeIsland;
         }
 
         public void Accelerate(Vector2 amount) {
@@ -30,10 +54,28 @@ namespace _2HourGame {
             var v = bodyRotation.Up * amount;
 
             base.Body.ApplyImpulse(new Vector2(v.X, v.Y));
+            throw new NotImplementedException();
         }
 
         public void Rotate(float amount) {
             //base.Body.ApplyAngularImpulse(amount);
+        }
+
+        public void LoadGoldFromIsland(Island island, GameTime now) {
+            if (island.HasGold && !this.IsFull && this.LoadCooldownHasExpired(now)) {
+                island.RemoveGold();
+                this.AddGold();
+                this.LastGoldLoadTime = now;
+            }
+        }
+
+        public void UnloadGoldToIsland(Island island) {
+            island.Gold += this.Gold;
+            this.Gold = 0;
+        }
+
+        private void AddGold() {
+            this.Gold++;
         }
     }
 }

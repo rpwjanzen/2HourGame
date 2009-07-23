@@ -11,24 +11,27 @@ namespace _2HourGame {
 
 		private GameObject islandBuilding;
 
-        private int gold;
-        public int Gold {
-            get { return gold; }
-            set { this.gold = value; }
+        public int Gold { get; private set; }
+        public bool HasGold {
+            get { return this.Gold > 0; }
         }
 
-		public Ship shipThatOwnedThisIsland;
-
-        public Island(Game game, Vector2 position, GameObject islandBuilding, SpriteBatch spriteBatch, int gold, Ship shipThatOwnedThisIsland, PhysicsSimulator physicsSimulator)
+        public Island(Game game, Vector2 position, GameObject islandBuilding, SpriteBatch spriteBatch, int initialGold, PhysicsSimulator physicsSimulator)
             : base(game, position, "island", 1f, Color.White, spriteBatch, physicsSimulator) {
 			this.islandBuilding = islandBuilding;
-			this.Gold = gold;
-			this.shipThatOwnedThisIsland = shipThatOwnedThisIsland;
+			this.Gold = initialGold;
         }
 
         protected override void LoadContent() {
             base.LoadContent();
             this.Body.IsStatic = true;
+        }
+
+        /// <summary>
+        /// Removes one gold from the island.
+        /// </summary>
+        public void RemoveGold() {
+            this.Gold--;
         }
     }
 }
