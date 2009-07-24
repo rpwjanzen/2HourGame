@@ -27,18 +27,19 @@ namespace _2HourGame {
         }
 
         protected override void Initialize() {
+
 			spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
 
-			CannonBallManager cannonBallManager = new CannonBallManager(this, 0.001f, spriteBatch);
+            CannonBallManager cannonBallManager = new CannonBallManager(this, 0.001f, spriteBatch);
 
             PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
 
             PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
             physicsComponent.Debug = true;
 
-            GameObject playerOneHouse = new GameObject(this, new Vector2(1280 / 4 - 80, 720 / 4 + 20), "house", 1f, Color.Blue, spriteBatch, null, effectManager, 0.1f);
+            GameObject playerOneHouse = new GameObject(this, new Vector2(1280 / 4 - 80, 720 / 4 + 20), "house", 1f, Color.Blue, spriteBatch, null, 0.1f);
 
             this.Components.Add(playerOneHouse);
 

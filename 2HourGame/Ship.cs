@@ -64,7 +64,7 @@ namespace _2HourGame {
                 island.RemoveGold();
                 this.AddGold();
                 this.LastGoldLoadTime = now.TotalGameTime;
-                effectManager.GoldPickupEffect(this);
+                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this);
             }
         }
 

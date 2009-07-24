@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame
 {
-    class EffectManager
+    class EffectManager : IEffectManager
     {
         Game game;
         SpriteBatch spriteBatch;
@@ -17,11 +17,12 @@ namespace _2HourGame
         public EffectManager(Game game, SpriteBatch spriteBatch) 
         {
             this.game = game;
+            game.Services.AddService(typeof(IEffectManager), this);
+
             this.spriteBatch = spriteBatch;
             textureInfos = new Dictionary<String, AnimatedTextureInfo>();
             
             textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, true));
-
         }
 
         public void GoldPickupEffect(Ship ship) 
@@ -29,7 +30,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("goldPickup", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, ship.Position, "goldGetAnimation", 1f, Color.White, spriteBatch, animTextInfo, this, 0f));
+                game.Components.Add(new GameObject(game, ship.Position, "goldGetAnimation", 1f, Color.White, spriteBatch, animTextInfo, 0f));
             }
         }
     }

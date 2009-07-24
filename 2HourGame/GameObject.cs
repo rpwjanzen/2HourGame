@@ -31,17 +31,14 @@ namespace _2HourGame
 
         string contentName;
 
-        protected EffectManager effectManager;
+        protected Game game;
 
-        Game game;
-
-        public GameObject(Game game, Vector2 initialPosition, string contentName, float boundsMultiplyer, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo
-            , EffectManager effectManager)
-            : this(game, initialPosition, contentName, boundsMultiplyer, color, spriteBatch, animatedTextureInfo, effectManager, 0) {
+        public GameObject(Game game, Vector2 initialPosition, string contentName, float boundsMultiplyer, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo)
+            : this(game, initialPosition, contentName, boundsMultiplyer, color, spriteBatch, animatedTextureInfo, 0) {
         }
 
         public GameObject(Game game, Vector2 initialPosition, string contentName, float boundsMultiplyer, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo
-            , EffectManager effectManager, float zIndex)
+            , float zIndex)
             : base(game)
         {
             this.game = game;
@@ -51,7 +48,6 @@ namespace _2HourGame
             this.boundsMultiplyer = boundsMultiplyer;
             this.spriteBatch = spriteBatch;
             this.animatedTextureInfo = animatedTextureInfo;
-            this.effectManager = effectManager;
             firstDraw = this.animatedTextureInfo != null ? true : false;
             this.ZIndex = zIndex;
         }
