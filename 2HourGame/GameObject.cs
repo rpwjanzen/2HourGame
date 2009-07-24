@@ -35,7 +35,7 @@ namespace _2HourGame
 
         protected Vector2 origin;
 
-        public float zIndex;
+        public float ZIndex { get; private set; }
 
         string contentName;
 
@@ -61,7 +61,7 @@ namespace _2HourGame
             this.animatedTextureInfo = animatedTextureInfo;
             this.effectManager = effectManager;
             firstDraw = this.animatedTextureInfo != null ? true : false;
-            this.zIndex = zIndex;
+            this.ZIndex = zIndex;
         }
 
         protected override void LoadContent()
@@ -108,12 +108,12 @@ namespace _2HourGame
 
                     Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
 
-                    spriteBatch.Draw(texture, Position, source, Color, Rotation, origin, animatedTextureInfo.scale, SpriteEffects.None, zIndex);
+                    spriteBatch.Draw(texture, Position, source, Color, Rotation, origin, animatedTextureInfo.scale, SpriteEffects.None, ZIndex);
                 }
             }
             else // regular sprite
             {
-                spriteBatch.Draw(texture, Position, null, Color, Rotation, origin, 1.0f, SpriteEffects.None, zIndex);
+                spriteBatch.Draw(texture, Position, null, Color, Rotation, origin, 1.0f, SpriteEffects.None, ZIndex);
             }
 
             base.Draw(gameTime);

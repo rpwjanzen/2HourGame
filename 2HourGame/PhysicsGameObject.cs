@@ -17,8 +17,8 @@ namespace _2HourGame
         PhysicsSimulator physicsSimulator;
 
         public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float boundsMultiplyer, Color color, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, AnimatedTextureInfo animatedTextureInfo
-            , EffectManager effectManger)
-            : base(game, initialPosition, contentName, boundsMultiplyer, color, spriteBatch, animatedTextureInfo, effectManger)
+            , EffectManager effectManger, float zIndex)
+            : base(game, initialPosition, contentName, boundsMultiplyer, color, spriteBatch, animatedTextureInfo, effectManger, zIndex)
         {
 
             this.physicsSimulator = physicsSimulator;
