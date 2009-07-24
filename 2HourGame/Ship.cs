@@ -36,8 +36,8 @@ namespace _2HourGame {
             return now.TotalGameTime.TotalSeconds - LastGoldLoadTime.TotalSeconds > MinimumSecondsBetweenLoadingGold;
         }
 
-        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, EffectManager effectManger, float zIndex)
-            : base(game, position, "boat", 0.6f, Color.White, spriteBatch, physicsSimulator, null, effectManger, zIndex)
+        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, float zIndex)
+            : base(game, position, "boat", 0.6f, Color.White, spriteBatch, physicsSimulator, null, zIndex)
         {
             this.GoldCapacity = 5;
             this.Gold = 0;
