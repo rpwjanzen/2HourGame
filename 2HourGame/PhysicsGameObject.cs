@@ -15,27 +15,34 @@ namespace _2HourGame
     class PhysicsGameObject : GameObject
     {
         PhysicsSimulator physicsSimulator;
+        Geom Geometry { get; set; }
+        public Body Body { get; private set; }
+        public float Speed {
+            get { return this.Body.LinearVelocity.Length(); }
+        }
+
+        public override Vector2 Position { get { return Geometry.Position; } }
+        public override float Rotation { get { return this.Geometry.Rotation; } }
 
         public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float boundsMultiplyer, Color color, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, AnimatedTextureInfo animatedTextureInfo
             , EffectManager effectManger, float zIndex)
             : base(game, initialPosition, contentName, boundsMultiplyer, color, spriteBatch, animatedTextureInfo, effectManger, zIndex)
         {
-
             this.physicsSimulator = physicsSimulator;
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
-            physicsSimulator.Add(this.body);
 
-            physicsSimulator.Add(geometry);
+            this.Body = BodyFactory.Instance.CreateCircleBody(this.Radius, 1.0f);
+            this.Body.Position = this.InitialPosition;
+            this.Body.LinearDragCoefficient = 0.95f;
+            this.Body.RotationalDragCoefficient = 10000.0f;
+            physicsSimulator.Add(this.Body);
 
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
+            this.Geometry = GeomFactory.Instance.CreateCircleGeom(this.Body, this.Radius, 12);
+            physicsSimulator.Add(Geometry);
         }
     }
 }

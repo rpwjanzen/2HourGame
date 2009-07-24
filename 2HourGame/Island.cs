@@ -25,7 +25,7 @@ namespace _2HourGame {
 
         protected override void LoadContent() {
             base.LoadContent();
-            this.Body.IsStatic = true;
+            base.Body.IsStatic = true;
         }
 
         /// <summary>

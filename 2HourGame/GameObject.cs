@@ -5,11 +5,6 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using FarseerGames.FarseerPhysics;
-using FarseerGames.FarseerPhysics.Collisions;
-using FarseerGames.FarseerPhysics.Dynamics;
-using FarseerGames.FarseerPhysics.Factories;
-
 namespace _2HourGame
 {
     class GameObject : DrawableGameComponent
@@ -17,12 +12,9 @@ namespace _2HourGame
         protected readonly Vector2 InitialPosition;
 
         public Color Color { get; private set; }
-        public Vector2 Position { get { return geometry.Position; } }
-        float Rotation { get { return this.geometry.Rotation; } }
+        public virtual Vector2 Position { get; private set; }
+        public virtual float Rotation { get; private set; }
 
-        protected Geom geometry;
-        protected Body body;
-        public Body Body { get { return this.body; } }
         public float Radius { get; private set; }
         
         protected float boundsMultiplyer;
@@ -69,20 +61,8 @@ namespace _2HourGame
             texture = this.Game.Content.Load<Texture2D>(@"Content\" + contentName);
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
             this.Radius = Math.Max(origin.X, origin.Y) * boundsMultiplyer;
-            
-            this.body = BodyFactory.Instance.CreateCircleBody(this.Radius, 1.0f);
-            this.body.Position = this.InitialPosition;
-            this.body.LinearDragCoefficient = 0.95f;
-            this.body.RotationalDragCoefficient = 10000.0f;
-
-            this.geometry = GeomFactory.Instance.CreateCircleGeom(this.Body, this.Radius, 12);
 
             base.LoadContent();
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)

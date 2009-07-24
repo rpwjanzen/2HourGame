@@ -11,9 +11,7 @@ namespace _2HourGame {
     {        
         int GoldCapacity { get; set; }
         int Gold { get; set; }
-        public float Speed {
-            get { return base.Body.LinearVelocity.Length(); }
-        }
+
         
         readonly float MaximumGoldTransferSpeed = 0.15f;
         bool CanTransferGold {

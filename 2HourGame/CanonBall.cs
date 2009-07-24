@@ -23,8 +23,5 @@ namespace _2HourGame
         public bool IsOutOfBounds {
             get { return false; }
         }
-        public float Speed {
-            get { return base.Body.LinearVelocity.Length(); }
-        }
     }
 }
