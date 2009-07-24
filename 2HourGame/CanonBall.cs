@@ -19,9 +19,5 @@ namespace _2HourGame
             base.Body.LinearDragCoefficient = 1.0f;
             base.LoadContent();
         }
-
-        public bool IsOutOfBounds {
-            get { return false; }
-        }
     }
 }

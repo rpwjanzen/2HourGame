@@ -24,7 +24,7 @@ namespace _2HourGame
         public override void Update(GameTime gameTime)
         {
             // TODO explicitly remove all cannonBalls that are no longer moving
-            cannonBalls = cannonBalls.Where(x => x.Speed != 0 && x.IsOutOfBounds == false);
+            cannonBalls = cannonBalls.Where(x => x.Speed != 0);
 
             base.Update(gameTime);
         }
