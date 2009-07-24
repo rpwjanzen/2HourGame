@@ -28,12 +28,13 @@ namespace _2HourGame {
 
         protected override void Initialize() {
 			spriteBatch = new SpriteBatch(this.GraphicsDevice);
+            PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
 
-			CannonBallManager cannonBallManager = new CannonBallManager(this, 0.001f, spriteBatch);
+			CannonBallManager cannonBallManager = new CannonBallManager(this, 0.001f, spriteBatch, physicsSimulator, effectManager);
 
-            PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
+            
 
             PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
             physicsComponent.Debug = true;

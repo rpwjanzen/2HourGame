@@ -19,5 +19,9 @@ namespace _2HourGame
             base.Body.LinearDragCoefficient = 1.0f;
             base.LoadContent();
         }
+
+        public void ApplyFiringForce(Vector2 firingForce) {
+            this.Body.ApplyForce(firingForce);
+        }
     }
 }

@@ -44,5 +44,10 @@ namespace _2HourGame
             this.Geometry = GeomFactory.Instance.CreateCircleGeom(this.Body, this.Radius, 12);
             physicsSimulator.Add(Geometry);
         }
+
+        public void RemoveFromPhysicsSimulator() {
+            physicsSimulator.Remove(this.Body);
+            physicsSimulator.Remove(this.Geometry);
+        }
     }
 }
