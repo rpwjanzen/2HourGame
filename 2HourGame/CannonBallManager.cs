@@ -9,7 +9,7 @@ namespace _2HourGame
 {
     class CannonBallManager : GameComponent
     {
-        IEnumerable<CanonBall> cannonBalls;
+        IEnumerable<CannonBall> cannonBalls;
         const float cannonBallDeaccelerationRate = -0.05f;
 
         float zIndex;
