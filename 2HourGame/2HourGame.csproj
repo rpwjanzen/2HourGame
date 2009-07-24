@@ -86,13 +86,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedGameObject.cs" />
     <Compile Include="AnimatedTextureInfo.cs" />
+    <Compile Include="Cannon.cs" />
     <Compile Include="CannonBallManager.cs" />
     <Compile Include="CanonBall.cs" />
-    <Compile Include="EffectManager.cs" />
+    <Compile Include="DrawableGameObject.cs" />
+    <Compile Include="AnimationManager.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="OldGameObject.cs" />
     <Compile Include="GoldView.cs" />
     <Compile Include="PhysicsComponent.cs" />
+    <Compile Include="OldPhysicsGameObject.cs" />
     <Compile Include="PhysicsGameObject.cs" />
     <Compile Include="ShipRelativeMoveBehavior.cs" />
     <Compile Include="House.cs" />
@@ -103,6 +108,7 @@
     <Compile Include="ScreenRelativeMoveBehavior.cs" />
     <Compile Include="Ship.cs" />
     <Compile Include="ShipMover.cs" />
+    <Compile Include="TextureLoader.cs" />
     <Compile Include="WorldBorder.cs" />
   </ItemGroup>
   <ItemGroup>

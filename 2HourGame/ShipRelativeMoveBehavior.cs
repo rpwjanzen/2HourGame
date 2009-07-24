@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 namespace _2HourGame {
     class ShipRelativeMoveBehavior {
         public void MoveShip(GamePadState gs, Ship ship) {
-            ship.Accelerate(gs.ThumbSticks.Left.Y * 50);
+            ship.Accelerate(gs.ThumbSticks.Left.Length() * 50);
             ship.Rotate(gs.ThumbSticks.Left.X * 25);
         }
     }

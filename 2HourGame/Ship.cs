@@ -11,7 +11,9 @@ namespace _2HourGame {
     {        
         int GoldCapacity { get; set; }
         int Gold { get; set; }
-
+        public float Speed {
+            get { return base.Body.LinearVelocity.Length(); }
+        }
         
         readonly float MaximumGoldTransferSpeed = 0.15f;
         bool CanTransferGold {
@@ -36,7 +38,7 @@ namespace _2HourGame {
             return now.TotalGameTime.TotalSeconds - LastGoldLoadTime.TotalSeconds > MinimumSecondsBetweenLoadingGold;
         }
 
-        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, EffectManager effectManger, float zIndex)
+        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, AnimationManager effectManger, float zIndex)
             : base(game, position, "boat", 0.6f, Color.White, spriteBatch, physicsSimulator, null, effectManger, zIndex)
         {
             this.GoldCapacity = 5;
@@ -48,7 +50,7 @@ namespace _2HourGame {
             //get the forward vector
             Vector2 forward = new Vector2(-base.Body.GetBodyMatrix().Up.X, -base.Body.GetBodyMatrix().Up.Y);
             var thrust = forward * amount;
-            base.Body.ApplyForceAtLocalPoint(thrust, Vector2.Zero);
+            base.Body.ApplyForce(thrust);
         }
 
         public void Accelerate(float amount) {
@@ -75,6 +77,10 @@ namespace _2HourGame {
 
         private void AddGold() {
             this.Gold++;
+        }
+
+        public CanonBall Fire(GameTime now) {
+            throw new NotImplementedException();
         }
     }
 }

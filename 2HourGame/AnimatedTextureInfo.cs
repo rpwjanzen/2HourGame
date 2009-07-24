@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame
 {
     class AnimatedTextureInfo
     {
-        public Vector2 imageSize { get; private set; }
-        public int totalFrames { get; private set; }
-        public double framesPerSecond { get; private set; }
-        public float scale { get; private set; }
-        public bool animateOnceOnly { get; private set; }
+        public Texture2D Texture { get; private set; }
+        public int ImageWidth { get; private set; }
+        public int ImageHeight { get; private set; }
+        public int TotalFrames { get; private set; }
+        public double FramesPerSecond { get; private set; }
+        public bool AnimateOnceOnly { get; private set; }
 
-        public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, bool animateOnceOnly)
+        public AnimatedTextureInfo(int imageWidth, int imageHeight, int totalFrames, double framesPerSecond, bool animateOnceOnly)
         {
-            this.imageSize = imageSize;
-            this.totalFrames = totalFrames;
-            this.framesPerSecond = framesPerSecond;
-            this.scale = scale;
-            this.animateOnceOnly = animateOnceOnly;
+            this.ImageWidth = imageWidth;
+            this.ImageHeight = imageHeight;
+            this.TotalFrames = totalFrames;
+            this.FramesPerSecond = framesPerSecond;
+            this.AnimateOnceOnly = animateOnceOnly;
         }
     }
 }

@@ -1,27 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerGames.FarseerPhysics;
+using FarseerGames.FarseerPhysics.Dynamics;
+using FarseerGames.FarseerPhysics.Collisions;
 
 namespace _2HourGame
 {
-    class CanonBall : PhysicsGameObject
-    {
-        public CanonBall(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, EffectManager effectManger, float zIndex)
-            : base(game, position, "cannonBall", 1f, Color.White, spriteBatch, physicsSimulator, null, effectManger, zIndex)
-        {
+    class CanonBall {
+        Body Body;
+        Geom Geometry;
+
+        Vector2 Velocity {
+            get { return this.Body.LinearVelocity; }
+        }
+        Vector2 Position {
+            get { return this.Body.Position; }
         }
 
-        protected override void LoadContent() {
-            base.Body.LinearDragCoefficient = 1.0f;
-            base.LoadContent();
+        Texture Texture;
+        SpriteBatch SpriteBatch;
+
+        public CanonBall() {
         }
 
-        public bool IsOutOfBounds {
-            get { return false; }
+        public void AddToPhysicsSimulator(PhysicsSimulator physicsSimulator) {
+            physicsSimulator.Add(this.Body);
+            physicsSimulator.Add(this.Geometry);
+        }
+
+        public void RemoveFromPhysicsSimulator(PhysicsSimulator physicsSimulator) {
+            physicsSimulator.Remove(this.Body);
+            physicsSimulator.Remove(this.Geometry);
         }
     }
 }
