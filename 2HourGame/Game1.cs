@@ -51,6 +51,8 @@ namespace _2HourGame {
             Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), spriteBatch, physicsSimulator, playerOneIsland, 0.01f);
             this.Components.Add(playerOneShip);
 
+            ShipGoldView playerOneShipGoldView = new ShipGoldView(this, playerOneShip, true, true, spriteBatch, 0.5f, 100);
+            this.Components.Add(playerOneShipGoldView);
 
             Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), playerOneHouse, spriteBatch, 11, physicsSimulator, 0.2f);
             this.Components.Add(goldIsland);
@@ -60,7 +62,7 @@ namespace _2HourGame {
 
             this.Components.Add(physicsComponent);
 
-            GoldView goldView = new GoldView(this, new[] { playerOneIsland, goldIsland }, new[] { playerOneShip }, spriteBatch, 0.01f);
+            IslandsGoldView goldView = new IslandsGoldView(this, new[] { playerOneIsland, goldIsland }, new[] { playerOneShip }, spriteBatch, 0.01f);
             this.Components.Add(goldView);
 
             base.Initialize();

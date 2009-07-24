@@ -91,11 +91,11 @@
     <Compile Include="CannonBall.cs" />
     <Compile Include="EffectManager.cs" />
     <Compile Include="GameObject.cs" />
-    <Compile Include="GoldView.cs" />
-    <Compile Include="ICannonBallManager.cs" />
+    <Compile Include="IslandsGoldView.cs" />
     <Compile Include="IEffectManager.cs" />
     <Compile Include="PhysicsComponent.cs" />
     <Compile Include="PhysicsGameObject.cs" />
+    <Compile Include="ShipGoldView.cs" />
     <Compile Include="ShipRelativeMoveBehavior.cs" />
     <Compile Include="House.cs" />
     <Compile Include="Island.cs" />

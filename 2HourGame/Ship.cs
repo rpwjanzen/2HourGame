@@ -9,7 +9,7 @@ using FarseerGames.FarseerPhysics;
 namespace _2HourGame {
     class Ship : PhysicsGameObject
     {        
-        int GoldCapacity { get; set; }
+        public int GoldCapacity { get; private set; }
         int Gold { get; set; }
 
         
