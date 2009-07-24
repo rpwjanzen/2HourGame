@@ -33,8 +33,9 @@ namespace _2HourGame {
             EffectManager effectManager = new EffectManager(this, spriteBatch);
 
 			CannonBallManager cannonBallManager = new CannonBallManager(this, 0.001f, spriteBatch, physicsSimulator, effectManager);
-
-            
+            this.Components.Add(cannonBallManager);
+            CannonBallManagerView cannonBallManagerView = new CannonBallManagerView(this, cannonBallManager, spriteBatch, 0.001f);
+            this.Components.Add(cannonBallManagerView);
 
             PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
             physicsComponent.Debug = true;
@@ -48,7 +49,7 @@ namespace _2HourGame {
             Island playerOneIsland = new Island(this, new Vector2(1280 / 4 - 100, 720 / 4), playerOneHouse, spriteBatch, 0, physicsSimulator, effectManager, 0.2f);
             this.Components.Add(playerOneIsland);
 
-            Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), spriteBatch, physicsSimulator, playerOneIsland, effectManager, 0.01f);
+            Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), spriteBatch, physicsSimulator, playerOneIsland, effectManager, 0.01f, cannonBallManager);
             this.Components.Add(playerOneShip);
 
 

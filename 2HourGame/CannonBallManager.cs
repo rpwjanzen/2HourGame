@@ -37,17 +37,17 @@ namespace _2HourGame
             base.Update(gameTime);
         }
 
-        public void AddCannonBall(CanonBall cannonBall) {
-            cannonBalls.Add(cannonBall);
-        }
-
         public void RemoveCannonBall(CanonBall cannonBall) {
             cannonBalls.Remove(cannonBall);
+            base.Game.Components.Remove(cannonBall);
         }
 
         public CanonBall CreateCannonBall(Vector2 position, Vector2 firingForce) {
-            var cannonBall = new CanonBall(this.Game, position, this.spriteBatch, this.PhysicsSimulator, this.EffectManager, this.CannonBallLayerDepth);
+            var cannonBall = new CanonBall(this.Game, position, this.spriteBatch, this.PhysicsSimulator, this.EffectManager, this.CannonBallLayerDepth);            
+            base.Game.Components.Add(cannonBall);
             cannonBall.ApplyFiringForce(firingForce);
+            cannonBalls.Add(cannonBall);
+
             return cannonBall;
         }
 

@@ -36,12 +36,29 @@ namespace _2HourGame {
             return now.TotalGameTime.TotalSeconds - LastGoldLoadTime.TotalSeconds > MinimumSecondsBetweenLoadingGold;
         }
 
-        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, EffectManager effectManger, float zIndex)
+        CannonBallManager CannonBallManager { get; set; }
+        Vector2 Velocity {
+            get { return base.Body.LinearVelocity; }
+        }
+        Vector2 FiringVelocity { get; set; }
+
+        TimeSpan LastFireTime { get; set; }
+        // in seconds
+        float CannonCooldownTime { get; set; }
+        bool CannonHasCooledDown(GameTime now) {
+            return now.TotalGameTime.TotalSeconds - LastFireTime.TotalSeconds > this.CannonCooldownTime;
+        }
+
+        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, EffectManager effectManger, float zIndex, CannonBallManager cannonBallManager)
             : base(game, position, "boat", 0.6f, Color.White, spriteBatch, physicsSimulator, null, effectManger, zIndex)
         {
             this.GoldCapacity = 5;
             this.Gold = 0;
             this.HomeIsland = homeIsland;
+            this.CannonBallManager = cannonBallManager;
+            this.FiringVelocity = Vector2.UnitY;
+            this.CannonCooldownTime = 2.0f;
+            this.LastFireTime = new TimeSpan();
         }
         
         public void Thrust(float amount) {
@@ -75,6 +92,23 @@ namespace _2HourGame {
 
         private void AddGold() {
             this.Gold++;
+        }
+
+        public void FireCannon(GameTime now) {
+            if (CannonHasCooledDown(now)) {
+                //get the left vector
+                Vector2 left = new Vector2(-base.Body.GetBodyMatrix().Left.X, -base.Body.GetBodyMatrix().Left.Y);
+                var thrust = left * 150.0f;
+                
+                // take into account the ship's momentum
+                thrust += this.Velocity;
+
+                var cannonBallPostion = (left * (this.Radius + 10)) + this.Position;
+                
+                var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
+                
+                this.LastFireTime = now.TotalGameTime;
+            }
         }
     }
 }

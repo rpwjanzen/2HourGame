@@ -16,12 +16,12 @@ namespace _2HourGame
         }
 
         protected override void LoadContent() {
-            base.Body.LinearDragCoefficient = 1.0f;
             base.LoadContent();
+            //base.Body.LinearDragCoefficient = 1.0f;            
         }
 
         public void ApplyFiringForce(Vector2 firingForce) {
-            this.Body.ApplyForce(firingForce);
+            base.Body.ApplyImpulse(firingForce);
         }
     }
 }

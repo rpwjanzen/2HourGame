@@ -24,7 +24,7 @@ namespace _2HourGame {
         }
 
         protected override void LoadContent() {
-            this.Texture = this.Game.Content.Load<Texture2D>("cannonBall");
+            this.Texture = this.Game.Content.Load<Texture2D>(@"Content\cannonBall");
             this.Origin = new Vector2(this.Texture.Width / 2.0f, this.Texture.Height / 2.0f);
             base.LoadContent();
         }
