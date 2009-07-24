@@ -9,6 +9,7 @@ namespace _2HourGame
 {
     class GameObject : DrawableGameComponent
     {
+        // is this something that the PhysicsGameObject should handle???
         protected readonly Vector2 InitialPosition;
 
         public Color Color { get; private set; }
@@ -44,6 +45,7 @@ namespace _2HourGame
             this.game = game;
             this.Color = color;
             this.InitialPosition = initialPosition;
+            Position = initialPosition;
             this.contentName = contentName;
             this.boundsMultiplyer = boundsMultiplyer;
             this.spriteBatch = spriteBatch;
