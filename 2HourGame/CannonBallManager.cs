@@ -4,29 +4,53 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerGames.FarseerPhysics;
 
 namespace _2HourGame
 {
     class CannonBallManager : GameComponent
     {
-        IEnumerable<CannonBall> cannonBalls;
-        const float cannonBallDeaccelerationRate = -0.05f;
-
+        List<CannonBall> cannonBalls;
+        public IEnumerable<CannonBall> CannonBalls {
+            get { return cannonBalls; }
+        }
         float zIndex;
+        float CannonBallLayerDepth {
+            get { return this.zIndex; }
+        }
+        PhysicsSimulator PhysicsSimulator { get; set; }
         SpriteBatch spriteBatch;
 
-        public CannonBallManager(Game game, float zIndex, SpriteBatch spriteBatch)
+        public CannonBallManager(Game game, float zIndex, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
             : base(game) {
+            cannonBalls = new List<CannonBall>();
             this.spriteBatch = spriteBatch;
             this.zIndex = zIndex;
+            this.PhysicsSimulator = physicsSimulator;
         }
 
         public override void Update(GameTime gameTime)
         {
-            // TODO explicitly remove all cannonBalls that are no longer moving
-            cannonBalls = cannonBalls.Where(x => x.Speed != 0);
-
+            this.RemoveStationaryCannonBalls();
             base.Update(gameTime);
+        }
+
+        public void RemoveCannonBall(CannonBall cannonBall) {
+            cannonBalls.Remove(cannonBall);
+            base.Game.Components.Remove(cannonBall);
+        }
+
+        public CannonBall CreateCannonBall(Vector2 position, Vector2 firingForce) {
+            var cannonBall = new CannonBall(this.Game, position, this.spriteBatch, this.PhysicsSimulator, this.CannonBallLayerDepth);            
+            base.Game.Components.Add(cannonBall);
+            cannonBall.ApplyFiringForce(firingForce);
+            cannonBalls.Add(cannonBall);
+
+            return cannonBall;
+        }
+
+        void RemoveStationaryCannonBalls() {
+            cannonBalls = cannonBalls.Where(x => x.Speed != 0).ToList<CannonBall>();
         }
     }
 }

@@ -88,10 +88,15 @@
   <ItemGroup>
     <Compile Include="AnimatedTextureInfo.cs" />
     <Compile Include="CannonBallManager.cs" />
+    <Compile Include="CannonBallManagerView.cs" />
     <Compile Include="CannonBall.cs" />
     <Compile Include="EffectManager.cs" />
     <Compile Include="GameObject.cs" />
+<<<<<<< HEAD:2HourGame/2HourGame.csproj
     <Compile Include="IslandsGoldView.cs" />
+=======
+    <Compile Include="GoldView.cs" />
+>>>>>>> dda2592336655092f5b77319c1a152894354451b:2HourGame/2HourGame.csproj
     <Compile Include="IEffectManager.cs" />
     <Compile Include="PhysicsComponent.cs" />
     <Compile Include="PhysicsGameObject.cs" />
