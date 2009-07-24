@@ -49,8 +49,8 @@ namespace _2HourGame {
             return now.TotalGameTime.TotalSeconds - LastFireTime.TotalSeconds > this.CannonCooldownTime;
         }
 
-        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, EffectManager effectManger, float zIndex, CannonBallManager cannonBallManager)
-            : base(game, position, "boat", 0.6f, Color.White, spriteBatch, physicsSimulator, null, effectManger, zIndex)
+        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, float zIndex, CannonBallManager cannonBallManager)
+            : base(game, position, "boat", 0.6f, Color.White, spriteBatch, physicsSimulator, null, zIndex)
         {
             this.GoldCapacity = 5;
             this.Gold = 0;
@@ -81,7 +81,7 @@ namespace _2HourGame {
                 island.RemoveGold();
                 this.AddGold();
                 this.LastGoldLoadTime = now.TotalGameTime;
-                effectManager.GoldPickupEffect(this);
+                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this);
             }
         }
 

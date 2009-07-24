@@ -8,9 +8,9 @@ using FarseerGames.FarseerPhysics;
 
 namespace _2HourGame
 {
-    class CanonBall : PhysicsGameObject
+    class CannonBall : PhysicsGameObject
     {
-        public CanonBall(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, float zIndex)
+        public CannonBall(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, float zIndex)
             : base(game, position, "cannonBall", 1f, Color.White, spriteBatch, physicsSimulator, null, zIndex)
         {
         }

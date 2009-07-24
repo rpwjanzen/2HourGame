@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace _2HourGame {
     class CannonBallManagerView : DrawableGameComponent {
         CannonBallManager CannonBallManager { get; set; }
-        IEnumerable<CanonBall> CannonBalls {
+        IEnumerable<CannonBall> CannonBalls {
             get { return CannonBallManager.CannonBalls; }
         }
 

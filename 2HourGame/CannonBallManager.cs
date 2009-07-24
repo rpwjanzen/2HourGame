@@ -10,8 +10,8 @@ namespace _2HourGame
 {
     class CannonBallManager : GameComponent
     {
-        List<CanonBall> cannonBalls;
-        public IEnumerable<CanonBall> CannonBalls {
+        List<CannonBall> cannonBalls;
+        public IEnumerable<CannonBall> CannonBalls {
             get { return cannonBalls; }
         }
         float zIndex;
@@ -19,16 +19,14 @@ namespace _2HourGame
             get { return this.zIndex; }
         }
         PhysicsSimulator PhysicsSimulator { get; set; }
-        EffectManager EffectManager { get; set; }
         SpriteBatch spriteBatch;
 
-        public CannonBallManager(Game game, float zIndex, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, EffectManager effectManager)
+        public CannonBallManager(Game game, float zIndex, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
             : base(game) {
-            cannonBalls = new List<CanonBall>();
+            cannonBalls = new List<CannonBall>();
             this.spriteBatch = spriteBatch;
             this.zIndex = zIndex;
             this.PhysicsSimulator = physicsSimulator;
-            this.EffectManager = effectManager;
         }
 
         public override void Update(GameTime gameTime)
@@ -37,13 +35,13 @@ namespace _2HourGame
             base.Update(gameTime);
         }
 
-        public void RemoveCannonBall(CanonBall cannonBall) {
+        public void RemoveCannonBall(CannonBall cannonBall) {
             cannonBalls.Remove(cannonBall);
             base.Game.Components.Remove(cannonBall);
         }
 
-        public CanonBall CreateCannonBall(Vector2 position, Vector2 firingForce) {
-            var cannonBall = new CanonBall(this.Game, position, this.spriteBatch, this.PhysicsSimulator, this.EffectManager, this.CannonBallLayerDepth);            
+        public CannonBall CreateCannonBall(Vector2 position, Vector2 firingForce) {
+            var cannonBall = new CannonBall(this.Game, position, this.spriteBatch, this.PhysicsSimulator, this.CannonBallLayerDepth);            
             base.Game.Components.Add(cannonBall);
             cannonBall.ApplyFiringForce(firingForce);
             cannonBalls.Add(cannonBall);
@@ -52,7 +50,7 @@ namespace _2HourGame
         }
 
         void RemoveStationaryCannonBalls() {
-            cannonBalls = cannonBalls.Where(x => x.Speed != 0).ToList<CanonBall>();
+            cannonBalls = cannonBalls.Where(x => x.Speed != 0).ToList<CannonBall>();
         }
     }
 }
