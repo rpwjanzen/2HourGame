@@ -60,6 +60,12 @@ namespace _2HourGame {
             this.CannonCooldownTime = 2.0f;
             this.LastFireTime = new TimeSpan();
         }
+
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+            this.Body.RotationalDragCoefficient = 5000.0f;
+        }
         
         public void Thrust(float amount) {
             //get the forward vector
@@ -106,7 +112,7 @@ namespace _2HourGame {
                 var cannonBallPostion = (left * (this.Radius + 10)) + this.Position;
                 
                 var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
-                
+
                 this.LastFireTime = now.TotalGameTime;
             }
         }

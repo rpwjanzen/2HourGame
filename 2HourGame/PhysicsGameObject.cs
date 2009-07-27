@@ -38,7 +38,7 @@ namespace _2HourGame
             this.Body = BodyFactory.Instance.CreateCircleBody(this.Radius, 1.0f);
             this.Body.Position = this.InitialPosition;
             this.Body.LinearDragCoefficient = 0.95f;
-            this.Body.RotationalDragCoefficient = 10000.0f;
+            this.Body.RotationalDragCoefficient = 10.0f;
             physicsSimulator.Add(this.Body);
 
             this.Geometry = GeomFactory.Instance.CreateCircleGeom(this.Body, this.Radius, 12);

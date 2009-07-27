@@ -17,7 +17,7 @@ namespace _2HourGame
 
         protected override void LoadContent() {
             base.LoadContent();
-            //base.Body.LinearDragCoefficient = 1.0f;            
+            base.Body.LinearDragCoefficient = 0.40f;            
         }
 
         public void ApplyFiringForce(Vector2 firingForce) {
