@@ -21,7 +21,7 @@ namespace _2HourGame
 
         float boundsMultiplyer;
 
-        SpriteBatch spriteBatch;
+        protected SpriteBatch spriteBatch;
         Texture2D texture;
         AnimatedTextureInfo animatedTextureInfo;
         TimeSpan animationStartTime;

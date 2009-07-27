@@ -8,7 +8,11 @@ using FarseerGames.FarseerPhysics;
 
 namespace _2HourGame {
     class Ship : PhysicsGameObject
-    {        
+    {
+        private Color shipColor;
+        private Texture2D gunwale;
+        private Texture2D rigging;
+
         public int GoldCapacity { get; private set; }
         int Gold { get; set; }
 
@@ -55,8 +59,8 @@ namespace _2HourGame {
             return now.TotalGameTime.TotalSeconds - LastFireTimeRight.TotalSeconds > this.CannonCooldownTime;
         }
 
-        public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, float zIndex, CannonBallManager cannonBallManager)
-            : base(game, position, "boat", 0.6f, Color.White, spriteBatch, physicsSimulator, null, zIndex)
+        public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, float zIndex, CannonBallManager cannonBallManager)
+            : base(game, position, "shipHull", 0.6f, Color.White, spriteBatch, physicsSimulator, null, zIndex)
         {
             this.GoldCapacity = 5;
             this.Gold = 0;
@@ -66,12 +70,22 @@ namespace _2HourGame {
             this.CannonCooldownTime = 2.0f;
             this.LastFireTimeLeft = new TimeSpan();
             this.LastFireTimeRight = new TimeSpan();
+            this.shipColor = playerColor;
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
             this.Body.RotationalDragCoefficient = 5000.0f;
+            gunwale = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
+            rigging = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, origin, 1.0f, SpriteEffects.None, ZIndex - 0.001f);
+            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, origin, 1.0f, SpriteEffects.None, ZIndex - 0.002f);
         }
         
         public void Thrust(float amount) {

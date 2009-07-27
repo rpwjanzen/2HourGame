@@ -41,7 +41,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("splash", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "splash", 1f, Color.White, spriteBatch, animTextInfo, 0f));
+                game.Components.Add(new GameObject(game, position, "splashAnimation", 1f, Color.White, spriteBatch, animTextInfo, 0f));
             }
         }
 
@@ -50,7 +50,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("cannonSmoke", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "cannonSmoke", 1f, Color.White, spriteBatch, animTextInfo, 0f));
+                game.Components.Add(new GameObject(game, position, "cannonSmokeAnimation", 1f, Color.White, spriteBatch, animTextInfo, 0f));
             }
         }
     }

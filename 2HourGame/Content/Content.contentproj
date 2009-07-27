@@ -38,11 +38,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="boat.png">
-      <Name>boat</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="cannonBall.png">
       <Name>cannonBall</Name>
       <Importer>TextureImporter</Importer>
@@ -88,15 +83,36 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="splash.png">
-      <Name>splash</Name>
+    <Compile Include="cannonSmokeAnimation.png">
+      <Name>cannonSmokeAnimation</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="cannonSmoke.png">
-      <Name>cannonSmoke</Name>
+    <Compile Include="splashAnimation.png">
+      <Name>splashAnimation</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="shipHull.png">
+      <Name>shipHull</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="shipGunwale.png">
+      <Name>shipGunwale</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="shipRigging.png">
+      <Name>shipRigging</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
