@@ -94,7 +94,7 @@ namespace _2HourGame {
                 island.RemoveGold();
                 this.AddGold();
                 this.LastGoldLoadTime = now.TotalGameTime;
-                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this);
+                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this.Position);
             }
         }
 
