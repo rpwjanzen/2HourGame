@@ -76,7 +76,7 @@ namespace _2HourGame {
         protected override void LoadContent()
         {
             base.LoadContent();
-            this.Body.RotationalDragCoefficient = 5000.0f;
+            this.Body.RotationalDragCoefficient = 2500.0f;
             gunwale = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
         }
@@ -134,7 +134,7 @@ namespace _2HourGame {
                 
                 var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
 
-                base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y)/4);
+                base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y)/8);
 
                 if (isLeftCannon)
                     this.LastFireTimeLeft = now.TotalGameTime;
