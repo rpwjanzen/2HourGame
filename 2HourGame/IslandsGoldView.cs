@@ -36,7 +36,7 @@ namespace _2HourGame
 
         protected override void LoadContent()
         {
-            texture = this.Game.Content.Load<Texture2D>(@"Content/gold");
+            texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTexture("gold");
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
             base.LoadContent();
         }

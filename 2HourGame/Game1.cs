@@ -32,11 +32,12 @@ namespace _2HourGame {
             PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
+            TextureManager textureManager = new TextureManager(this);
 
 			CannonBallManager cannonBallManager = new CannonBallManager(this, 0.001f, spriteBatch, physicsSimulator);
             this.Components.Add(cannonBallManager);
-            CannonBallManagerView cannonBallManagerView = new CannonBallManagerView(this, cannonBallManager, spriteBatch, 0.001f);
-            this.Components.Add(cannonBallManagerView);
+            //CannonBallManagerView cannonBallManagerView = new CannonBallManagerView(this, cannonBallManager, spriteBatch, 0.001f);
+            //this.Components.Add(cannonBallManagerView);
 
             PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
             physicsComponent.Debug = true;

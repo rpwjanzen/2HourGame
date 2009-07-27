@@ -56,7 +56,7 @@ namespace _2HourGame
 
         protected override void LoadContent()
         {
-            texture = this.Game.Content.Load<Texture2D>(@"Content\" + contentName);
+            texture = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
             this.Radius = Math.Max(origin.X, origin.Y) * boundsMultiplyer;
 
