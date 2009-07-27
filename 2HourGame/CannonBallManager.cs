@@ -46,7 +46,7 @@ namespace _2HourGame
             cannonBall.ApplyFiringForce(firingForce);
             cannonBalls.Add(cannonBall);
 
-            ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).CannonSmokeEffect(cannonBall);
+            ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).CannonSmokeEffect(cannonBall.Position);
 
             return cannonBall;
         }
@@ -56,7 +56,7 @@ namespace _2HourGame
 
             foreach (CannonBall c in cannonBallsToRemove) 
             {
-                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).SplashEffect(c);
+                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).SplashEffect(c.Position);
                 c.RemoveFromPhysicsSimulator();
                 game.Components.Remove(c);
                 cannonBalls.Remove(c);

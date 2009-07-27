@@ -36,21 +36,21 @@ namespace _2HourGame
             }
         }
 
-        public void SplashEffect(CannonBall cannonBall) 
+        public void SplashEffect(Vector2 position) 
         {
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("splash", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, cannonBall.Position, "splash", 1f, Color.White, spriteBatch, animTextInfo, 0f));
+                game.Components.Add(new GameObject(game, position, "splash", 1f, Color.White, spriteBatch, animTextInfo, 0f));
             }
         }
 
-        public void CannonSmokeEffect(CannonBall cannonBall) 
+        public void CannonSmokeEffect(Vector2 position) 
         {
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("cannonSmoke", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, cannonBall.Position, "cannonSmoke", 1f, Color.White, spriteBatch, animTextInfo, 0f));
+                game.Components.Add(new GameObject(game, position, "cannonSmoke", 1f, Color.White, spriteBatch, animTextInfo, 0f));
             }
         }
     }

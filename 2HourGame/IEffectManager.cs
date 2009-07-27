@@ -5,7 +5,7 @@ namespace _2HourGame
     interface IEffectManager
     {
         void GoldPickupEffect(Vector2 position);
-        void SplashEffect(CannonBall cannonBall);
-        void CannonSmokeEffect(CannonBall cannonBall);
+        void SplashEffect(Vector2 position);
+        void CannonSmokeEffect(Vector2 position);
     }
 }
