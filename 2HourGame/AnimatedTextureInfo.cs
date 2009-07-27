@@ -15,19 +15,19 @@ namespace _2HourGame
         public bool animateOnceOnly { get; private set; }
         public Vector2 textureDrawOffset { get; private set; }
 
-        public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, bool animateOnceOnly)
+        public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, bool animateOnceOnly, Vector2 drawOffset)
         {
             this.imageSize = imageSize;
             this.totalFrames = totalFrames;
             this.framesPerSecond = framesPerSecond;
             this.scale = scale;
             this.animateOnceOnly = animateOnceOnly;
-            textureDrawOffset = calculateTextureDrawOffset();
+            textureDrawOffset = calculateTextureDrawOffset(drawOffset);
         }
 
-        private Vector2 calculateTextureDrawOffset()
+        private Vector2 calculateTextureDrawOffset(Vector2 drawOffset)
         {
-            return new Vector2(((totalFrames - 1) / 2) * imageSize.X * scale, 0);
+            return new Vector2(((totalFrames - 1) / 2) * imageSize.X * scale, 0) + drawOffset;
         }
 
     }

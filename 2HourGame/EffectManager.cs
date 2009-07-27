@@ -22,8 +22,8 @@ namespace _2HourGame
             this.spriteBatch = spriteBatch;
             textureInfos = new Dictionary<String, AnimatedTextureInfo>();
 
-            textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, true));
-            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 70), 10, 10, 1f, true));
+            textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, true, new Vector2(0, -50)));
+            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 70), 10, 10, 1f, true, new Vector2(0, -30)));
         }
 
         public void GoldPickupEffect(Ship ship) 
