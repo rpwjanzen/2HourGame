@@ -9,5 +9,6 @@ namespace _2HourGame
     {
         void GoldPickupEffect(Ship ship);
         void SplashEffect(CannonBall cannonBall);
+        void CannonSmokeEffect(CannonBall cannonBall);
     }
 }

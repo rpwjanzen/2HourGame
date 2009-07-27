@@ -24,6 +24,7 @@ namespace _2HourGame
 
             textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, true, new Vector2(0, -50)));
             textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 70), 10, 10, 1f, true, new Vector2(0, -30)));
+            textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 1f, true, new Vector2(0, 0)));
         }
 
         public void GoldPickupEffect(Ship ship) 
@@ -41,6 +42,15 @@ namespace _2HourGame
             if (textureInfos.TryGetValue("splash", out animTextInfo))
             {
                 game.Components.Add(new GameObject(game, cannonBall.Position, "splash", 1f, Color.White, spriteBatch, animTextInfo, 0f));
+            }
+        }
+
+        public void CannonSmokeEffect(CannonBall cannonBall) 
+        {
+            AnimatedTextureInfo animTextInfo;
+            if (textureInfos.TryGetValue("cannonSmoke", out animTextInfo))
+            {
+                game.Components.Add(new GameObject(game, cannonBall.Position, "cannonSmoke", 1f, Color.White, spriteBatch, animTextInfo, 0f));
             }
         }
     }

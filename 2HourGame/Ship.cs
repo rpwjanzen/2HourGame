@@ -103,15 +103,17 @@ namespace _2HourGame {
         public void FireCannon(GameTime now) {
             if (CannonHasCooledDown(now)) {
                 //get the left vector
-                Vector2 left = new Vector2(-base.Body.GetBodyMatrix().Left.X, -base.Body.GetBodyMatrix().Left.Y);
-                var thrust = left * 150.0f;
+                Vector2 right = new Vector2(-base.Body.GetBodyMatrix().Left.X, -base.Body.GetBodyMatrix().Left.Y);
+                var thrust = right * 75.0f;
                 
                 // take into account the ship's momentum
                 thrust += this.Velocity;
 
-                var cannonBallPostion = (left * (this.Radius + 10)) + this.Position;
+                var cannonBallPostion = (right * (this.Radius + 10)) + this.Position;
                 
                 var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
+
+                base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y)/4);
 
                 this.LastFireTime = now.TotalGameTime;
             }
