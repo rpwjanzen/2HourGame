@@ -52,8 +52,12 @@ namespace _2HourGame {
                 }
 
                 // Fire Cannons Behaviour
-                if (gs.IsButtonDown(Buttons.A)) {
-                    ship.FireCannon(gameTime);
+                if (gs.IsButtonDown(Buttons.LeftTrigger)) {
+                    ship.FireCannon(gameTime, true);
+                }
+                if (gs.IsButtonDown(Buttons.RightTrigger))
+                {
+                    ship.FireCannon(gameTime, false);
                 }
                 // TODO Collision detection somewhere
                 moveShipBehavior.MoveShip(gs, ship);

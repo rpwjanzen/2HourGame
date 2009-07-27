@@ -42,11 +42,17 @@ namespace _2HourGame {
         }
         Vector2 FiringVelocity { get; set; }
 
-        TimeSpan LastFireTime { get; set; }
+        TimeSpan LastFireTimeLeft { get; set; }
+        TimeSpan LastFireTimeRight { get; set; }
         // in seconds
         float CannonCooldownTime { get; set; }
-        bool CannonHasCooledDown(GameTime now) {
-            return now.TotalGameTime.TotalSeconds - LastFireTime.TotalSeconds > this.CannonCooldownTime;
+        bool LeftCannonHasCooledDown(GameTime now)
+        {
+            return now.TotalGameTime.TotalSeconds - LastFireTimeLeft.TotalSeconds > this.CannonCooldownTime;
+        }
+        bool RightCannonHasCooledDown(GameTime now)
+        {
+            return now.TotalGameTime.TotalSeconds - LastFireTimeRight.TotalSeconds > this.CannonCooldownTime;
         }
 
         public Ship(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, float zIndex, CannonBallManager cannonBallManager)
@@ -58,7 +64,8 @@ namespace _2HourGame {
             this.CannonBallManager = cannonBallManager;
             this.FiringVelocity = Vector2.UnitY;
             this.CannonCooldownTime = 2.0f;
-            this.LastFireTime = new TimeSpan();
+            this.LastFireTimeLeft = new TimeSpan();
+            this.LastFireTimeRight = new TimeSpan();
         }
 
         protected override void LoadContent()
@@ -100,22 +107,25 @@ namespace _2HourGame {
             this.Gold++;
         }
 
-        public void FireCannon(GameTime now) {
-            if (CannonHasCooledDown(now)) {
-                //get the left vector
-                Vector2 right = new Vector2(-base.Body.GetBodyMatrix().Left.X, -base.Body.GetBodyMatrix().Left.Y);
-                var thrust = right * 75.0f;
+        public void FireCannon(GameTime now, bool isLeftCannon) {
+            if ((isLeftCannon && LeftCannonHasCooledDown(now)) || (!isLeftCannon && RightCannonHasCooledDown(now))) {
+                //get the right vector
+                Vector2 firingVector = isLeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y);
+                var thrust = firingVector * 75.0f;
                 
                 // take into account the ship's momentum
                 thrust += this.Velocity;
 
-                var cannonBallPostion = (right * (this.Radius + 10)) + this.Position;
+                var cannonBallPostion = (firingVector * (this.Radius + 10)) + this.Position;
                 
                 var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
 
                 base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y)/4);
 
-                this.LastFireTime = now.TotalGameTime;
+                if (isLeftCannon)
+                    this.LastFireTimeLeft = now.TotalGameTime;
+                else
+                    this.LastFireTimeRight = now.TotalGameTime;
             }
         }
     }
