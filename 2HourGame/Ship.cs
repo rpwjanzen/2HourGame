@@ -94,7 +94,7 @@ namespace _2HourGame {
                 island.RemoveGold();
                 this.AddGold();
                 this.LastGoldLoadTime = now.TotalGameTime;
-                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this.Position);
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this.Position);
             }
         }
 
@@ -116,7 +116,7 @@ namespace _2HourGame {
                 // take into account the ship's momentum
                 thrust += this.Velocity;
 
-                var cannonBallPostion = (firingVector * (this.Radius + 10)) + this.Position;
+                var cannonBallPostion = (firingVector * (this.XAxis + 10)) + this.Position;
                 
                 var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
 
