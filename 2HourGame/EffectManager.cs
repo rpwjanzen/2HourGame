@@ -23,7 +23,7 @@ namespace _2HourGame
             textureInfos = new Dictionary<String, AnimatedTextureInfo>();
 
             textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, true, new Vector2(0, -50)));
-            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 70), 10, 10, 1f, true, new Vector2(0, -30)));
+            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, true, new Vector2(0, -15)));
             textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 1f, true, new Vector2(0, 0)));
         }
 
