@@ -8,5 +8,6 @@ namespace _2HourGame
     interface IEffectManager
     {
         void GoldPickupEffect(Ship ship);
+        void SplashEffect(CannonBall cannonBall);
     }
 }

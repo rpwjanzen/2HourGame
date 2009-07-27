@@ -53,6 +53,9 @@ namespace _2HourGame {
             Ship playerOneShip = new Ship(this, new Vector2((1280 / 4), (720 / 4) + 100), spriteBatch, physicsSimulator, playerOneIsland, 0.01f, cannonBallManager);
             this.Components.Add(playerOneShip);
 
+            Ship playerTwoShip = new Ship(this, new Vector2((1280 / 3), (720 / 3) + 100), spriteBatch, physicsSimulator, null, 0.01f, cannonBallManager);
+            this.Components.Add(playerTwoShip);
+
             ShipGoldView playerOneShipGoldView = new ShipGoldView(this, playerOneShip, true, true, spriteBatch, 0.5f, 100);
             this.Components.Add(playerOneShipGoldView);
 

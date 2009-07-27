@@ -21,12 +21,17 @@ namespace _2HourGame
         PhysicsSimulator PhysicsSimulator { get; set; }
         SpriteBatch spriteBatch;
 
+        const float minimumCannonBallSpeed = 25f;
+
+        Game game;
+
         public CannonBallManager(Game game, float zIndex, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
             : base(game) {
             cannonBalls = new List<CannonBall>();
             this.spriteBatch = spriteBatch;
             this.zIndex = zIndex;
             this.PhysicsSimulator = physicsSimulator;
+            this.game = game;
         }
 
         public override void Update(GameTime gameTime)
@@ -35,10 +40,10 @@ namespace _2HourGame
             base.Update(gameTime);
         }
 
-        public void RemoveCannonBall(CannonBall cannonBall) {
-            cannonBalls.Remove(cannonBall);
-            base.Game.Components.Remove(cannonBall);
-        }
+        //public void RemoveCannonBall(CannonBall cannonBall) {
+        //    cannonBalls.Remove(cannonBall);
+        //    base.Game.Components.Remove(cannonBall);
+        //}
 
         public CannonBall CreateCannonBall(Vector2 position, Vector2 firingForce) {
             var cannonBall = new CannonBall(this.Game, position, this.spriteBatch, this.PhysicsSimulator, this.CannonBallLayerDepth);            
@@ -50,7 +55,15 @@ namespace _2HourGame
         }
 
         void RemoveStationaryCannonBalls() {
-            cannonBalls = cannonBalls.Where(x => x.Speed != 0).ToList<CannonBall>();
+            List<CannonBall> cannonBallsToRemove = cannonBalls.Where(x => x.Speed < minimumCannonBallSpeed).ToList<CannonBall>();
+
+            foreach (CannonBall c in cannonBallsToRemove) 
+            {
+                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).SplashEffect(c);
+                c.RemoveFromPhysicsSimulator();
+                game.Components.Remove(c);
+                cannonBalls.Remove(c);
+            }
         }
     }
 }

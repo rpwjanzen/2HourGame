@@ -86,7 +86,7 @@ namespace _2HourGame
 
                     Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
 
-                    spriteBatch.Draw(texture, Position, source, Color, Rotation, origin, animatedTextureInfo.scale, SpriteEffects.None, ZIndex);
+                    spriteBatch.Draw(texture, Position + animatedTextureInfo.textureDrawOffset, source, Color, Rotation, origin, animatedTextureInfo.scale, SpriteEffects.None, ZIndex);
                 }
             }
             else // regular sprite

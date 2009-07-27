@@ -13,6 +13,7 @@ namespace _2HourGame
         public double framesPerSecond { get; private set; }
         public float scale { get; private set; }
         public bool animateOnceOnly { get; private set; }
+        public Vector2 textureDrawOffset { get; private set; }
 
         public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, bool animateOnceOnly)
         {
@@ -21,6 +22,13 @@ namespace _2HourGame
             this.framesPerSecond = framesPerSecond;
             this.scale = scale;
             this.animateOnceOnly = animateOnceOnly;
+            textureDrawOffset = calculateTextureDrawOffset();
         }
+
+        private Vector2 calculateTextureDrawOffset()
+        {
+            return new Vector2(((totalFrames - 1) / 2) * imageSize.X * scale, 0);
+        }
+
     }
 }
