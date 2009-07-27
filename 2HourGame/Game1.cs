@@ -52,9 +52,6 @@ namespace _2HourGame {
             addPlayer(PlayerIndex.Three, Color.Green, new Vector2((1280 / 4) - 100, (720 / 4) * 3), new Vector2((1280 / 4), (720 / 4) * 3 - 100), islands, ships, physicsSimulator, cannonBallManager, false, true);
             addPlayer(PlayerIndex.Four, Color.Yellow, new Vector2((1280 / 4) * 3 + 100, (720 / 4) * 3), new Vector2((1280 / 4) * 3, (720 / 4) * 3 - 100), islands, ships, physicsSimulator, cannonBallManager, false, false);
 
-            //Ship playerTwoShip = new Ship(this, new Vector2((1280 / 3), (720 / 3) + 100), spriteBatch, physicsSimulator, null, 0.01f, cannonBallManager);
-            //this.Components.Add(playerTwoShip);
-
             Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), null, spriteBatch, 11, physicsSimulator, 0.2f);
             this.Components.Add(goldIsland);
             islands.Add(goldIsland);
@@ -76,7 +73,7 @@ namespace _2HourGame {
             this.Components.Add(playerOneIsland);
             islands.Add(playerOneIsland);
 
-            Ship playerOneShip = new Ship(this, shipLocation, spriteBatch, physicsSimulator, playerOneIsland, 0.01f, cannonBallManager);
+            Ship playerOneShip = new Ship(this, color, shipLocation, spriteBatch, physicsSimulator, playerOneIsland, 0.01f, cannonBallManager);
             this.Components.Add(playerOneShip);
             ships.Add(playerOneShip);
 

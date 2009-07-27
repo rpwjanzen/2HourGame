@@ -24,15 +24,17 @@ namespace _2HourGame
 
         public void LoadContent()
         {
-            addTexture("boat");
             addTexture("boundingCircle");
             addTexture("cannonBall");
-            addTexture("cannonSmoke");
+            addTexture("cannonSmokeAnimation");
             addTexture("gold");
             addTexture("goldGetAnimation");
             addTexture("house");
             addTexture("island");
-            addTexture("splash");
+            addTexture("shipGunwale");
+            addTexture("shipHull");
+            addTexture("shipRigging");
+            addTexture("splashAnimation");
         }
 
         private void addTexture(string textureName) 
