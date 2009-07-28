@@ -46,16 +46,21 @@ namespace _2HourGame
             return cannonBall;
         }
 
-        void RemoveStationaryCannonBalls() {
+        public void RemoveStationaryCannonBalls() {
             List<CannonBall> cannonBallsToRemove = cannonBalls.Where(x => x.Speed < minimumCannonBallSpeed).ToList<CannonBall>();
 
             foreach (CannonBall c in cannonBallsToRemove) 
             {
                 ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).SplashEffect(c.Position);
-                c.RemoveFromPhysicsSimulator();
-                game.Components.Remove(c);
-                cannonBalls.Remove(c);
+                RemoveCannonBall(c);
             }
+        }
+
+        public void RemoveCannonBall(CannonBall cannonBall) 
+        {
+            cannonBall.RemoveFromPhysicsSimulator();
+            game.Components.Remove(cannonBall);
+            cannonBalls.Remove(cannonBall);
         }
     }
 }

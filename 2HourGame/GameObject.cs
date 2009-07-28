@@ -33,7 +33,7 @@ namespace _2HourGame
 
         public float ZIndex { get; private set; }
 
-        string contentName;
+        protected string contentName;
 
         public GameObject(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo)
             : this(game, position, contentName, scale, color, spriteBatch, animatedTextureInfo, 0) {

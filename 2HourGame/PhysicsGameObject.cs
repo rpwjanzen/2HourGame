@@ -42,6 +42,7 @@ namespace _2HourGame
             physicsSimulator.Add(this.Body);
 
             this.Geometry = GeomFactory.Instance.CreateEllipseGeom(this.Body, base.XRadius, base.YRadius, 12);
+            this.Geometry.Tag = this;
             physicsSimulator.Add(Geometry);
         }
 

@@ -75,19 +75,33 @@ namespace _2HourGame {
             this.LastFireTimeLeft = new TimeSpan();
             this.LastFireTimeRight = new TimeSpan();
             this.shipColor = playerColor;
-
-            //Geometry.OnCollision += ShipCollision;
         }
 
         private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
         {
-            //if(geom1.
+            if (geom1.Tag.GetType() == typeof(CannonBall) || geom2.Tag.GetType() == typeof(CannonBall))
+            {
+                takeDamage();
+
+                if (geom1.Tag.GetType() == typeof(CannonBall))
+                    this.CannonBallManager.RemoveCannonBall((CannonBall)geom1.Tag);
+                else
+                    this.CannonBallManager.RemoveCannonBall((CannonBall)geom2.Tag);
+            }
+            
             return true;
+        }
+
+        private void takeDamage() 
+        {
+            if (Gold > 0)
+                Gold--;
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
+            Geometry.OnCollision += ShipCollision;
             this.Body.RotationalDragCoefficient = 2500.0f;
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
