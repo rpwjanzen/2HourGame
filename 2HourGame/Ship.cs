@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using FarseerGames.FarseerPhysics;
+using FarseerGames.FarseerPhysics.Collisions;
+using FarseerGames.FarseerPhysics.Dynamics;
+using FarseerGames.FarseerPhysics.Factories;
 
 namespace _2HourGame {
     class Ship : PhysicsGameObject
@@ -59,8 +63,8 @@ namespace _2HourGame {
             return now.TotalGameTime.TotalSeconds - LastFireTimeRight.TotalSeconds > this.CannonCooldownTime;
         }
 
-        public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, float zIndex, CannonBallManager cannonBallManager)
-            : base(game, position, "shipHull", 0.6f, Color.White, spriteBatch, physicsSimulator, null, zIndex)
+        public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager)
+            : base(game, position, "shipHull", 0.6f, Color.White, spriteBatch, physicsSimulator, null, (float)ZIndexManager.drawnItemOrders.shipHull / 100)
         {
             this.GoldCapacity = 5;
             this.Gold = 0;
@@ -71,6 +75,14 @@ namespace _2HourGame {
             this.LastFireTimeLeft = new TimeSpan();
             this.LastFireTimeRight = new TimeSpan();
             this.shipColor = playerColor;
+
+            //Geometry.OnCollision += ShipCollision;
+        }
+
+        private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
+        {
+            //if(geom1.
+            return true;
         }
 
         protected override void LoadContent()
@@ -84,8 +96,8 @@ namespace _2HourGame {
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, origin, 1.0f, SpriteEffects.None, ZIndex - 0.001f);
-            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, origin, 1.0f, SpriteEffects.None, ZIndex - 0.002f);
+            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, origin, 1.0f, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipGunwale / 100);
+            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, origin, 1.0f, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipRigging / 100);
         }
         
         public void Thrust(float amount) {

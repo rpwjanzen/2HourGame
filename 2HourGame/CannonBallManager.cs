@@ -14,10 +14,6 @@ namespace _2HourGame
         public IEnumerable<CannonBall> CannonBalls {
             get { return cannonBalls; }
         }
-        float zIndex;
-        float CannonBallLayerDepth {
-            get { return this.zIndex; }
-        }
         PhysicsSimulator PhysicsSimulator { get; set; }
         SpriteBatch spriteBatch;
 
@@ -25,11 +21,10 @@ namespace _2HourGame
 
         Game game;
 
-        public CannonBallManager(Game game, float zIndex, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
+        public CannonBallManager(Game game, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
             : base(game) {
             cannonBalls = new List<CannonBall>();
             this.spriteBatch = spriteBatch;
-            this.zIndex = zIndex;
             this.PhysicsSimulator = physicsSimulator;
             this.game = game;
         }
@@ -41,7 +36,7 @@ namespace _2HourGame
         }
 
         public CannonBall CreateCannonBall(Vector2 position, Vector2 firingForce) {
-            var cannonBall = new CannonBall(this.Game, position, this.spriteBatch, this.PhysicsSimulator, this.CannonBallLayerDepth);            
+            var cannonBall = new CannonBall(this.Game, position, this.spriteBatch, this.PhysicsSimulator);            
             base.Game.Components.Add(cannonBall);
             cannonBall.ApplyFiringForce(firingForce);
             cannonBalls.Add(cannonBall);

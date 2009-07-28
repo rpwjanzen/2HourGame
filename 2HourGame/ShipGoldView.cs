@@ -20,8 +20,6 @@ namespace _2HourGame
 
         float scale;
 
-        public float zIndex;
-
         Ship ship;
 
         // where to display the gold
@@ -31,12 +29,11 @@ namespace _2HourGame
         bool top;
         bool left;
 
-        public ShipGoldView(Game game, Ship ship, bool top, bool left, SpriteBatch spriteBatch, float zIndex, float displayWidth)
+        public ShipGoldView(Game game, Ship ship, bool top, bool left, SpriteBatch spriteBatch, float displayWidth)
             : base(game)
         {
             this.ship = ship;
             this.spriteBatch = spriteBatch;
-            this.zIndex = zIndex;
             this.top = top;
             this.left = left;
             this.displayWidth = displayWidth;
@@ -62,7 +59,7 @@ namespace _2HourGame
             {
                 Color drawColor = i < ship.CarriedGold ? Color.White : Color.DarkGray;
 
-                spriteBatch.Draw(texture, goldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None, zIndex + (0.001f * i));
+                spriteBatch.Draw(texture, goldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipGoldView / 100 + (0.001f * i));
             }
 
             base.Draw(gameTime);

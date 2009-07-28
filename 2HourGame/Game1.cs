@@ -37,7 +37,7 @@ namespace _2HourGame {
             EffectManager effectManager = new EffectManager(this, spriteBatch);
             TextureManager textureManager = new TextureManager(this);
 
-			CannonBallManager cannonBallManager = new CannonBallManager(this, 0.001f, spriteBatch, physicsSimulator);
+			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch, physicsSimulator);
             this.Components.Add(cannonBallManager);
             //CannonBallManagerView cannonBallManagerView = new CannonBallManagerView(this, cannonBallManager, spriteBatch, 0.001f);
             //this.Components.Add(cannonBallManagerView);
@@ -52,13 +52,13 @@ namespace _2HourGame {
             addPlayer(PlayerIndex.Three, Color.Green, new Vector2((1280 / 4) - 100, (720 / 4) * 3), new Vector2((1280 / 4), (720 / 4) * 3 - 100), islands, ships, physicsSimulator, cannonBallManager, false, true);
             addPlayer(PlayerIndex.Four, Color.Yellow, new Vector2((1280 / 4) * 3 + 100, (720 / 4) * 3), new Vector2((1280 / 4) * 3, (720 / 4) * 3 - 100), islands, ships, physicsSimulator, cannonBallManager, false, false);
 
-            Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), null, spriteBatch, 11, physicsSimulator, 0.2f);
+            Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), null, spriteBatch, 11, physicsSimulator);
             this.Components.Add(goldIsland);
             islands.Add(goldIsland);
 
             this.Components.Add(physicsComponent);
 
-            IslandsGoldView goldView = new IslandsGoldView(this, islands, ships, spriteBatch, 0.01f);
+            IslandsGoldView goldView = new IslandsGoldView(this, islands, ships, spriteBatch);
             this.Components.Add(goldView);
 
             base.Initialize();
@@ -66,18 +66,18 @@ namespace _2HourGame {
 
         private void addPlayer(PlayerIndex playerIndex, Color color, Vector2 islandLocation, Vector2 shipLocation, List<Island> islands, List<Ship> ships, PhysicsSimulator physicsSimulator, CannonBallManager cannonBallManager, bool top, bool left) 
         {
-            GameObject playerOneHouse = new GameObject(this, islandLocation + new Vector2(20, 20), "house", 1f, color, spriteBatch, null, 0.1f);
+            GameObject playerOneHouse = new GameObject(this, islandLocation + new Vector2(20, 20), "house", 1f, color, spriteBatch, null, (float)ZIndexManager.drawnItemOrders.house / 100);
             this.Components.Add(playerOneHouse);
 
-            Island playerOneIsland = new Island(this, islandLocation, playerOneHouse, spriteBatch, 0, physicsSimulator, 0.2f);
+            Island playerOneIsland = new Island(this, islandLocation, playerOneHouse, spriteBatch, 0, physicsSimulator);
             this.Components.Add(playerOneIsland);
             islands.Add(playerOneIsland);
 
-            Ship playerOneShip = new Ship(this, color, shipLocation, spriteBatch, physicsSimulator, playerOneIsland, 0.01f, cannonBallManager);
+            Ship playerOneShip = new Ship(this, color, shipLocation, spriteBatch, physicsSimulator, playerOneIsland, cannonBallManager);
             this.Components.Add(playerOneShip);
             ships.Add(playerOneShip);
 
-            ShipGoldView playerOneShipGoldView = new ShipGoldView(this, playerOneShip, top, left, spriteBatch, 0.5f, 100);
+            ShipGoldView playerOneShipGoldView = new ShipGoldView(this, playerOneShip, top, left, spriteBatch, 100);
             this.Components.Add(playerOneShipGoldView);
 
             ShipMover playerOneShipMover = new ShipMover(this, playerOneShip, playerIndex, islands);

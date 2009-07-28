@@ -15,7 +15,7 @@ namespace _2HourGame
     class PhysicsGameObject : GameObject
     {
         PhysicsSimulator physicsSimulator;
-        Geom Geometry { get; set; }
+        protected Geom Geometry { get; set; }
         public Body Body { get; private set; }
         public float Speed {
             get { return this.Body.LinearVelocity.Length(); }

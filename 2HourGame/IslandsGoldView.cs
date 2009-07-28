@@ -21,15 +21,12 @@ namespace _2HourGame
 
         float scale;
 
-        public float zIndex;
-
-        public IslandsGoldView(Game game, IEnumerable<Island> islands, IEnumerable<Ship> ships, SpriteBatch spriteBatch, float zIndex)
+        public IslandsGoldView(Game game, IEnumerable<Island> islands, IEnumerable<Ship> ships, SpriteBatch spriteBatch)
             : base(game)
         {
             this.islands = islands;
             this.ships = ships;
             this.spriteBatch = spriteBatch;
-            this.zIndex = zIndex;
             scale = 0.3f;
             goldIslandOffset = new Vector2(17, 17);
         }
@@ -47,7 +44,7 @@ namespace _2HourGame
             {
                 for (int i = 0; i < island.Gold && i < 10; i++) 
                 {
-                    spriteBatch.Draw(texture, island.Position + goldIslandOffset + goldLocation(i) , null, Color.White, 0, origin, scale, SpriteEffects.None, zIndex);
+                    spriteBatch.Draw(texture, island.Position + goldIslandOffset + goldLocation(i), null, Color.White, 0, origin, scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.islandGoldView / 100);
                 }
             }
             
