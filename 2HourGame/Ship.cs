@@ -77,15 +77,15 @@ namespace _2HourGame {
         {
             base.LoadContent();
             this.Body.RotationalDragCoefficient = 5000.0f;
-            gunwale = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
-            rigging = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
+            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
+            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, origin, 1.0f, SpriteEffects.None, ZIndex - 0.001f);
-            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, origin, 1.0f, SpriteEffects.None, ZIndex - 0.002f);
+            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, base.Origin, this.Scale, SpriteEffects.None, base.ZIndex - 0.001f);
+            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, base.Origin, this.Scale, SpriteEffects.None, base.ZIndex - 0.002f);
         }
         
         public void Thrust(float amount) {
@@ -130,7 +130,7 @@ namespace _2HourGame {
                 // take into account the ship's momentum
                 thrust += this.Velocity;
 
-                var cannonBallPostion = (firingVector * (this.XAxis + 10)) + this.Position;
+                var cannonBallPostion = (firingVector * (this.XRadius + 10)) + this.Position;
                 
                 var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
 

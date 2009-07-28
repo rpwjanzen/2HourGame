@@ -13,13 +13,15 @@ namespace _2HourGame
         public virtual Vector2 Position { get; private set; }
         public virtual float Rotation { get; private set; }
 
-        public float XAxis { get; private set; }
-        public float YAxis { get; private set; }
+        public float XRadius { get; private set; }
+        public float YRadius { get; private set; }
+        public float Width { get { return XRadius * 2; } }
+        public float Height { get { return YRadius * 2; } }
         public bool IsCircle {
-            get { return this.XAxis == this.YAxis; }
+            get { return this.XRadius == this.YRadius; }
         }
 
-        float boundsMultiplyer;
+        public float Scale { get; private set; }
 
         protected SpriteBatch spriteBatch;
         Texture2D texture;
@@ -27,36 +29,36 @@ namespace _2HourGame
         TimeSpan animationStartTime;
         bool firstDraw;
 
-        Vector2 Origin { get; set; }
+        public Vector2 Origin { get; private set; }
 
-        float ZIndex { get; set; }
+        public float ZIndex { get; private set; }
 
         string contentName;
 
-        public GameObject(Game game, Vector2 position, string contentName, float boundsMultiplyer, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo)
-            : this(game, position, contentName, boundsMultiplyer, color, spriteBatch, animatedTextureInfo, 0) {
+        public GameObject(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo)
+            : this(game, position, contentName, scale, color, spriteBatch, animatedTextureInfo, 0) {
         }
 
-        public GameObject(Game game, Vector2 position, string contentName, float boundsMultiplyer, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo
+        public GameObject(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo
             , float zIndex)
             : base(game)
         {
             this.Color = color;
             this.Position = position;
             this.contentName = contentName;
-            this.boundsMultiplyer = boundsMultiplyer;
+            this.Scale = scale;
             this.spriteBatch = spriteBatch;
             this.animatedTextureInfo = animatedTextureInfo;
-            firstDraw = this.animatedTextureInfo != null ? true : false;
+            this.firstDraw = this.animatedTextureInfo != null ? true : false;
             this.ZIndex = zIndex;
         }
 
         protected override void LoadContent()
         {
-            texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
-            Origin = new Vector2(texture.Width / 2, texture.Height / 2);
-            this.XAxis = Origin.X * boundsMultiplyer;
-            this.YAxis = Origin.Y * boundsMultiplyer;
+            this.texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
+            this.Origin = new Vector2(texture.Width / 2, texture.Height / 2);
+            this.XRadius = this.Origin.X * this.Scale;
+            this.YRadius = this.Origin.Y * this.Scale;
 
             base.LoadContent();
         }
@@ -89,7 +91,7 @@ namespace _2HourGame
             }
             else // regular sprite
             {
-                spriteBatch.Draw(texture, Position, null, Color, Rotation, Origin, 1.0f, SpriteEffects.None, ZIndex);
+                spriteBatch.Draw(texture, Position, null, Color, Rotation, Origin, this.Scale, SpriteEffects.None, ZIndex);
             }
 
             base.Draw(gameTime);
