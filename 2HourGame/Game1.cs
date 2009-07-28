@@ -47,10 +47,10 @@ namespace _2HourGame {
 
             var worldBorder = new WorldBorder(new Rectangle(0, 0, 1280, 720), physicsSimulator);
 
-            addPlayer(PlayerIndex.One, Color.Blue, new Vector2(1280 / 4 - 100, 720 / 4), new Vector2((1280 / 4), (720 / 4) + 100), islands, ships, physicsSimulator, cannonBallManager, true, true);
-            addPlayer(PlayerIndex.Two, Color.Red, new Vector2((1280 / 4) * 3 + 100, (720 / 4)), new Vector2((1280 / 4) * 3, (720 / 4) + 100), islands, ships, physicsSimulator, cannonBallManager, true, false);
-            addPlayer(PlayerIndex.Three, Color.Green, new Vector2((1280 / 4) - 100, (720 / 4) * 3), new Vector2((1280 / 4), (720 / 4) * 3 - 100), islands, ships, physicsSimulator, cannonBallManager, false, true);
-            addPlayer(PlayerIndex.Four, Color.Yellow, new Vector2((1280 / 4) * 3 + 100, (720 / 4) * 3), new Vector2((1280 / 4) * 3, (720 / 4) * 3 - 100), islands, ships, physicsSimulator, cannonBallManager, false, false);
+            addPlayer(PlayerIndex.One, Color.Blue, new Vector2(1280 / 4 - 100, 720 / 4 - 50), new Vector2((1280 / 4), (720 / 4) + 50), islands, ships, physicsSimulator, cannonBallManager, true, true);
+            addPlayer(PlayerIndex.Two, Color.Red, new Vector2((1280 / 4) * 3 + 100, (720 / 4) - 50), new Vector2((1280 / 4) * 3, (720 / 4) + 50), islands, ships, physicsSimulator, cannonBallManager, true, false);
+            addPlayer(PlayerIndex.Three, Color.Green, new Vector2((1280 / 4) - 100, (720 / 4) * 3 + 50), new Vector2((1280 / 4), (720 / 4) * 3 - 50), islands, ships, physicsSimulator, cannonBallManager, false, true);
+            addPlayer(PlayerIndex.Four, Color.Yellow, new Vector2((1280 / 4) * 3 + 100, (720 / 4) * 3 + 50), new Vector2((1280 / 4) * 3, (720 / 4) * 3 - 50), islands, ships, physicsSimulator, cannonBallManager, false, false);
 
             Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), null, spriteBatch, 11, physicsSimulator);
             this.Components.Add(goldIsland);

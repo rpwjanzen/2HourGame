@@ -67,11 +67,10 @@ namespace _2HourGame
 
         private void setPositions(float displayWidth)
         {
-            float leftmost = left ? 0 : 1280 - displayWidth;
-            float topPosition = top ? 0 : 720 - texture.Height;
-            float length = displayWidth;
+            float leftmost = left ? 10 : 1280 - displayWidth - 10;
+            float topPosition = top ? 10 : 720 - texture.Height - 10;
 
-            float increment = length / ship.GoldCapacity;
+            float increment = displayWidth / ship.GoldCapacity;
 
             goldPositions = new List<Vector2>();
 
