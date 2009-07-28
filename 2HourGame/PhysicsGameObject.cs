@@ -35,13 +35,13 @@ namespace _2HourGame
         {
             base.LoadContent();
 
-            this.Body = BodyFactory.Instance.CreateCircleBody(this.Radius, 1.0f);
-            this.Body.Position = this.InitialPosition;
+            this.Body = BodyFactory.Instance.CreateEllipseBody(base.XRadius, base.YRadius, 1.0f);
+            this.Body.Position = base.Position;
             this.Body.LinearDragCoefficient = 0.95f;
             this.Body.RotationalDragCoefficient = 10.0f;
             physicsSimulator.Add(this.Body);
 
-            this.Geometry = GeomFactory.Instance.CreateCircleGeom(this.Body, this.Radius, 12);
+            this.Geometry = GeomFactory.Instance.CreateEllipseGeom(this.Body, base.XRadius, base.YRadius, 12);
             physicsSimulator.Add(Geometry);
         }
 

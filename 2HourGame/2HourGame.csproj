@@ -94,7 +94,6 @@
     <Compile Include="IslandsGoldView.cs" />
     <Compile Include="IEffectManager.cs" />
     <Compile Include="ITextureManager.cs" />
-    <Compile Include="IZIndexManager.cs" />
     <Compile Include="PhysicsComponent.cs" />
     <Compile Include="PhysicsGameObject.cs" />
     <Compile Include="ShipGoldView.cs" />
@@ -108,7 +107,6 @@
     <Compile Include="ShipMover.cs" />
     <Compile Include="TextureManager.cs" />
     <Compile Include="WorldBorder.cs" />
-    <Compile Include="ZIndexManagerOld.cs" />
     <Compile Include="ZIndexManager.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -89,15 +89,15 @@ namespace _2HourGame {
         {
             base.LoadContent();
             this.Body.RotationalDragCoefficient = 2500.0f;
-            gunwale = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
-            rigging = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
+            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
+            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, origin, 1.0f, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipGunwale / 100);
-            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, origin, 1.0f, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipRigging / 100);
+            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, base.Origin, this.Scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipGunwale / 100);
+            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, base.Origin, this.Scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipRigging / 100);
         }
         
         public void Thrust(float amount) {
@@ -120,7 +120,7 @@ namespace _2HourGame {
                 island.RemoveGold();
                 this.AddGold();
                 this.LastGoldLoadTime = now.TotalGameTime;
-                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this.Position);
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this.Position);
             }
         }
 
@@ -142,7 +142,7 @@ namespace _2HourGame {
                 // take into account the ship's momentum
                 thrust += this.Velocity;
 
-                var cannonBallPostion = (firingVector * (this.Radius + 10)) + this.Position;
+                var cannonBallPostion = (firingVector * (this.XRadius + 10)) + this.Position;
                 
                 var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
 
