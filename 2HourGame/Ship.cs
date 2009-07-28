@@ -77,8 +77,8 @@ namespace _2HourGame {
         {
             base.LoadContent();
             this.Body.RotationalDragCoefficient = 2500.0f;
-            gunwale = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
-            rigging = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
+            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
+            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
         }
 
         public override void Draw(GameTime gameTime)
