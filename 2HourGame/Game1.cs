@@ -12,6 +12,11 @@ using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 using FarseerGames.FarseerPhysics;
 
+using _2HourGame.Factories;
+using _2HourGame.View;
+using _2HourGame.View.GameServices;
+using _2HourGame.Model;
+
 namespace _2HourGame {
     /// <summary>
     /// This is the main type for your game
