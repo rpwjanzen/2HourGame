@@ -156,8 +156,10 @@ namespace _2HourGame {
                 // take into account the ship's momentum
                 thrust += this.Velocity;
 
-                var cannonBallPostion = (firingVector * (this.XRadius + 10)) + this.Position;
-                
+                var cannonBallPostion = (firingVector * (this.XRadius + 5)) + this.Position;
+                var smokePosition = firingVector * (this.XRadius - 2) + this.Position;
+
+                ((IEffectManager)Game.Services.GetService(typeof(IEffectManager))).CannonSmokeEffect(smokePosition);
                 var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
 
                 base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y)/8);
