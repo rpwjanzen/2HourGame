@@ -7,24 +7,26 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame
 {
-    class EffectManager : IEffectManager
+    class AnimationManager : IAnimationManager
     {
         Game game;
         SpriteBatch spriteBatch;
 
         Dictionary<String, AnimatedTextureInfo> textureInfos;
 
-        public EffectManager(Game game, SpriteBatch spriteBatch) 
+        public AnimationManager(Game game, SpriteBatch spriteBatch) 
         {
             this.game = game;
-            game.Services.AddService(typeof(IEffectManager), this);
+            game.Services.AddService(typeof(IAnimationManager), this);
 
             this.spriteBatch = spriteBatch;
             textureInfos = new Dictionary<String, AnimatedTextureInfo>();
 
-            textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, true, new Vector2(0, -50)));
-            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, true, new Vector2(13, -7)));
-            textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, true, new Vector2(6, 0)));
+            textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, new Vector2(0, -50), new AnimateAndDeleteAnimationBehaviour()));
+            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, new Vector2(13, -7), new AnimateAndDeleteAnimationBehaviour()));
+            textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, new Vector2(6, 0), new AnimateAndDeleteAnimationBehaviour()));
+            // the fps should be the number of frames over the ship reload time, and the scale should be the same as the ship
+            textureInfos.Add("cannon", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 1f, new Vector2(6, 0), new AnimateWhenStartTimeResetAnimationBehaviour()));
         }
 
         public void GoldPickupEffect(Vector2 position) 
@@ -52,6 +54,16 @@ namespace _2HourGame
             {
                 game.Components.Add(new GameObject(game, position, "cannonSmokeAnimation", 1f, Color.White, spriteBatch, animTextInfo, (float)ZIndexManager.drawnItemOrders.cannonSmokeAnimation / 100));
             }
+        }
+
+        public AnimatedTextureInfo getAnimatedTextureInfo(string name) 
+        {
+            AnimatedTextureInfo animTextInfo;
+            if (textureInfos.TryGetValue(name, out animTextInfo))
+            {
+                return animTextInfo;
+            }
+            return null;
         }
     }
 }

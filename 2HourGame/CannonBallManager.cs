@@ -41,8 +41,6 @@ namespace _2HourGame
             cannonBall.ApplyFiringForce(firingForce);
             cannonBalls.Add(cannonBall);
 
-            ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).CannonSmokeEffect(cannonBall.Position);
-
             return cannonBall;
         }
 

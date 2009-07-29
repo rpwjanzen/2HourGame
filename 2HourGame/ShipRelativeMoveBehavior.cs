@@ -9,7 +9,9 @@ namespace _2HourGame {
     class ShipRelativeMoveBehavior {
         public void MoveShip(GamePadState gs, Ship ship) {
             if (gs.ThumbSticks.Left != Vector2.Zero) {
-                ship.Accelerate(gs.ThumbSticks.Left.Y * 15);
+				if (gs.ThumbSticks.Left.Y > 0) {
+                	ship.Accelerate(gs.ThumbSticks.Left.Y * 15);
+				}
                 ship.Rotate(gs.ThumbSticks.Left.X * 25);
             }
         }

@@ -18,6 +18,7 @@ namespace _2HourGame
             cannonBall,
             cannonSmokeAnimation,
             shipRigging,
+            shipCannon,
             shipGunwale,
             shipHull,
             islandGoldView,
