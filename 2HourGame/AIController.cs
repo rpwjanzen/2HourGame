@@ -11,16 +11,7 @@ namespace _2HourGame {
         IEnumerable<Island> OtherIslands { get; set; }
         Ship ControlledShip { get; set; }
         float ProximityRadius { get; set; }
-        Ship targetShip;
-        Ship TargetShip {
-            get { return targetShip; }
-            set {
-                if (value == this.ControlledShip) {
-                    throw new ArgumentException("no!");
-                }
-                this.targetShip = value;
-            }
-        }
+        Ship TargetShip { get; set; }
 
         /// <summary>
         /// An AIController should have access to all information a user of the system has.
@@ -42,9 +33,6 @@ namespace _2HourGame {
             this.GoToPoint(this.TargetShip.Position, gameTime);
             base.Update(gameTime);
         }
-
-        float interval = 1.0f;
-        TimeSpan lastTime;
 
         void GoToPoint(Vector2 point, GameTime gt) {
             var delta = this.ControlledShip.Position - point;
@@ -73,16 +61,6 @@ namespace _2HourGame {
             } else if (angleDifference < -180.0f) {
                 this.TurnRight();
             } else { }
-
-            //if (gt.TotalGameTime.TotalSeconds - lastTime.TotalSeconds > interval) {
-            //    Console.WriteLine("Controlled Ship Rotation: " + myRotation);
-            //    Console.WriteLine("Desired Ship Rotation: " + desiredRotation);
-            //    Console.WriteLine("Difference: " + angleDifference);
-            //    lastTime = gt.TotalGameTime;
-            //}
-            //Console.WriteLine("Controlled Ship Rotation: " + myRotation);
-            //Console.WriteLine("Desired Ship Rotation: " + desiredRotation);
-            //Console.WriteLine("Difference: " + angleDifference);
         }
 
         void TurnLeft() {
