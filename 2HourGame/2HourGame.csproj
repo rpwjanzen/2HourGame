@@ -86,17 +86,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AIController.cs" />
     <Compile Include="AnimatedTextureInfo.cs" />
     <Compile Include="CannonBallManager.cs" />
     <Compile Include="CannonBall.cs" />
+    <Compile Include="DrawableGameObjectFactory.cs" />
     <Compile Include="EffectManager.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="GameObjectFactory.cs" />
+    <Compile Include="HouseFactory.cs" />
+    <Compile Include="IslandFactory.cs" />
     <Compile Include="IslandsGoldView.cs" />
     <Compile Include="IEffectManager.cs" />
     <Compile Include="ITextureManager.cs" />
+    <Compile Include="LinqExtensions.cs" />
     <Compile Include="PhysicsComponent.cs" />
     <Compile Include="PhysicsGameObject.cs" />
+    <Compile Include="PhysicsGameObjectFactory.cs" />
+    <Compile Include="ShipFactory.cs" />
     <Compile Include="ShipGoldView.cs" />
+    <Compile Include="ShipGoldViewFactory.cs" />
+    <Compile Include="ShipMoverFactory.cs" />
     <Compile Include="ShipRelativeMoveBehavior.cs" />
     <Compile Include="Island.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

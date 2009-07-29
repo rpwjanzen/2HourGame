@@ -37,6 +37,7 @@ namespace _2HourGame {
         public int CarriedGold {
             get { return this.Gold; }
         }
+
         private bool IsFull {
             get { return this.Gold >= this.GoldCapacity; }
         }
@@ -79,16 +80,16 @@ namespace _2HourGame {
 
         private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
         {
-            if (geom1.Tag.GetType() == typeof(CannonBall) || geom2.Tag.GetType() == typeof(CannonBall))
-            {
-                takeDamage();
+            if (!(geom1.Tag != null || geom2.Tag == null)) {
+                if (geom1.Tag.GetType() == typeof(CannonBall) || geom2.Tag.GetType() == typeof(CannonBall)) {
+                    takeDamage();
 
-                if (geom1.Tag.GetType() == typeof(CannonBall))
-                    this.CannonBallManager.RemoveCannonBall((CannonBall)geom1.Tag);
-                else
-                    this.CannonBallManager.RemoveCannonBall((CannonBall)geom2.Tag);
+                    if (geom1.Tag.GetType() == typeof(CannonBall))
+                        this.CannonBallManager.RemoveCannonBall((CannonBall)geom1.Tag);
+                    else
+                        this.CannonBallManager.RemoveCannonBall((CannonBall)geom2.Tag);
+                }
             }
-            
             return true;
         }
 

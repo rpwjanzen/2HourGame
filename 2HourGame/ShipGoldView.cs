@@ -13,6 +13,7 @@ namespace _2HourGame
     /// </summary>
     class ShipGoldView : DrawableGameComponent
     {
+        public enum GoldViewPosition { UpperLeft, UpperRight, LowerLeft, LowerRight }
         SpriteBatch spriteBatch;
         Texture2D texture;
 
@@ -23,61 +24,83 @@ namespace _2HourGame
         Ship ship;
 
         // where to display the gold
-        List<Vector2> goldPositions;
+        List<Vector2> GoldPositions { get; set; }
 
         // where is this ships goldview
-        bool top;
-        bool left;
+        GoldViewPosition Position { get; set; }
 
-        public ShipGoldView(Game game, Ship ship, bool top, bool left, SpriteBatch spriteBatch, float displayWidth)
+        public ShipGoldView(Game game, Ship ship, GoldViewPosition position , SpriteBatch spriteBatch, float displayWidth)
             : base(game)
         {
             this.ship = ship;
             this.spriteBatch = spriteBatch;
-            this.top = top;
-            this.left = left;
             this.displayWidth = displayWidth;
             scale = 1f;
-
-            //setPositions(top, left, displayWidth);
+            this.Position = position;
         }
 
         protected override void LoadContent()
         {
             texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTexture("gold");
-            //origin = new Vector2(texture.Width / 2, texture.Height / 2);
-            setPositions(displayWidth);
+            this.GoldPositions = CalculatePositions(displayWidth);
             base.LoadContent();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if(ship.CarriedGold != goldPositions.Count)
-                setPositions(displayWidth);
+            if (ship.CarriedGold != GoldPositions.Count) {
+                this.GoldPositions = CalculatePositions(displayWidth);
+            }
 
-            for (int i = 0; i < goldPositions.Count; i++)
+            for (int i = 0; i < GoldPositions.Count; i++)
             {
                 Color drawColor = i < ship.CarriedGold ? Color.White : Color.DarkGray;
 
-                spriteBatch.Draw(texture, goldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipGoldView / 100 + (0.001f * i));
+                spriteBatch.Draw(texture, GoldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipGoldView / 100 + (0.001f * i));
             }
 
             base.Draw(gameTime);
         }
 
-        private void setPositions(float displayWidth)
+        private List<Vector2> CalculatePositions(float displayWidth)
         {
-            float leftmost = left ? 10 : 1280 - displayWidth - 10;
-            float topPosition = top ? 10 : 720 - texture.Height - 10;
+            Vector2 position;
+
+            switch (this.Position) {
+                case GoldViewPosition.UpperLeft:
+                    position = new Vector2(
+                        10,
+                        10);
+                    break;
+                case GoldViewPosition.UpperRight:
+                    position = new Vector2(
+                        1280 - displayWidth - 10,
+                        10);
+                    break;
+                case GoldViewPosition.LowerLeft:
+                    position = new Vector2(
+                        10,
+                        720 - texture.Height - 10);
+                    break;
+                case GoldViewPosition.LowerRight:
+                    position = new Vector2(
+                        1280 - displayWidth - 10,
+                        720 - texture.Height - 10);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             float increment = displayWidth / ship.GoldCapacity;
 
-            goldPositions = new List<Vector2>();
-
+            var goldPositions = new List<Vector2>();
             for (int i = 0; i < ship.GoldCapacity; i++)
             {
-                goldPositions.Add(new Vector2(leftmost + (i * increment), topPosition));
+                var offset = new Vector2(i * increment, 0);
+                goldPositions.Add(position + offset);
             }
+
+            return goldPositions;
         }
     }
 }

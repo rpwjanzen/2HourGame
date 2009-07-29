@@ -27,61 +27,91 @@ namespace _2HourGame {
         }
 
         protected override void Initialize() {
-
-            List<Island> islands = new List<Island>();
-            List<Ship> ships = new List<Ship>();
+            float width = graphics.PreferredBackBufferWidth;
+            float height = graphics.PreferredBackBufferHeight;
 
 			spriteBatch = new SpriteBatch(this.GraphicsDevice);
             PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
+            PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
+            physicsComponent.Debug = true;
+            this.Components.Add(physicsComponent);
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
             TextureManager textureManager = new TextureManager(this);
 
 			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch, physicsSimulator);
             this.Components.Add(cannonBallManager);
-            //CannonBallManagerView cannonBallManagerView = new CannonBallManagerView(this, cannonBallManager, spriteBatch, 0.001f);
-            //this.Components.Add(cannonBallManagerView);
 
-            PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
-            physicsComponent.Debug = true;
+            var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
 
-            var worldBorder = new WorldBorder(new Rectangle(0, 0, 1280, 720), physicsSimulator);
+            var playerColors = new[] {
+                Color.Blue,
+                Color.Red,
+                Color.Green,
+                Color.Yellow
+            }.ToList();
 
-            addPlayer(PlayerIndex.One, Color.Blue, new Vector2(1280 / 4 - 100, 720 / 4 - 50), new Vector2((1280 / 4), (720 / 4) + 50), islands, ships, physicsSimulator, cannonBallManager, true, true);
-            addPlayer(PlayerIndex.Two, Color.Red, new Vector2((1280 / 4) * 3 + 100, (720 / 4) - 50), new Vector2((1280 / 4) * 3, (720 / 4) + 50), islands, ships, physicsSimulator, cannonBallManager, true, false);
-            addPlayer(PlayerIndex.Three, Color.Green, new Vector2((1280 / 4) - 100, (720 / 4) * 3 + 50), new Vector2((1280 / 4), (720 / 4) * 3 - 50), islands, ships, physicsSimulator, cannonBallManager, false, true);
-            addPlayer(PlayerIndex.Four, Color.Yellow, new Vector2((1280 / 4) * 3 + 100, (720 / 4) * 3 + 50), new Vector2((1280 / 4) * 3, (720 / 4) * 3 - 50), islands, ships, physicsSimulator, cannonBallManager, false, false);
+            var islandPositions = new[] {
+                new Vector2(width / 4 - 100, height / 4 - 50),
+                new Vector2((width / 4) * 3 + 100, (height / 4) - 50),
+                new Vector2((width / 4) - 100, (height / 4) * 3 + 50),
+                new Vector2((width / 4) * 3 + 100, (height / 4) * 3 + 50)
+            }.ToList();
+            
+            // maybe it's being re-evaluated each time and we are getting a bunch of extra objects
+            var islandBuildingOffset = new Vector2(20, 20);
+            var islandBuildings = new HouseFactory(this, spriteBatch).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
+            foreach (var v in islandBuildings) {
+                this.Components.Add(v);
+            }
 
-            Island goldIsland = new Island(this, new Vector2(1280 / 2, 720 / 2), null, spriteBatch, 11, physicsSimulator);
-            this.Components.Add(goldIsland);
-            islands.Add(goldIsland);
+            IslandFactory islandFactory = new IslandFactory(this, spriteBatch, physicsSimulator);
+            var playerIslands = islandFactory.CreatePlayerIslands(islandPositions, islandBuildings);
+            foreach (var v in playerIslands) {
+                this.Components.Add(v);
+            }
 
-            this.Components.Add(physicsComponent);
+            var goldIslands = new List<Island>();
+            goldIslands.Add(islandFactory.CreateIsland(new Vector2(width / 2, height / 2), null, 11));
+            foreach (var v in goldIslands) {
+                this.Components.Add(v);
+            }
 
-            IslandsGoldView goldView = new IslandsGoldView(this, islands, ships, spriteBatch);
-            this.Components.Add(goldView);
+            var playerPositions = new[] {
+                new Vector2((width / 4), (height / 4) + 50),
+                new Vector2((width / 4) * 3, (height / 4) + 50),
+                new Vector2((width / 4), (height / 4) * 3 - 50),
+                new Vector2((width / 4) * 3, (height / 4) * 3 - 50)
+            }.ToList();
+
+            var ships = new ShipFactory(this, spriteBatch, physicsSimulator, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands);
+            foreach (var v in ships) {
+                this.Components.Add(v);
+            }
+
+            var shipGoldViewFactory = new ShipGoldViewFactory(this, spriteBatch, 100);
+            var playerGoldViews = ships.Zip(new[] {
+                ShipGoldView.GoldViewPosition.UpperLeft,
+                ShipGoldView.GoldViewPosition.UpperRight, 
+                ShipGoldView.GoldViewPosition.LowerLeft, 
+                ShipGoldView.GoldViewPosition.LowerRight
+            }, (s, p) => shipGoldViewFactory.CreateShipGoldView(s, p)).ToList();
+            foreach (var v in playerGoldViews) {
+                this.Components.Add(v);
+            }
+
+            var shipMovers = new ShipMoverFactory(this, playerIslands.Concat(goldIslands)).CreateShipMovers(ships, new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four });
+            
+            for(int i = 0; i < shipMovers.Count - 1; i++) {
+                this.Components.Add(shipMovers[i]);
+            }
+            var targetShip = ships[0];
+            var controlledShip = ships[3];
+            var islands = playerIslands.Concat(goldIslands);
+            AIController playerFourController = new AIController(this, controlledShip, controlledShip.HomeIsland, islands.Where(i => i != controlledShip.HomeIsland).ToList(), targetShip);
+            this.Components.Add(playerFourController);
 
             base.Initialize();
-        }
-
-        private void addPlayer(PlayerIndex playerIndex, Color color, Vector2 islandLocation, Vector2 shipLocation, List<Island> islands, List<Ship> ships, PhysicsSimulator physicsSimulator, CannonBallManager cannonBallManager, bool top, bool left) 
-        {
-            GameObject playerOneHouse = new GameObject(this, islandLocation + new Vector2(20, 20), "house", 1f, color, spriteBatch, null, (float)ZIndexManager.drawnItemOrders.house / 100);
-            this.Components.Add(playerOneHouse);
-
-            Island playerOneIsland = new Island(this, islandLocation, playerOneHouse, spriteBatch, 0, physicsSimulator);
-            this.Components.Add(playerOneIsland);
-            islands.Add(playerOneIsland);
-
-            Ship playerOneShip = new Ship(this, color, shipLocation, spriteBatch, physicsSimulator, playerOneIsland, cannonBallManager);
-            this.Components.Add(playerOneShip);
-            ships.Add(playerOneShip);
-
-            ShipGoldView playerOneShipGoldView = new ShipGoldView(this, playerOneShip, top, left, spriteBatch, 100);
-            this.Components.Add(playerOneShipGoldView);
-
-            ShipMover playerOneShipMover = new ShipMover(this, playerOneShip, playerIndex, islands);
-            this.Components.Add(playerOneShipMover);
         }
 
         protected override void Draw(GameTime gameTime) {
