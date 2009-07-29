@@ -86,28 +86,6 @@ namespace _2HourGame.Model
             this.shipColor = playerColor;
         }
 
-        private CannonView initializeCannonView(bool isLeftCannon) 
-        {
-            CannonView newCannonView = new CannonView(
-                Game,
-                isLeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) * this.XRadius + this.Position 
-                    : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y) * this.XRadius + this.Position,
-                "cannonAnimation",
-                ShipScale,
-                Color.White,
-                spriteBatch,
-                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo("cannon")
-                );
-
-            if(isLeftCannon)
-                newCannonView.UpdateRotation(2f * (float)Math.PI);
-            else
-                newCannonView.UpdateRotation((float)Math.PI);
-
-            Game.Components.Add(newCannonView);
-            return newCannonView;
-        }
-
         private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
         {
             if (!(geom1.Tag != null || geom2.Tag == null)) {
@@ -137,8 +115,16 @@ namespace _2HourGame.Model
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
 
-            LeftCannonView = initializeCannonView(true);
-            RightCannonView = initializeCannonView(false);
+            LeftCannonView = initializeCannonView(CannonView.CannonType.LeftCannon);
+            RightCannonView = initializeCannonView(CannonView.CannonType.RightCannon);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            UpdateCannonView(LeftCannonView);
+            UpdateCannonView(RightCannonView);
         }
 
         public override void Draw(GameTime gameTime)
@@ -209,6 +195,48 @@ namespace _2HourGame.Model
                 else
                     this.LastFireTimeRight = now.TotalGameTime;
             }
+        }
+
+
+        private CannonView initializeCannonView(CannonView.CannonType cannonType)
+        {
+            CannonView newCannonView = new CannonView(
+                Game,
+                getCannonPosition(cannonType),
+                "cannonAnimation",
+                ShipScale,
+                Color.White,
+                spriteBatch,
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo("cannon"),
+                cannonType
+                );
+
+            newCannonView.UpdateRotation(getCannonRotation(cannonType));
+
+            Game.Components.Add(newCannonView);
+            return newCannonView;
+        }
+
+        private void UpdateCannonView(CannonView cannonView) 
+        {
+            cannonView.UpdateRotation(getCannonRotation(cannonView.cannonType));
+            cannonView.UpdatePosition(getCannonPosition(cannonView.cannonType));
+        }
+
+        private float getCannonRotation(CannonView.CannonType cannonType) 
+        {
+            if (cannonType == CannonView.CannonType.LeftCannon)
+                return 2f * (float)Math.PI + this.Rotation;
+            else
+                return (float)Math.PI + this.Rotation;
+        }
+
+        private Vector2 getCannonPosition(CannonView.CannonType cannonType) 
+        {
+            if (cannonType == CannonView.CannonType.LeftCannon)
+                return new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) * (this.XRadius - 8) + this.Position;
+            else
+                return new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y) * (this.XRadius - 8) + this.Position;
         }
     }
 }

@@ -13,7 +13,15 @@ namespace _2HourGame.View
         public double framesPerSecond { get; private set; }
         public float scale { get; private set; }
         public bool animateOnceOnly { get; private set; }
-        public Vector2 textureDrawOffset { get; private set; }
+
+        private Vector2 textureDrawOffset;
+
+        public Vector2 textureOrigin {
+            get
+            {
+                return new Vector2(imageSize.X / 2f, imageSize.Y / 2f);
+            }
+        }
 
         public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, bool animateOnceOnly, Vector2 drawOffset)
         {
@@ -22,13 +30,13 @@ namespace _2HourGame.View
             this.framesPerSecond = framesPerSecond;
             this.scale = scale;
             this.animateOnceOnly = animateOnceOnly;
-            textureDrawOffset = calculateTextureDrawOffset(drawOffset);
+            textureDrawOffset = drawOffset;
         }
 
-        private Vector2 calculateTextureDrawOffset(Vector2 drawOffset)
+        public Vector2 drawOffset(float rotationRadians)
         {
-            return new Vector2(((totalFrames - 1) / 2) * imageSize.X * scale, 0) + drawOffset;
+            Matrix rotationMatrix = Matrix.CreateRotationZ(rotationRadians);
+            return Vector2.Transform(textureDrawOffset, rotationMatrix);
         }
-
     }
 }

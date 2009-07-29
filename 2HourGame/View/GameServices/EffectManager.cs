@@ -27,9 +27,9 @@ namespace _2HourGame
             textureInfos = new Dictionary<String, AnimatedTextureInfo>();
 
             textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, true, new Vector2(0, -50)));
-            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, true, new Vector2(13, -7)));
-            textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, true, new Vector2(6, 0)));
-            textureInfos.Add("cannon", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 1f, true, new Vector2(0, 0)));
+            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, true, new Vector2(0, -7)));
+            textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, true, new Vector2(0, 0)));
+            textureInfos.Add("cannon", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 0.6f, true, new Vector2(0, 4)));
         }
 
         public void GoldPickupEffect(Vector2 position) 
@@ -37,7 +37,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("goldPickup", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "goldGetAnimation", 1f, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
+                game.Components.Add(new GameObject(game, position, "goldGetAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
             }
         }
 
@@ -46,7 +46,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("splash", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "splashAnimation", 1f, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.splashAnimation)));
+                game.Components.Add(new GameObject(game, position, "splashAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.splashAnimation)));
             }
         }
 
@@ -55,7 +55,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("cannonSmoke", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "cannonSmokeAnimation", 1f, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonSmokeAnimation)));
+                game.Components.Add(new GameObject(game, position, "cannonSmokeAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonSmokeAnimation)));
             }
         }
 

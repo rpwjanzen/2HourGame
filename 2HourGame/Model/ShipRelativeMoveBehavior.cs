@@ -10,7 +10,7 @@ namespace _2HourGame.Model {
         public void MoveShip(GamePadState gs, Ship ship) {
             if (gs.ThumbSticks.Left != Vector2.Zero) {
 				if (gs.ThumbSticks.Left.Y > 0) {
-                	ship.Accelerate(gs.ThumbSticks.Left.Y * 15);
+                	ship.Accelerate(gs.ThumbSticks.Left.Y * 10);
 				}
                 ship.Rotate(gs.ThumbSticks.Left.X * 25);
             }

@@ -25,6 +25,7 @@ namespace _2HourGame.View.GameServices
         public void LoadContent()
         {
             addTexture("boundingCircle");
+            addTexture("cannonAnimation");
             addTexture("cannonBall");
             addTexture("cannonSmokeAnimation");
             addTexture("gold");

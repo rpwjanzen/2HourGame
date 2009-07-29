@@ -59,7 +59,10 @@ namespace _2HourGame.Model
         protected override void LoadContent()
         {
             this.texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
-            this.Origin = new Vector2(texture.Width / 2, texture.Height / 2);
+            if (animatedTextureInfo == null)
+                this.Origin = new Vector2(texture.Width / 2, texture.Height / 2);
+            else
+                this.Origin = animatedTextureInfo.textureOrigin;
             this.XRadius = this.Origin.X * this.Scale;
             this.YRadius = this.Origin.Y * this.Scale;
 
@@ -89,7 +92,7 @@ namespace _2HourGame.Model
 
                     Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
 
-                    spriteBatch.Draw(texture, Position + animatedTextureInfo.textureDrawOffset, source, Color, Rotation, Origin, animatedTextureInfo.scale, SpriteEffects.None, ZIndex);
+                    spriteBatch.Draw(texture, Position + animatedTextureInfo.drawOffset(Rotation), source, Color, Rotation, Origin, this.Scale, SpriteEffects.None, ZIndex);
                 }
             }
             else // regular sprite
