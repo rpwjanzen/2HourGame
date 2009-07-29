@@ -10,8 +10,8 @@ namespace _2HourGame
     class GameObject : DrawableGameComponent
     {
         public Color Color { get; private set; }
-        public virtual Vector2 Position { get; private set; }
-        public virtual float Rotation { get; private set; }
+        public virtual Vector2 Position { get; protected set; }
+        public virtual float Rotation { get; protected set; } // in radians
 
         public float XRadius { get; private set; }
         public float YRadius { get; private set; }
@@ -24,10 +24,10 @@ namespace _2HourGame
         public float Scale { get; private set; }
 
         protected SpriteBatch spriteBatch;
-        Texture2D texture;
-        AnimatedTextureInfo animatedTextureInfo;
-        TimeSpan animationStartTime;
-        bool firstDraw;
+        protected Texture2D texture;
+        protected AnimatedTextureInfo animatedTextureInfo;
+        protected TimeSpan animationStartTime;
+        protected bool firstDraw;
 
         public Vector2 Origin { get; private set; }
 

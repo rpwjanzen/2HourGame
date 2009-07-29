@@ -17,9 +17,10 @@ namespace _2HourGame {
         private Texture2D gunwale;
         private Texture2D rigging;
 
+        private const float ShipScale = 0.6f;
+
         public int GoldCapacity { get; private set; }
         int Gold { get; set; }
-
         
         readonly float MaximumGoldTransferSpeed = 0.15f;
         bool CanTransferGold {
@@ -51,6 +52,9 @@ namespace _2HourGame {
         }
         Vector2 FiringVelocity { get; set; }
 
+        CannonView LeftCannonView;
+        CannonView RightCannonView;
+
         TimeSpan LastFireTimeLeft { get; set; }
         TimeSpan LastFireTimeRight { get; set; }
         // in seconds
@@ -65,7 +69,7 @@ namespace _2HourGame {
         }
 
         public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager)
-            : base(game, position, "shipHull", 0.6f, Color.White, spriteBatch, physicsSimulator, null, (float)ZIndexManager.drawnItemOrders.shipHull / 100)
+            : base(game, position, "shipHull", ShipScale, Color.White, spriteBatch, physicsSimulator, null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull))
         {
             this.GoldCapacity = 5;
             this.Gold = 0;
@@ -76,6 +80,28 @@ namespace _2HourGame {
             this.LastFireTimeLeft = new TimeSpan();
             this.LastFireTimeRight = new TimeSpan();
             this.shipColor = playerColor;
+        }
+
+        private CannonView initializeCannonView(bool isLeftCannon) 
+        {
+            CannonView newCannonView = new CannonView(
+                Game,
+                isLeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) * this.XRadius + this.Position 
+                    : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y) * this.XRadius + this.Position,
+                "cannonAnimation",
+                ShipScale,
+                Color.White,
+                spriteBatch,
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo("cannon")
+                );
+
+            if(isLeftCannon)
+                newCannonView.UpdateRotation(2f * (float)Math.PI);
+            else
+                newCannonView.UpdateRotation((float)Math.PI);
+
+            Game.Components.Add(newCannonView);
+            return newCannonView;
         }
 
         private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
@@ -106,13 +132,16 @@ namespace _2HourGame {
             this.Body.RotationalDragCoefficient = 2500.0f;
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
+
+            LeftCannonView = initializeCannonView(true);
+            RightCannonView = initializeCannonView(false);
         }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, base.Origin, this.Scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipGunwale / 100);
-            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, base.Origin, this.Scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipRigging / 100);
+            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, base.Origin, this.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
+            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, base.Origin, this.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
         }
         
         public void Thrust(float amount) {
@@ -150,6 +179,12 @@ namespace _2HourGame {
 
         public void FireCannon(GameTime now, bool isLeftCannon) {
             if ((isLeftCannon && LeftCannonHasCooledDown(now)) || (!isLeftCannon && RightCannonHasCooledDown(now))) {
+                // start the firing animation
+                if(isLeftCannon)
+                    LeftCannonView.PlayAnimation(now);
+                else
+                    RightCannonView.PlayAnimation(now);
+                
                 //get the right vector
                 Vector2 firingVector = isLeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y);
                 var thrust = firingVector * 75.0f;

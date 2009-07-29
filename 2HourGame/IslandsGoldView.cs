@@ -44,7 +44,7 @@ namespace _2HourGame
             {
                 for (int i = 0; i < island.Gold && i < 10; i++) 
                 {
-                    spriteBatch.Draw(texture, island.Position + goldIslandOffset + goldLocation(i), null, Color.White, 0, origin, scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.islandGoldView / 100);
+                    spriteBatch.Draw(texture, island.Position + goldIslandOffset + goldLocation(i), null, Color.White, 0, origin, scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.islandGoldView));
                 }
             }
             

@@ -13,7 +13,7 @@ namespace _2HourGame {
         }
 
         public GameObject CreateHouse(Color houseColor, Vector2 houseLocation) {
-            return new GameObject(base.Game, houseLocation, "house", 1f, houseColor, base.SpriteBatch, null, (float)ZIndexManager.drawnItemOrders.house / 100);
+            return new GameObject(base.Game, houseLocation, "house", 1f, houseColor, base.SpriteBatch, null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house));
         }
     }
 }

@@ -26,5 +26,10 @@ namespace _2HourGame
             island,
             splashAnimation
         }
+
+        public static float getZIndex(drawnItemOrders drawnItem) 
+        {
+            return ((int)drawnItem) / 100f;
+        }
     }
 }

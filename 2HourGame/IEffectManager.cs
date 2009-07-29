@@ -7,5 +7,6 @@ namespace _2HourGame
         void GoldPickupEffect(Vector2 position);
         void SplashEffect(Vector2 position);
         void CannonSmokeEffect(Vector2 position);
+        AnimatedTextureInfo getAnimatedTextureInfo(string effectName);
     }
 }

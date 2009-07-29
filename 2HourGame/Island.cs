@@ -18,7 +18,7 @@ namespace _2HourGame {
         }
 
         public Island(Game game, Vector2 position, GameObject islandBuilding, SpriteBatch spriteBatch, int initialGold, PhysicsSimulator physicsSimulator)
-            : base(game, position, "island", 1f, Color.White, spriteBatch, physicsSimulator, null, (float)ZIndexManager.drawnItemOrders.island / 100)
+            : base(game, position, "island", 1f, Color.White, spriteBatch, physicsSimulator, null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.island))
         {
 			this.islandBuilding = islandBuilding;
 			this.Gold = initialGold;

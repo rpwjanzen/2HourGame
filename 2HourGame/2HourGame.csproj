@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="AIController.cs" />
     <Compile Include="AnimatedTextureInfo.cs" />
+    <Compile Include="CannonView.cs" />
     <Compile Include="CannonBallManager.cs" />
     <Compile Include="CannonBall.cs" />
     <Compile Include="DrawableGameObjectFactory.cs" />

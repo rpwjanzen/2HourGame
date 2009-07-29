@@ -11,7 +11,7 @@ namespace _2HourGame
     class CannonBall : PhysicsGameObject
     {
         public CannonBall(Game game, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
-            : base(game, position, "cannonBall", 1f, Color.White, spriteBatch, physicsSimulator, null, (float)ZIndexManager.drawnItemOrders.cannonBall/100)
+            : base(game, position, "cannonBall", 1f, Color.White, spriteBatch, physicsSimulator, null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonBall))
         {
         }
 

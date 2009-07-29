@@ -56,7 +56,7 @@ namespace _2HourGame
             {
                 Color drawColor = i < ship.CarriedGold ? Color.White : Color.DarkGray;
 
-                spriteBatch.Draw(texture, GoldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None, (float)ZIndexManager.drawnItemOrders.shipGoldView / 100 + (0.001f * i));
+                spriteBatch.Draw(texture, GoldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGoldView) + (0.001f * i));
             }
 
             base.Draw(gameTime);
