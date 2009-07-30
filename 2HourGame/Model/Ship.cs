@@ -90,7 +90,7 @@ namespace _2HourGame.Model
         {
             if (!(geom1.Tag != null || geom2.Tag == null)) {
                 if (geom1.Tag.GetType() == typeof(CannonBall) || geom2.Tag.GetType() == typeof(CannonBall)) {
-                    takeDamage();
+                    hitByCannonBall();
 
                     if (geom1.Tag.GetType() == typeof(CannonBall))
                         this.CannonBallManager.RemoveCannonBall((CannonBall)geom1.Tag);
@@ -101,7 +101,10 @@ namespace _2HourGame.Model
             return true;
         }
 
-        private void takeDamage() 
+        /// <summary>
+        /// Ship reaction to being hit by a cannon ball.
+        /// </summary>
+        private void hitByCannonBall() 
         {
             if (Gold > 0)
                 Gold--;
@@ -177,7 +180,7 @@ namespace _2HourGame.Model
                 
                 //get the right vector
                 Vector2 firingVector = isLeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y);
-                var thrust = firingVector * 75.0f;
+                var thrust = firingVector * 65.0f;
                 
                 // take into account the ship's momentum
                 thrust += this.Velocity;

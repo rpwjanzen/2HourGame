@@ -12,7 +12,7 @@ namespace _2HourGame.Model {
 				if (gs.ThumbSticks.Left.Y > 0) {
                 	ship.Accelerate(gs.ThumbSticks.Left.Y * 10);
 				}
-                ship.Rotate(gs.ThumbSticks.Left.X * 25);
+                ship.Rotate(gs.ThumbSticks.Left.X * 20);
             }
         }
     }
