@@ -77,10 +77,15 @@ namespace _2HourGame {
             }
 
             var goldIslands = new List<Island>();
-            goldIslands.Add(islandFactory.CreateIsland(new Vector2(width / 2, height / 2), null, 11));
+            goldIslands.Add(islandFactory.CreateIsland(new Vector2(width / 2, height / 2), null, 16));
             foreach (var v in goldIslands) {
                 this.Components.Add(v);
             }
+
+            List<Island> allIslands = new List<Island>(playerIslands.ToArray());
+            allIslands.AddRange(goldIslands);
+            IslandsGoldView islandGoldView = new IslandsGoldView(this, allIslands, spriteBatch);
+            this.Components.Add(islandGoldView);
 
             var playerPositions = new[] {
                 new Vector2((width / 4), (height / 4) + 50),

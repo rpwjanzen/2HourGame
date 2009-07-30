@@ -88,7 +88,7 @@ namespace _2HourGame.Model
 
         private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
         {
-            if (!(geom1.Tag != null || geom2.Tag == null)) {
+            if (geom1.Tag != null && geom2.Tag != null) {
                 if (geom1.Tag.GetType() == typeof(CannonBall) || geom2.Tag.GetType() == typeof(CannonBall)) {
                     hitByCannonBall();
 
