@@ -30,14 +30,25 @@ namespace _2HourGame
             textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, true, new Vector2(0, -7)));
             textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, true, new Vector2(0, 0)));
             textureInfos.Add("cannon", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 0.6f, true, new Vector2(0, 4)));
+            textureInfos.Add("goldLost", new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, true, new Vector2(0, 20)));
+            textureInfos.Add("boatHitByCannon", new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, true, new Vector2(0, 0)));
         }
 
-        public void GoldPickupEffect(Vector2 position) 
+        public void GoldPickupEffect(Vector2 position)
         {
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("goldPickup", out animTextInfo))
             {
                 game.Components.Add(new GameObject(game, position, "goldGetAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
+            }
+        }
+
+        public void GoldLostEffect(Vector2 position)
+        {
+            AnimatedTextureInfo animTextInfo;
+            if (textureInfos.TryGetValue("goldLost", out animTextInfo))
+            {
+                game.Components.Add(new GameObject(game, position, "goldLoseAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
             }
         }
 
@@ -50,12 +61,21 @@ namespace _2HourGame
             }
         }
 
-        public void CannonSmokeEffect(Vector2 position) 
+        public void CannonSmokeEffect(Vector2 position)
         {
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("cannonSmoke", out animTextInfo))
             {
                 game.Components.Add(new GameObject(game, position, "cannonSmokeAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonSmokeAnimation)));
+            }
+        }
+
+        public void BoatHitByCannonEffect(Vector2 position)
+        {
+            AnimatedTextureInfo animTextInfo;
+            if (textureInfos.TryGetValue("boatHitByCannon", out animTextInfo))
+            {
+                game.Components.Add(new GameObject(game, position, "boatHitByCannonAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.boatHitByCannonAnimation)));
             }
         }
 

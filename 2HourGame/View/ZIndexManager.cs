@@ -19,6 +19,8 @@ namespace _2HourGame.View
             cannonSmokeAnimation,
             shipRigging,
             shipCannon,
+            goldLoseAnimation,
+            boatHitByCannonAnimation,
             shipGunwale,
             shipHull,
             islandGoldView,

@@ -24,12 +24,14 @@ namespace _2HourGame.View.GameServices
 
         public void LoadContent()
         {
+            addTexture("boatHitByCannonAnimation");
             addTexture("boundingCircle");
             addTexture("cannonAnimation");
             addTexture("cannonBall");
             addTexture("cannonSmokeAnimation");
             addTexture("gold");
             addTexture("goldGetAnimation");
+            addTexture("goldLoseAnimation");
             addTexture("house");
             addTexture("island");
             addTexture("shipGunwale");

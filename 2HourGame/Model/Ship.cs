@@ -92,10 +92,19 @@ namespace _2HourGame.Model
                 if (geom1.Tag.GetType() == typeof(CannonBall) || geom2.Tag.GetType() == typeof(CannonBall)) {
                     hitByCannonBall();
 
+                    Vector2 effectPosition;
                     if (geom1.Tag.GetType() == typeof(CannonBall))
+                    {
                         this.CannonBallManager.RemoveCannonBall((CannonBall)geom1.Tag);
+                        effectPosition = geom1.Position;
+                    }
                     else
+                    {
                         this.CannonBallManager.RemoveCannonBall((CannonBall)geom2.Tag);
+                        effectPosition = geom2.Position;
+                    }
+                    ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).GoldLostEffect(this.Position);
+                    ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).BoatHitByCannonEffect(effectPosition);
                 }
             }
             return true;
