@@ -82,6 +82,9 @@ namespace _2HourGame.Model
             physicsSimulator.Add(borderBody);
 
             var borderGeometry = GeomFactory.Instance.CreateRectangleGeom(borderBody, borderWidth, borderHeight);
+            // prevent collisions with cannon balls
+            borderGeometry.CollisionCategories = CollisionCategory.Cat1;
+            borderGeometry.CollidesWith = CollisionCategory.All & ~CollisionCategory.Cat2;
             physicsSimulator.Add(borderGeometry);
         }
 

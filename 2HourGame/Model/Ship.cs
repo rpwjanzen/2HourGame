@@ -23,6 +23,10 @@ namespace _2HourGame.Model
 
         private const float ShipScale = 0.6f;
 
+        private const double maxHealth = 5;
+        public double health { get; private set; }
+        public bool isActive { get; private set; }
+
         public int GoldCapacity { get; private set; }
         int Gold { get; set; }
         
@@ -84,27 +88,25 @@ namespace _2HourGame.Model
             this.LastFireTimeLeft = new TimeSpan();
             this.LastFireTimeRight = new TimeSpan();
             this.shipColor = playerColor;
+            this.health = 5;
+            this.isActive = true;
         }
 
         private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
         {
             if (geom1.Tag != null && geom2.Tag != null) {
                 if (geom1.Tag.GetType() == typeof(CannonBall) || geom2.Tag.GetType() == typeof(CannonBall)) {
-                    hitByCannonBall();
 
-                    Vector2 effectPosition;
                     if (geom1.Tag.GetType() == typeof(CannonBall))
                     {
                         this.CannonBallManager.RemoveCannonBall((CannonBall)geom1.Tag);
-                        effectPosition = geom1.Position;
+                        hitByCannonBall((CannonBall)geom1.Tag);
                     }
                     else
                     {
                         this.CannonBallManager.RemoveCannonBall((CannonBall)geom2.Tag);
-                        effectPosition = geom2.Position;
+                        hitByCannonBall((CannonBall)geom2.Tag);
                     }
-                    ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).GoldLostEffect(this.Position);
-                    ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).BoatHitByCannonEffect(effectPosition);
                 }
             }
             return true;
@@ -113,10 +115,21 @@ namespace _2HourGame.Model
         /// <summary>
         /// Ship reaction to being hit by a cannon ball.
         /// </summary>
-        private void hitByCannonBall() 
+        private void hitByCannonBall(CannonBall cannonBall) 
         {
             if (Gold > 0)
+            {
                 Gold--;
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).BoatHitByCannonEffect(cannonBall.Position);
+            }
+
+
+            health -= (cannonBall.Speed != 0 ? cannonBall.Speed : 120)/50;
+            if(health <=0)
+            {
+                // disable drawing and movement
+                isActive = false;
+            }
         }
 
         protected override void LoadContent()
@@ -141,9 +154,12 @@ namespace _2HourGame.Model
 
         public override void Draw(GameTime gameTime)
         {
-            base.Draw(gameTime);
-            base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, base.Origin, this.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
-            base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, base.Origin, this.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
+            if (isActive)
+            {
+                base.Draw(gameTime);
+                base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, base.Origin, this.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
+                base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, base.Origin, this.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
+            }
         }
         
         public void Thrust(float amount) {

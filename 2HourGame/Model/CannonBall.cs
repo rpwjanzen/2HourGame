@@ -21,6 +21,9 @@ namespace _2HourGame.Model
             base.LoadContent();
             base.Body.LinearDragCoefficient = 0.20f;
             base.Body.Mass = 0.5f;
+            // prevent collisions with the border
+            base.Geometry.CollisionCategories = CollisionCategory.Cat2;
+            base.Geometry.CollidesWith = CollisionCategory.All & ~CollisionCategory.Cat1;
         }
 
         public void ApplyFiringForce(Vector2 firingForce) {

@@ -29,44 +29,58 @@ namespace _2HourGame.Model
         }
 
         public override void Update(GameTime gameTime) {
-            GamePadState gs = GamePad.GetState(playerIndex);
-            if (gs.IsConnected) {
-                // Gold Pickup Behaviour
-                if (goldIsland != null && ship.Speed > 0.15) 
-                    goldIsland = null;
-                if (gs.Buttons.B == ButtonState.Pressed && ship.Speed <= 0.15) 
+            // only process commands if the ship is availiable
+            if (ship.isActive)
+            {
+                GamePadState gs = GamePad.GetState(playerIndex);
+                if (gs.IsConnected)
                 {
-                    Island closestInRangeIsland = GetClosestInRangeIsland();
-                    if (closestInRangeIsland != null) {
-                        if (closestInRangeIsland == ship.HomeIsland) {
-                            ship.UnloadGoldToIsland(closestInRangeIsland);
-                        } else {
-                            if (goldIsland == null) {
-                                if (closestInRangeIsland != null && closestInRangeIsland != ship.HomeIsland) {
-                                    goldIsland = closestInRangeIsland;
+                    // Gold Pickup Behaviour
+                    if (goldIsland != null && ship.Speed > 0.15)
+                        goldIsland = null;
+                    if (gs.Buttons.B == ButtonState.Pressed && ship.Speed <= 0.15)
+                    {
+                        Island closestInRangeIsland = GetClosestInRangeIsland();
+                        if (closestInRangeIsland != null)
+                        {
+                            if (closestInRangeIsland == ship.HomeIsland)
+                            {
+                                ship.UnloadGoldToIsland(closestInRangeIsland);
+                            }
+                            else
+                            {
+                                if (goldIsland == null)
+                                {
+                                    if (closestInRangeIsland != null && closestInRangeIsland != ship.HomeIsland)
+                                    {
+                                        goldIsland = closestInRangeIsland;
+                                    }
                                 }
-                            } else if (goldIsland == GetClosestInRangeIsland()) {
-                                ship.LoadGoldFromIsland(goldIsland, gameTime);
+                                else if (goldIsland == GetClosestInRangeIsland())
+                                {
+                                    ship.LoadGoldFromIsland(goldIsland, gameTime);
+                                }
                             }
                         }
                     }
-                }
 
-                // Fire Cannons Behaviour
-                if (gs.IsButtonDown(Buttons.LeftTrigger)) {
-                    ship.FireCannon(gameTime, true);
+                    // Fire Cannons Behaviour
+                    if (gs.IsButtonDown(Buttons.LeftTrigger))
+                    {
+                        ship.FireCannon(gameTime, true);
+                    }
+                    if (gs.IsButtonDown(Buttons.RightTrigger))
+                    {
+                        ship.FireCannon(gameTime, false);
+                    }
+                    // TODO Collision detection somewhere
+                    moveShipBehavior.MoveShip(gs, ship);
                 }
-                if (gs.IsButtonDown(Buttons.RightTrigger))
-                {
-                    ship.FireCannon(gameTime, false);
-                }
-                // TODO Collision detection somewhere
-                moveShipBehavior.MoveShip(gs, ship);
-            }
                 // Not connected
-            else {
+                else
+                {
+                }
             }
-
             base.Update(gameTime);
         }
 

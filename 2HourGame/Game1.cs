@@ -112,14 +112,14 @@ namespace _2HourGame {
 
             var shipMovers = new ShipMoverFactory(this, playerIslands.Concat(goldIslands)).CreateShipMovers(ships, new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four });
             
-            for(int i = 0; i < shipMovers.Count - 1; i++) {
+            for(int i = 0; i < shipMovers.Count; i++) {
                 this.Components.Add(shipMovers[i]);
             }
-            var targetShip = ships[0];
-            var controlledShip = ships[3];
-            var islands = playerIslands.Concat(goldIslands);
-            AIController playerFourController = new AIController(this, controlledShip, controlledShip.HomeIsland, islands.Where(i => i != controlledShip.HomeIsland).ToList(), targetShip);
-            this.Components.Add(playerFourController);
+            //var targetShip = ships[0];
+            //var controlledShip = ships[3];
+            //var islands = playerIslands.Concat(goldIslands);
+            //AIController playerFourController = new AIController(this, controlledShip, controlledShip.HomeIsland, islands.Where(i => i != controlledShip.HomeIsland).ToList(), targetShip);
+            //this.Components.Add(playerFourController);
 
             base.Initialize();
         }

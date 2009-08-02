@@ -81,7 +81,7 @@ namespace _2HourGame.Model
                 }
 
                 // get the frame to draw
-                int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds) 
+                int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
                     * animatedTextureInfo.framesPerSecond));
 
                 if (animatedTextureInfo.animateOnceOnly && totalFrame == animatedTextureInfo.totalFrames)
