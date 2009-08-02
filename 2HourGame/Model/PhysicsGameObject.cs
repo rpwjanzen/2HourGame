@@ -52,5 +52,11 @@ namespace _2HourGame.Model
             physicsSimulator.Remove(this.Body);
             physicsSimulator.Remove(this.Geometry);
         }
+
+        protected void AddToPhysicsSimulator() 
+        {
+            physicsSimulator.Add(this.Body);
+            physicsSimulator.Add(this.Geometry);
+        }
     }
 }

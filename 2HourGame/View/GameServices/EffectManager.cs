@@ -32,6 +32,8 @@ namespace _2HourGame
             textureInfos.Add("cannon", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 0.6f, true, new Vector2(0, 4)));
             textureInfos.Add("goldLost", new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, true, new Vector2(0, 20)));
             textureInfos.Add("boatHitByCannon", new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, true, new Vector2(0, 0)));
+            textureInfos.Add("shipSinking", new AnimatedTextureInfo(new Vector2(100, 100), 1, 0.3, 0.5f, true, new Vector2(0, 0)));
+            textureInfos.Add("floatingCrate", new AnimatedTextureInfo(new Vector2(20, 20), 6, 3, 0.7f, true, new Vector2(5, 5)));
         }
 
         public void GoldPickupEffect(Vector2 position)
@@ -76,6 +78,24 @@ namespace _2HourGame
             if (textureInfos.TryGetValue("boatHitByCannon", out animTextInfo))
             {
                 game.Components.Add(new GameObject(game, position, "boatHitByCannonAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.boatHitByCannonAnimation)));
+            }
+        }
+
+        public void ShipSinking(Vector2 position)
+        {
+            AnimatedTextureInfo animTextInfo;
+            if (textureInfos.TryGetValue("shipSinking", out animTextInfo))
+            {
+                game.Components.Add(new GameObject(game, position, "shipSinking", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipSinking)));
+            }
+        }
+
+        public void FloatingCrate(Vector2 position)
+        {
+            AnimatedTextureInfo animTextInfo;
+            if (textureInfos.TryGetValue("floatingCrate", out animTextInfo))
+            {
+                game.Components.Add(new GameObject(game, position, "floatingCrate", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.floatingCrate)));
             }
         }
 

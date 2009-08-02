@@ -15,44 +15,49 @@ namespace _2HourGame.View
 
         public CannonType cannonType { get; private set; }
 
+        public bool isActive;
+
         public CannonView(Game game, Vector2 initialPosition, string contentName, float scale, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo, CannonType cannonType)
             : base(game, initialPosition, contentName, scale, color, spriteBatch, animatedTextureInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipCannon))
         {
             this.cannonType = cannonType;
+            isActive = true;
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if (firstDraw)
+            if (isActive)
             {
-                firstDraw = false;
-                animationStartTime = gameTime.TotalGameTime;
+                if (firstDraw)
+                {
+                    firstDraw = false;
+                    animationStartTime = gameTime.TotalGameTime;
+                }
+
+                // get the frame to draw
+                int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
+                    * animatedTextureInfo.framesPerSecond));
+
+                int frame;
+                if (totalFrame >= animatedTextureInfo.totalFrames)
+                    frame = 0;
+                else
+                    frame = totalFrame % animatedTextureInfo.totalFrames;
+
+                Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
+                spriteBatch.Draw(
+                    texture,
+                    Position + (cannonType == CannonType.LeftCannon ? animatedTextureInfo.drawOffset(Rotation) : -animatedTextureInfo.drawOffset(Rotation)),
+                    source,
+                    Color,
+                    Rotation,
+                    Origin,
+                    animatedTextureInfo.scale,
+                    SpriteEffects.None,
+                    ZIndex
+                    );
             }
 
-            // get the frame to draw
-            int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
-                * animatedTextureInfo.framesPerSecond));
-            
-            int frame;
-            if (totalFrame >= animatedTextureInfo.totalFrames)
-                frame = 0;
-            else
-                frame = totalFrame % animatedTextureInfo.totalFrames;
-
-            Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
-            spriteBatch.Draw(
-                texture, 
-                Position + (cannonType == CannonType.LeftCannon ? animatedTextureInfo.drawOffset(Rotation) : -animatedTextureInfo.drawOffset(Rotation)),
-                source, 
-                Color, 
-                Rotation, 
-                Origin, 
-                animatedTextureInfo.scale, 
-                SpriteEffects.None, 
-                ZIndex
-                );
-
-            //base.Draw(gameTime);
         }
 
         public void PlayAnimation(GameTime gameTime) 

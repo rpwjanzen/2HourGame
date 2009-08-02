@@ -23,6 +23,8 @@ namespace _2HourGame.View
             boatHitByCannonAnimation,
             shipGunwale,
             shipHull,
+            floatingCrate,
+            shipSinking,
             islandGoldView,
             house,
             island,

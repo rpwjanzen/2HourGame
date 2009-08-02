@@ -9,6 +9,8 @@ namespace _2HourGame.View.GameServices
         void CannonSmokeEffect(Vector2 position);
         void GoldLostEffect(Vector2 position);
         void BoatHitByCannonEffect(Vector2 position);
+        void ShipSinking(Vector2 position);
+        void FloatingCrate(Vector2 position);
         AnimatedTextureInfo getAnimatedTextureInfo(string effectName);
     }
 }

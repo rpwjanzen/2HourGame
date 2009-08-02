@@ -123,13 +123,13 @@ namespace _2HourGame.Model
                 ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).BoatHitByCannonEffect(cannonBall.Position);
             }
 
-
+            // if a ship is too close when it fires then the cannon ball as a speed of 0.
+            // We could consider puttin the cannon ball in a collision group with the ship
+            // and then creating it closer to the ship.
             health -= (cannonBall.Speed != 0 ? cannonBall.Speed : 120)/50;
-            if(health <=0)
-            {
-                // disable drawing and movement
-                isActive = false;
-            }
+
+            if (health <= 0)
+                hideShip();
         }
 
         protected override void LoadContent()
@@ -265,6 +265,30 @@ namespace _2HourGame.Model
                 return new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) * (this.XRadius - 8) + this.Position;
             else
                 return new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y) * (this.XRadius - 8) + this.Position;
+        }
+
+        /// <summary>
+        /// disables drawing, control, and physics of ship
+        /// </summary>
+        private void hideShip()
+        {
+            RemoveFromPhysicsSimulator();
+            LeftCannonView.isActive = false;
+            RightCannonView.isActive = false;
+            isActive = false;
+            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).ShipSinking(this.Position);
+            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).FloatingCrate(this.Position);
+        }
+
+        /// <summary>
+        /// enables drawing, control, and physics of ship
+        /// </summary>
+        private void displayShip() 
+        {
+            AddToPhysicsSimulator();
+            isActive = true;
+            LeftCannonView.isActive = true;
+            RightCannonView.isActive = true;
         }
     }
 }
