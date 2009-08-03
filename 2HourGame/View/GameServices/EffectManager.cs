@@ -26,14 +26,14 @@ namespace _2HourGame
             this.spriteBatch = spriteBatch;
             textureInfos = new Dictionary<String, AnimatedTextureInfo>();
 
-            textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, true, new Vector2(0, -50)));
-            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, true, new Vector2(0, -7)));
-            textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, true, new Vector2(0, 0)));
-            textureInfos.Add("cannon", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 0.6f, true, new Vector2(0, 4)));
-            textureInfos.Add("goldLost", new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, true, new Vector2(0, 20)));
-            textureInfos.Add("boatHitByCannon", new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, true, new Vector2(0, 0)));
-            textureInfos.Add("shipSinking", new AnimatedTextureInfo(new Vector2(100, 100), 1, 0.3, 0.5f, true, new Vector2(0, 0)));
-            textureInfos.Add("floatingCrate", new AnimatedTextureInfo(new Vector2(20, 20), 6, 3, 0.7f, true, new Vector2(5, 5)));
+            textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, 1, new Vector2(0, -50)));
+            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, 1, new Vector2(0, -7)));
+            textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, 1, new Vector2(0, 0)));
+            textureInfos.Add("cannon", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 0.6f, 1, new Vector2(0, 4)));
+            textureInfos.Add("goldLost", new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, 1, new Vector2(0, 20)));
+            textureInfos.Add("boatHitByCannon", new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, 1, new Vector2(0, 0)));
+            textureInfos.Add("shipSinking", new AnimatedTextureInfo(new Vector2(100, 100), 1, 0.3, 0.3f, 1, new Vector2(0, 0)));
+            textureInfos.Add("floatingCrate", new AnimatedTextureInfo(new Vector2(20, 20), 6, 3, 0.7f, 3, new Vector2(5, 5)));
         }
 
         public void GoldPickupEffect(Vector2 position)

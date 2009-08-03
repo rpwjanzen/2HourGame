@@ -12,7 +12,7 @@ namespace _2HourGame.View
         public int totalFrames { get; private set; }
         public double framesPerSecond { get; private set; }
         public float scale { get; private set; }
-        public bool animateOnceOnly { get; private set; }
+        public int numAnimationIterations { get; private set; }
 
         private Vector2 textureDrawOffset;
 
@@ -23,13 +23,13 @@ namespace _2HourGame.View
             }
         }
 
-        public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, bool animateOnceOnly, Vector2 drawOffset)
+        public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, int numAnimationIterations, Vector2 drawOffset)
         {
             this.imageSize = imageSize;
             this.totalFrames = totalFrames;
             this.framesPerSecond = framesPerSecond;
             this.scale = scale;
-            this.animateOnceOnly = animateOnceOnly;
+            this.numAnimationIterations = numAnimationIterations;
             textureDrawOffset = drawOffset;
         }
 

@@ -40,7 +40,7 @@ namespace _2HourGame.Model
             int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
                 * animatedTextureInfo.framesPerSecond));
 
-            if (animatedTextureInfo.animateOnceOnly && totalFrame == animatedTextureInfo.totalFrames)
+            if (totalFrame == animatedTextureInfo.totalFrames * animatedTextureInfo.numAnimationIterations)
                 animationDone();
             else
             {

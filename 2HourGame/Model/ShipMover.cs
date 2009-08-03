@@ -78,7 +78,7 @@ namespace _2HourGame.Model
                     // TODO Collision detection somewhere
                     moveShipBehavior.MoveShip(gs, ship);
                 }
-                // Not connected
+                // Controller Not connected
                 else
                 {
                 }
