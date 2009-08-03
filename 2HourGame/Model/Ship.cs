@@ -76,6 +76,15 @@ namespace _2HourGame.Model
             return now.TotalGameTime.TotalSeconds - LastFireTimeRight.TotalSeconds > this.CannonCooldownTime;
         }
 
+        Vector2 spawnPoint;
+        TimeSpan timeOfDeath;
+        bool setTimeOfDeathTimespan;
+        double respawnTimeSeconds = 10;
+        bool respawnTimeIsOver(GameTime now) 
+        {
+            return now.TotalGameTime.TotalSeconds - timeOfDeath.TotalSeconds > respawnTimeSeconds;
+        }
+
         public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager)
             : base(game, position, "shipHull", ShipScale, Color.White, spriteBatch, physicsSimulator, null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull))
         {
@@ -90,6 +99,8 @@ namespace _2HourGame.Model
             this.shipColor = playerColor;
             this.health = 5;
             this.isActive = true;
+            this.spawnPoint = position;
+            this.setTimeOfDeathTimespan = false;
         }
 
         private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
@@ -129,7 +140,13 @@ namespace _2HourGame.Model
             health -= (cannonBall.Speed != 0 ? cannonBall.Speed : 120)/50;
 
             if (health <= 0)
+            {
                 hideShip();
+                setTimeOfDeathTimespan = true;
+                base.Body.Position = spawnPoint;
+                health = maxHealth;
+                Gold = 0;
+            }
         }
 
         protected override void LoadContent()
@@ -150,6 +167,18 @@ namespace _2HourGame.Model
 
             UpdateCannonView(LeftCannonView);
             UpdateCannonView(RightCannonView);
+
+            if (setTimeOfDeathTimespan) 
+            {
+                setTimeOfDeathTimespan = false;
+                timeOfDeath = gameTime.TotalGameTime;
+            }
+
+            if (!isActive && respawnTimeIsOver(gameTime)) 
+            {
+                isActive = true;
+                displayShip();
+            }
         }
 
         public override void Draw(GameTime gameTime)

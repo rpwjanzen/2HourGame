@@ -38,7 +38,7 @@ namespace _2HourGame.Model
                     // Gold Pickup Behaviour
                     if (goldIsland != null && ship.Speed > 0.15)
                         goldIsland = null;
-                    if (gs.Buttons.B == ButtonState.Pressed && ship.Speed <= 0.15)
+                    if (gs.Buttons.A == ButtonState.Pressed && ship.Speed <= 0.15)
                     {
                         Island closestInRangeIsland = GetClosestInRangeIsland();
                         if (closestInRangeIsland != null)
