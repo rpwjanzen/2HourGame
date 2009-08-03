@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIController.cs" />
+    <Compile Include="Model\AnimationObject.cs" />
     <Compile Include="View\AnimatedTextureInfo.cs" />
     <Compile Include="View\CannonView.cs" />
     <Compile Include="Model\CannonBallManager.cs" />

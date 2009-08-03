@@ -26,9 +26,8 @@ namespace _2HourGame.Model
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float scale, Color color, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, AnimatedTextureInfo animatedTextureInfo
-            , float zIndex)
-            : base(game, initialPosition, contentName, scale, color, spriteBatch, animatedTextureInfo, zIndex)
+        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float scale, Color color, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, float zIndex)
+            : base(game, initialPosition, contentName, scale, color, spriteBatch, zIndex)
         {
             this.physicsSimulator = physicsSimulator;
         }

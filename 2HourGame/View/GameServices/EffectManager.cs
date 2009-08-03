@@ -41,7 +41,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("goldPickup", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "goldGetAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
+                game.Components.Add(new AnimationObject(game, position, "goldGetAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
             }
         }
 
@@ -50,7 +50,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("goldLost", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "goldLoseAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
+                game.Components.Add(new AnimationObject(game, position, "goldLoseAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
             }
         }
 
@@ -59,7 +59,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("splash", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "splashAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.splashAnimation)));
+                game.Components.Add(new AnimationObject(game, position, "splashAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.splashAnimation)));
             }
         }
 
@@ -68,7 +68,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("cannonSmoke", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "cannonSmokeAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonSmokeAnimation)));
+                game.Components.Add(new AnimationObject(game, position, "cannonSmokeAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonSmokeAnimation)));
             }
         }
 
@@ -77,7 +77,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("boatHitByCannon", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "boatHitByCannonAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.boatHitByCannonAnimation)));
+                game.Components.Add(new AnimationObject(game, position, "boatHitByCannonAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.boatHitByCannonAnimation)));
             }
         }
 
@@ -86,7 +86,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("shipSinking", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "shipSinking", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipSinking)));
+                game.Components.Add(new AnimationObject(game, position, "shipSinking", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipSinking)));
             }
         }
 
@@ -95,7 +95,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("floatingCrate", out animTextInfo))
             {
-                game.Components.Add(new GameObject(game, position, "floatingCrate", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.floatingCrate)));
+                game.Components.Add(new AnimationObject(game, position, "floatingCrate", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.floatingCrate)));
             }
         }
 

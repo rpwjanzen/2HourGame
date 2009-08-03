@@ -24,26 +24,22 @@ namespace _2HourGame.Model
             get { return this.XRadius == this.YRadius; }
         }
 
-        public float Scale { get; private set; }
-
         protected SpriteBatch spriteBatch;
         protected Texture2D texture;
-        protected AnimatedTextureInfo animatedTextureInfo;
-        protected TimeSpan animationStartTime;
-        protected bool firstDraw;
 
-        public Vector2 Origin { get; private set; }
+        public float Scale { get; private set; }
+
+        public Vector2 Origin { get; protected set; }
 
         public float ZIndex { get; private set; }
 
         protected string contentName;
 
-        public GameObject(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo)
-            : this(game, position, contentName, scale, color, spriteBatch, animatedTextureInfo, 0) {
+        public GameObject(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch)
+            : this(game, position, contentName, scale, color, spriteBatch, 0) {
         }
 
-        public GameObject(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo
-            , float zIndex)
+        public GameObject(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch, float zIndex)
             : base(game)
         {
             this.Color = color;
@@ -51,64 +47,31 @@ namespace _2HourGame.Model
             this.contentName = contentName;
             this.Scale = scale;
             this.spriteBatch = spriteBatch;
-            this.animatedTextureInfo = animatedTextureInfo;
-            this.firstDraw = this.animatedTextureInfo != null ? true : false;
             this.ZIndex = zIndex;
         }
 
         protected override void LoadContent()
         {
             this.texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
-            if (animatedTextureInfo == null)
-                this.Origin = new Vector2(texture.Width / 2, texture.Height / 2);
-            else
-                this.Origin = animatedTextureInfo.textureOrigin;
+
+            setOrigin();
+
             this.XRadius = this.Origin.X * this.Scale;
             this.YRadius = this.Origin.Y * this.Scale;
 
             base.LoadContent();
         }
 
-        public override void Draw(GameTime gameTime)
+        protected virtual void setOrigin()
         {
-            // animated sprite
-            if (animatedTextureInfo != null)
-            {
-                if (firstDraw)
-                {
-                    firstDraw = false;
-                    animationStartTime = gameTime.TotalGameTime;
-                }
-
-                // get the frame to draw
-                int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
-                    * animatedTextureInfo.framesPerSecond));
-
-                if (animatedTextureInfo.animateOnceOnly && totalFrame == animatedTextureInfo.totalFrames)
-                    animationDone();
-                else
-                {
-                    int frame = totalFrame % animatedTextureInfo.totalFrames;
-
-                    Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
-
-                    spriteBatch.Draw(texture, Position + animatedTextureInfo.drawOffset(Rotation), source, Color, Rotation, Origin, this.Scale, SpriteEffects.None, ZIndex);
-                }
-            }
-            else // regular sprite
-            {
-                spriteBatch.Draw(texture, Position, null, Color, Rotation, Origin, this.Scale, SpriteEffects.None, ZIndex);
-            }
-
-            base.Draw(gameTime);
+            this.Origin = new Vector2(texture.Width / 2, texture.Height / 2);
         }
 
-        /// <summary>
-        /// This animation is done so it should be removed from the list of components.
-        /// </summary>
-        private void animationDone() 
+        public override void Draw(GameTime gameTime)
         {
-            base.Game.Components.Remove(this);
+            spriteBatch.Draw(texture, Position, null, Color, Rotation, Origin, this.Scale, SpriteEffects.None, ZIndex);
+
+            base.Draw(gameTime);
         }
     }
 }

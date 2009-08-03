@@ -9,7 +9,7 @@ using _2HourGame.Model;
 
 namespace _2HourGame.View
 {
-    class CannonView : GameObject
+    class CannonView : AnimationObject
     {
         public enum CannonType { LeftCannon, RightCannon }
 

@@ -17,7 +17,7 @@ namespace _2HourGame.Factories
         }
 
         public GameObject CreateHouse(Color houseColor, Vector2 houseLocation) {
-            return new GameObject(base.Game, houseLocation, "house", 1f, houseColor, base.SpriteBatch, null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house));
+            return new GameObject(base.Game, houseLocation, "house", 1f, houseColor, base.SpriteBatch, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house));
         }
     }
 }

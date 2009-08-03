@@ -86,7 +86,7 @@ namespace _2HourGame.Model
         }
 
         public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager)
-            : base(game, position, "shipHull", ShipScale, Color.White, spriteBatch, physicsSimulator, null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull))
+            : base(game, position, "shipHull", ShipScale, Color.White, spriteBatch, physicsSimulator, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull))
         {
             this.GoldCapacity = 5;
             this.Gold = 0;
@@ -137,7 +137,7 @@ namespace _2HourGame.Model
             // if a ship is too close when it fires then the cannon ball as a speed of 0.
             // We could consider puttin the cannon ball in a collision group with the ship
             // and then creating it closer to the ship.
-            health -= (cannonBall.Speed != 0 ? cannonBall.Speed : 120)/50;
+            health -= (cannonBall.Speed != 0 ? cannonBall.Speed : 120)/75;
 
             if (health <= 0)
             {
