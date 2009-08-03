@@ -224,16 +224,18 @@ namespace _2HourGame.Model
             this.Gold++;
         }
 
-        public void FireCannon(GameTime now, bool isLeftCannon) {
-            if ((isLeftCannon && LeftCannonHasCooledDown(now)) || (!isLeftCannon && RightCannonHasCooledDown(now))) {
+        public void FireCannon(GameTime now, CannonView.CannonType cannonType) {
+            if ((cannonType == CannonView.CannonType.LeftCannon && LeftCannonHasCooledDown(now)) ||
+                (cannonType == CannonView.CannonType.RightCannon && RightCannonHasCooledDown(now)))
+            {
                 // start the firing animation
-                if(isLeftCannon)
+                if (cannonType == CannonView.CannonType.LeftCannon)
                     LeftCannonView.PlayAnimation(now);
                 else
                     RightCannonView.PlayAnimation(now);
                 
                 //get the right vector
-                Vector2 firingVector = isLeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y);
+                Vector2 firingVector = cannonType == CannonView.CannonType.LeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y);
                 var thrust = firingVector * 65.0f;
                 
                 // take into account the ship's momentum
@@ -247,7 +249,7 @@ namespace _2HourGame.Model
 
                 base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y)/8);
 
-                if (isLeftCannon)
+                if (cannonType == CannonView.CannonType.LeftCannon)
                     this.LastFireTimeLeft = now.TotalGameTime;
                 else
                     this.LastFireTimeRight = now.TotalGameTime;

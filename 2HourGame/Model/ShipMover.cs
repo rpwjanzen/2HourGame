@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using _2HourGame.View;
+
 namespace _2HourGame.Model
 {
     class ShipMover : GameComponent {
@@ -67,11 +69,11 @@ namespace _2HourGame.Model
                     // Fire Cannons Behaviour
                     if (gs.IsButtonDown(Buttons.LeftTrigger))
                     {
-                        ship.FireCannon(gameTime, true);
+                        ship.FireCannon(gameTime, CannonView.CannonType.LeftCannon);
                     }
                     if (gs.IsButtonDown(Buttons.RightTrigger))
                     {
-                        ship.FireCannon(gameTime, false);
+                        ship.FireCannon(gameTime, CannonView.CannonType.RightCannon);
                     }
                     // TODO Collision detection somewhere
                     moveShipBehavior.MoveShip(gs, ship);
