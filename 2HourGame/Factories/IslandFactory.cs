@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 
 using _2HourGame.Model;
+using _2HourGame.View;
 
 namespace _2HourGame.Factories
 {
@@ -21,7 +22,11 @@ namespace _2HourGame.Factories
         }
 
         public Island CreateIsland(Vector2 position, GameObject building, int goldAmount) {
-            return new Island(base.Game, position, building, base.SpriteBatch, goldAmount, base.PhysicsSimulator);
+            Island island = new Island(base.Game, position, base.PhysicsSimulator, goldAmount, building, "island");
+            GameObjectView islandView = new GameObjectView(base.Game, "island", Color.White, SpriteBatch, island);
+            base.Game.Components.Add(island);
+            base.Game.Components.Add(islandView);
+            return island;
         }
     }
 }

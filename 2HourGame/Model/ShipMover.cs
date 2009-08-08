@@ -69,11 +69,11 @@ namespace _2HourGame.Model
                     // Fire Cannons Behaviour
                     if (gs.IsButtonDown(Buttons.LeftTrigger))
                     {
-                        ship.FireCannon(gameTime, CannonView.CannonType.LeftCannon);
+                        ship.FireCannon(gameTime, CannonType.LeftCannon);
                     }
                     if (gs.IsButtonDown(Buttons.RightTrigger))
                     {
-                        ship.FireCannon(gameTime, CannonView.CannonType.RightCannon);
+                        ship.FireCannon(gameTime, CannonType.RightCannon);
                     }
                     // TODO Collision detection somewhere
                     moveShipBehavior.MoveShip(gs, ship);

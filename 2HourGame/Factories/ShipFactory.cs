@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using _2HourGame.Model;
+using _2HourGame.View;
 
 namespace _2HourGame.Factories
 {
@@ -20,8 +21,14 @@ namespace _2HourGame.Factories
             return colors.Zip3(locations, islands, (c, l, i) => CreatePlayerShip(c, l, i)).ToList();
         }
 
-        public Ship CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland) {
-            return new Ship(base.Game, color, shipLocation, base.SpriteBatch, base.PhysicsSimulator, playerIsland, this.CannonBallManager);
+        public Ship CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland)
+        {
+            Ship ship = new Ship(base.Game, shipLocation, base.PhysicsSimulator, playerIsland, CannonBallManager, "shipHull");
+            ShipView shipView = new ShipView(base.Game, color, "shipHull", Color.White, SpriteBatch, ship);
+            base.Game.Components.Add(ship);
+            base.Game.Components.Add(shipView);
+            return ship;
+            //return new Ship(base.Game, color, shipLocation, base.SpriteBatch, base.PhysicsSimulator, playerIsland, this.CannonBallManager);
         }
     }
 }

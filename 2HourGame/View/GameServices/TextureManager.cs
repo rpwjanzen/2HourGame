@@ -29,6 +29,7 @@ namespace _2HourGame.View.GameServices
             addTexture("cannonAnimation");
             addTexture("cannonBall");
             addTexture("cannonSmokeAnimation");
+            addTexture("floatingCrate");
             addTexture("gold");
             addTexture("goldGetAnimation");
             addTexture("goldLoseAnimation");
@@ -37,6 +38,7 @@ namespace _2HourGame.View.GameServices
             addTexture("shipGunwale");
             addTexture("shipHull");
             addTexture("shipRigging");
+            addTexture("shipSinking");
             addTexture("splashAnimation");
         }
 
@@ -56,6 +58,16 @@ namespace _2HourGame.View.GameServices
                 textures.TryGetValue(textureName, out texture);
                 return texture;
             }
+        }
+
+        public Vector2 getTextureOrigin(string textureName, float scale)
+        {
+            AnimatedTextureInfo animTextInfo = ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(textureName);
+            Texture2D texture = getTexture(textureName);
+            if (animTextInfo == null)
+                return new Vector2(texture.Width / 2, texture.Height / 2);
+            else 
+                return animTextInfo.textureOrigin;
         }
     }
 }

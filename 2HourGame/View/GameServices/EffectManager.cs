@@ -26,12 +26,12 @@ namespace _2HourGame
             this.spriteBatch = spriteBatch;
             textureInfos = new Dictionary<String, AnimatedTextureInfo>();
 
-            textureInfos.Add("goldPickup", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, 1, new Vector2(0, -50)));
-            textureInfos.Add("splash", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, 1, new Vector2(0, -7)));
-            textureInfos.Add("cannonSmoke", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, 1, new Vector2(0, 0)));
-            textureInfos.Add("cannon", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 0.6f, 1, new Vector2(0, 4)));
-            textureInfos.Add("goldLost", new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, 1, new Vector2(0, 20)));
-            textureInfos.Add("boatHitByCannon", new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, 1, new Vector2(0, 0)));
+            textureInfos.Add("goldGetAnimation", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, 1, new Vector2(0, -50)));
+            textureInfos.Add("splashAnimation", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, 1, new Vector2(0, -7)));
+            textureInfos.Add("cannonSmokeAnimation", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, 1, new Vector2(0, 0)));
+            textureInfos.Add("cannonAnimation", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 0.6f, 1, new Vector2(0, 4)));
+            textureInfos.Add("goldLoseAnimation", new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, 1, new Vector2(0, 20)));
+            textureInfos.Add("boatHitByCannonAnimation", new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, 1, new Vector2(0, 0)));
             textureInfos.Add("shipSinking", new AnimatedTextureInfo(new Vector2(100, 100), 1, 0.3, 0.3f, 1, new Vector2(0, 0)));
             textureInfos.Add("floatingCrate", new AnimatedTextureInfo(new Vector2(20, 20), 6, 3, 0.7f, 3, new Vector2(5, 5)));
         }
@@ -39,45 +39,45 @@ namespace _2HourGame
         public void GoldPickupEffect(Vector2 position)
         {
             AnimatedTextureInfo animTextInfo;
-            if (textureInfos.TryGetValue("goldPickup", out animTextInfo))
+            if (textureInfos.TryGetValue("goldGetAnimation", out animTextInfo))
             {
-                game.Components.Add(new AnimationObject(game, position, "goldGetAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
+                addAnimationView(position, "goldGetAnimation", animTextInfo, Color.White, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation));
             }
         }
 
         public void GoldLostEffect(Vector2 position)
         {
             AnimatedTextureInfo animTextInfo;
-            if (textureInfos.TryGetValue("goldLost", out animTextInfo))
+            if (textureInfos.TryGetValue("goldLoseAnimation", out animTextInfo))
             {
-                game.Components.Add(new AnimationObject(game, position, "goldLoseAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation)));
+                addAnimationView(position, "goldLoseAnimation", animTextInfo, Color.White, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.goldAnimation));
             }
         }
 
         public void SplashEffect(Vector2 position) 
         {
             AnimatedTextureInfo animTextInfo;
-            if (textureInfos.TryGetValue("splash", out animTextInfo))
+            if (textureInfos.TryGetValue("splashAnimation", out animTextInfo))
             {
-                game.Components.Add(new AnimationObject(game, position, "splashAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.splashAnimation)));
+                addAnimationView(position, "splashAnimation", animTextInfo, Color.White, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.splashAnimation));
             }
         }
 
         public void CannonSmokeEffect(Vector2 position)
         {
             AnimatedTextureInfo animTextInfo;
-            if (textureInfos.TryGetValue("cannonSmoke", out animTextInfo))
+            if (textureInfos.TryGetValue("cannonSmokeAnimation", out animTextInfo))
             {
-                game.Components.Add(new AnimationObject(game, position, "cannonSmokeAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonSmokeAnimation)));
+                addAnimationView(position, "cannonSmokeAnimation", animTextInfo, Color.White, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonSmokeAnimation));
             }
         }
 
         public void BoatHitByCannonEffect(Vector2 position)
         {
             AnimatedTextureInfo animTextInfo;
-            if (textureInfos.TryGetValue("boatHitByCannon", out animTextInfo))
+            if (textureInfos.TryGetValue("boatHitByCannonAnimation", out animTextInfo))
             {
-                game.Components.Add(new AnimationObject(game, position, "boatHitByCannonAnimation", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.boatHitByCannonAnimation)));
+                addAnimationView(position, "boatHitByCannonAnimation", animTextInfo, Color.White, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.boatHitByCannonAnimation));
             }
         }
 
@@ -86,7 +86,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("shipSinking", out animTextInfo))
             {
-                game.Components.Add(new AnimationObject(game, position, "shipSinking", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipSinking)));
+                addAnimationView(position, "shipSinking", animTextInfo, Color.White, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipSinking));
             }
         }
 
@@ -95,7 +95,7 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo;
             if (textureInfos.TryGetValue("floatingCrate", out animTextInfo))
             {
-                game.Components.Add(new AnimationObject(game, position, "floatingCrate", animTextInfo.scale, Color.White, spriteBatch, animTextInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.floatingCrate)));
+                addAnimationView(position, "floatingCrate", animTextInfo, Color.White, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.floatingCrate));
             }
         }
 
@@ -104,6 +104,13 @@ namespace _2HourGame
             AnimatedTextureInfo animTextInfo = null;
             textureInfos.TryGetValue(effectName, out animTextInfo);
             return animTextInfo;
+        }
+
+        private void addAnimationView(Vector2 position, string contentName, AnimatedTextureInfo animTextInfo, Color color, float zIndex)
+        {
+            GameObject animationObject = new GameObject(game, position, contentName, animTextInfo.scale);
+            game.Components.Add(animationObject);
+            game.Components.Add(new AnimationView(game, contentName, color, spriteBatch, animTextInfo, animationObject, zIndex));
         }
     }
 }

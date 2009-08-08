@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerGames.FarseerPhysics;
+using _2HourGame.View;
 using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
@@ -20,14 +21,11 @@ namespace _2HourGame.Model
 
         const float minimumCannonBallSpeed = 25f;
 
-        Game game;
-
         public CannonBallManager(Game game, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
             : base(game) {
             cannonBalls = new List<CannonBall>();
             this.spriteBatch = spriteBatch;
             this.PhysicsSimulator = physicsSimulator;
-            this.game = game;
         }
 
         public override void Update(GameTime gameTime)
@@ -37,8 +35,10 @@ namespace _2HourGame.Model
         }
 
         public CannonBall CreateCannonBall(Vector2 position, Vector2 firingForce) {
-            var cannonBall = new CannonBall(this.Game, position, this.spriteBatch, this.PhysicsSimulator);            
+            var cannonBall = new CannonBall(this.Game, position, this.PhysicsSimulator, "cannonBall");
+            var cannonBallView = new GameObjectView(base.Game, "cannonBall", Color.White, spriteBatch, cannonBall, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonBall));
             base.Game.Components.Add(cannonBall);
+            base.Game.Components.Add(cannonBallView);
             cannonBall.ApplyFiringForce(firingForce);
             cannonBalls.Add(cannonBall);
 
@@ -50,7 +50,8 @@ namespace _2HourGame.Model
 
             foreach (CannonBall c in cannonBallsToRemove) 
             {
-                ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).SplashEffect(c.Position);
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).SplashEffect(c.Position);
+                c.removeGameObject();
                 RemoveCannonBall(c);
             }
         }
@@ -58,7 +59,8 @@ namespace _2HourGame.Model
         public void RemoveCannonBall(CannonBall cannonBall) 
         {
             cannonBall.RemoveFromPhysicsSimulator();
-            game.Components.Remove(cannonBall);
+            cannonBall.removeGameObject();
+            base.Game.Components.Remove(cannonBall);
             cannonBalls.Remove(cannonBall);
         }
     }

@@ -15,30 +15,23 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
+    public delegate void Notifiaction();
+    public delegate void CannonFired(CannonType cannonType, GameTime gameTime);
+
     class Ship : PhysicsGameObject
     {
-        private Color shipColor;
-        private Texture2D gunwale;
-        private Texture2D rigging;
-
-        private const float ShipScale = 0.6f;
+        public event Notifiaction ShipSank;
+        public event Notifiaction ShipSpawned;
+        public event CannonFired CannonHasBeenFired;
 
         private const double maxHealth = 5;
         public double health { get; private set; }
         public bool isActive { get; private set; }
 
+        public Island HomeIsland { get; private set; }
+
         public int GoldCapacity { get; private set; }
         int Gold { get; set; }
-        
-        readonly float MaximumGoldTransferSpeed = 0.15f;
-        bool CanTransferGold {
-            get { return this.Speed < MaximumGoldTransferSpeed; }
-        }
-
-        readonly int MinimumSecondsBetweenLoadingGold = 2;
-        TimeSpan LastGoldLoadTime = new TimeSpan();
-
-        public Island HomeIsland { get; private set; }
         
         public int TotalGold {
             get { return HomeIsland.Gold + this.Gold; }
@@ -50,6 +43,9 @@ namespace _2HourGame.Model
         private bool IsFull {
             get { return this.Gold >= this.GoldCapacity; }
         }
+
+        readonly int MinimumSecondsBetweenLoadingGold = 2;
+        TimeSpan LastGoldLoadTime = new TimeSpan();
         private bool LoadCooldownHasExpired(GameTime now) {
             return now.TotalGameTime.TotalSeconds - LastGoldLoadTime.TotalSeconds > MinimumSecondsBetweenLoadingGold;
         }
@@ -59,9 +55,6 @@ namespace _2HourGame.Model
             get { return base.Body.LinearVelocity; }
         }
         Vector2 FiringVelocity { get; set; }
-
-        CannonView LeftCannonView;
-        CannonView RightCannonView;
 
         TimeSpan LastFireTimeLeft { get; set; }
         TimeSpan LastFireTimeRight { get; set; }
@@ -85,8 +78,10 @@ namespace _2HourGame.Model
             return now.TotalGameTime.TotalSeconds - timeOfDeath.TotalSeconds > respawnTimeSeconds;
         }
 
-        public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager)
-            : base(game, position, "shipHull", ShipScale, Color.White, spriteBatch, physicsSimulator, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull))
+        //public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager)
+            //: base(game, position, "shipHull", ShipScale, Color.White, spriteBatch, physicsSimulator, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull))
+        public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager, string contentName)
+            : base(game, position, physicsSimulator, contentName, 0.6f)
         {
             this.GoldCapacity = 5;
             this.Gold = 0;
@@ -96,11 +91,33 @@ namespace _2HourGame.Model
             this.CannonCooldownTime = 2.0f;
             this.LastFireTimeLeft = new TimeSpan();
             this.LastFireTimeRight = new TimeSpan();
-            this.shipColor = playerColor;
             this.health = 5;
             this.isActive = true;
             this.spawnPoint = position;
             this.setTimeOfDeathTimespan = false;
+
+            Geometry.OnCollision += ShipCollision;
+            this.Body.RotationalDragCoefficient = 2500.0f;
+
+            ShipSank += hideShip;
+            ShipSpawned += unHideShip;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            if (setTimeOfDeathTimespan)
+            {
+                setTimeOfDeathTimespan = false;
+                timeOfDeath = gameTime.TotalGameTime;
+            }
+
+            if (!isActive && respawnTimeIsOver(gameTime))
+            {
+                isActive = true;
+                ShipSpawned();
+            }
         }
 
         private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
@@ -124,7 +141,7 @@ namespace _2HourGame.Model
         }
 
         /// <summary>
-        /// Ship reaction to being hit by a cannon ball.
+        /// Ships status reaction to being hit by a cannon ball.
         /// </summary>
         private void hitByCannonBall(CannonBall cannonBall) 
         {
@@ -134,60 +151,15 @@ namespace _2HourGame.Model
                 ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).BoatHitByCannonEffect(cannonBall.Position);
             }
 
-            // if a ship is too close when it fires then the cannon ball as a speed of 0.
+            // if a ship is too close when it fires then the cannon ball it can have a speed of 0.
             // We could consider puttin the cannon ball in a collision group with the ship
             // and then creating it closer to the ship.
             health -= (cannonBall.Speed != 0 ? cannonBall.Speed : 120)/75;
 
             if (health <= 0)
             {
-                hideShip();
-                setTimeOfDeathTimespan = true;
-                base.Body.Position = spawnPoint;
-                health = maxHealth;
+                ShipSank();
                 Gold = 0;
-            }
-        }
-
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-            Geometry.OnCollision += ShipCollision;
-            this.Body.RotationalDragCoefficient = 2500.0f;
-            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
-            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
-
-            LeftCannonView = initializeCannonView(CannonView.CannonType.LeftCannon);
-            RightCannonView = initializeCannonView(CannonView.CannonType.RightCannon);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-
-            UpdateCannonView(LeftCannonView);
-            UpdateCannonView(RightCannonView);
-
-            if (setTimeOfDeathTimespan) 
-            {
-                setTimeOfDeathTimespan = false;
-                timeOfDeath = gameTime.TotalGameTime;
-            }
-
-            if (!isActive && respawnTimeIsOver(gameTime)) 
-            {
-                isActive = true;
-                displayShip();
-            }
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            if (isActive)
-            {
-                base.Draw(gameTime);
-                base.spriteBatch.Draw(gunwale, Position, null, shipColor, Rotation, base.Origin, this.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
-                base.spriteBatch.Draw(rigging, Position, null, Color.White, Rotation, base.Origin, this.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
             }
         }
         
@@ -224,18 +196,14 @@ namespace _2HourGame.Model
             this.Gold++;
         }
 
-        public void FireCannon(GameTime now, CannonView.CannonType cannonType) {
-            if ((cannonType == CannonView.CannonType.LeftCannon && LeftCannonHasCooledDown(now)) ||
-                (cannonType == CannonView.CannonType.RightCannon && RightCannonHasCooledDown(now)))
+        public void FireCannon(GameTime now, CannonType cannonType) {
+            if ((cannonType == CannonType.LeftCannon && LeftCannonHasCooledDown(now)) ||
+                (cannonType == CannonType.RightCannon && RightCannonHasCooledDown(now)))
             {
-                // start the firing animation
-                if (cannonType == CannonView.CannonType.LeftCannon)
-                    LeftCannonView.PlayAnimation(now);
-                else
-                    RightCannonView.PlayAnimation(now);
+                CannonHasBeenFired(cannonType, now);
                 
                 //get the right vector
-                Vector2 firingVector = cannonType == CannonView.CannonType.LeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y);
+                Vector2 firingVector = cannonType == CannonType.LeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y);
                 var thrust = firingVector * 65.0f;
                 
                 // take into account the ship's momentum
@@ -249,53 +217,11 @@ namespace _2HourGame.Model
 
                 base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y)/8);
 
-                if (cannonType == CannonView.CannonType.LeftCannon)
+                if (cannonType == CannonType.LeftCannon)
                     this.LastFireTimeLeft = now.TotalGameTime;
                 else
                     this.LastFireTimeRight = now.TotalGameTime;
             }
-        }
-
-
-        private CannonView initializeCannonView(CannonView.CannonType cannonType)
-        {
-            CannonView newCannonView = new CannonView(
-                Game,
-                getCannonPosition(cannonType),
-                "cannonAnimation",
-                ShipScale,
-                Color.White,
-                spriteBatch,
-                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo("cannon"),
-                cannonType
-                );
-
-            newCannonView.UpdateRotation(getCannonRotation(cannonType));
-
-            Game.Components.Add(newCannonView);
-            return newCannonView;
-        }
-
-        private void UpdateCannonView(CannonView cannonView) 
-        {
-            cannonView.UpdateRotation(getCannonRotation(cannonView.cannonType));
-            cannonView.UpdatePosition(getCannonPosition(cannonView.cannonType));
-        }
-
-        private float getCannonRotation(CannonView.CannonType cannonType) 
-        {
-            if (cannonType == CannonView.CannonType.LeftCannon)
-                return 2f * (float)Math.PI + this.Rotation;
-            else
-                return (float)Math.PI + this.Rotation;
-        }
-
-        private Vector2 getCannonPosition(CannonView.CannonType cannonType) 
-        {
-            if (cannonType == CannonView.CannonType.LeftCannon)
-                return new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) * (this.XRadius - 8) + this.Position;
-            else
-                return new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y) * (this.XRadius - 8) + this.Position;
         }
 
         /// <summary>
@@ -303,23 +229,20 @@ namespace _2HourGame.Model
         /// </summary>
         private void hideShip()
         {
+            setTimeOfDeathTimespan = true;
             RemoveFromPhysicsSimulator();
-            LeftCannonView.isActive = false;
-            RightCannonView.isActive = false;
             isActive = false;
-            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).ShipSinking(this.Position);
-            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).FloatingCrate(this.Position);
         }
 
         /// <summary>
         /// enables drawing, control, and physics of ship
         /// </summary>
-        private void displayShip() 
+        private void unHideShip()
         {
+            base.Body.Position = spawnPoint;
+            health = maxHealth;
             AddToPhysicsSimulator();
             isActive = true;
-            LeftCannonView.isActive = true;
-            RightCannonView.isActive = true;
         }
     }
 }

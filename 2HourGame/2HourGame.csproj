@@ -87,12 +87,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIController.cs" />
-    <Compile Include="Model\AnimationObject.cs" />
+    <Compile Include="View\AnimationView.cs" />
     <Compile Include="View\AnimatedTextureInfo.cs" />
     <Compile Include="View\CannonView.cs" />
     <Compile Include="Model\CannonBallManager.cs" />
     <Compile Include="Model\CannonBall.cs" />
     <Compile Include="Factories\DrawableGameObjectFactory.cs" />
+    <Compile Include="View\GameObjectView.cs" />
     <Compile Include="View\GameServices\EffectManager.cs" />
     <Compile Include="Model\GameObject.cs" />
     <Compile Include="Factories\GameObjectFactory.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Model\ShipMover.cs" />
     <Compile Include="View\GameServices\TextureManager.cs" />
     <Compile Include="Model\WorldBorder.cs" />
+    <Compile Include="View\ShipView.cs" />
     <Compile Include="View\ZIndexManager.cs" />
   </ItemGroup>
   <ItemGroup>

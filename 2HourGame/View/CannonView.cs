@@ -6,19 +6,22 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using _2HourGame.Model;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.View
 {
-    class CannonView : AnimationObject
-    {
-        public enum CannonType { LeftCannon, RightCannon }
+    public enum CannonType { LeftCannon, RightCannon }
 
+    class CannonView : AnimationView
+    {
         public CannonType cannonType { get; private set; }
 
         public bool isActive;
 
-        public CannonView(Game game, Vector2 initialPosition, string contentName, float scale, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo, CannonType cannonType)
-            : base(game, initialPosition, contentName, scale, color, spriteBatch, animatedTextureInfo, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipCannon))
+        //public CannonView(Game game, Vector2 initialPosition, float scale, Color color, SpriteBatch spriteBatch, CannonType cannonType)
+        //    : base(game, initialPosition, "cannonAnimation", scale, color, spriteBatch, ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo("cannon"), ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipCannon))   
+        public CannonView(Game game, Color color, SpriteBatch spriteBatch, CannonType cannonType, GameObject gameObject)
+            : base(game, "cannonAnimation", color, spriteBatch, ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo("cannonAnimation"), gameObject, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipCannon))
         {
             this.cannonType = cannonType;
             isActive = true;
@@ -47,11 +50,11 @@ namespace _2HourGame.View
                 Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
                 spriteBatch.Draw(
                     texture,
-                    Position + (cannonType == CannonType.LeftCannon ? animatedTextureInfo.drawOffset(Rotation) : -animatedTextureInfo.drawOffset(Rotation)),
+                    gameObject.Position + (cannonType == CannonType.LeftCannon ? animatedTextureInfo.drawOffset(gameObject.Rotation) : -animatedTextureInfo.drawOffset(gameObject.Rotation)),
                     source,
                     Color,
-                    Rotation,
-                    Origin,
+                    gameObject.Rotation,
+                    gameObject.Origin,
                     animatedTextureInfo.scale,
                     SpriteEffects.None,
                     ZIndex
@@ -67,12 +70,12 @@ namespace _2HourGame.View
 
         public void UpdatePosition(Vector2 newPosition) 
         {
-            base.Position = newPosition;
+            gameObject.Position = newPosition;
         }
 
         public void UpdateRotation(float rotation) 
         {
-            base.Rotation = rotation;
+            gameObject.Rotation = rotation;
         }
     }
 }
