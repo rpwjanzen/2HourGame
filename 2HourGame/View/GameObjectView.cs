@@ -38,10 +38,10 @@ namespace _2HourGame.View
         //    this.ZIndex = zIndex;
         //}
 
-        public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, GameObject gameObject)
-            : this(game, contentName, color, spriteBatch, gameObject, 0)
-        {
-        }
+        //public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, GameObject gameObject)
+        //    : this(game, contentName, color, spriteBatch, gameObject, 0)
+        //{
+        //}
 
         public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, GameObject gameObject, float zIndex)
             : base(game)

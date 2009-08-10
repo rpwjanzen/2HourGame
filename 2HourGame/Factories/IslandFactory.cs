@@ -23,7 +23,7 @@ namespace _2HourGame.Factories
 
         public Island CreateIsland(Vector2 position, GameObject building, int goldAmount) {
             Island island = new Island(base.Game, position, base.PhysicsSimulator, goldAmount, building, "island");
-            GameObjectView islandView = new GameObjectView(base.Game, "island", Color.White, SpriteBatch, island);
+            GameObjectView islandView = new GameObjectView(base.Game, "island", Color.White, SpriteBatch, island, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.island));
             base.Game.Components.Add(island);
             base.Game.Components.Add(islandView);
             return island;

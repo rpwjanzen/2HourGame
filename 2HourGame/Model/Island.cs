@@ -12,7 +12,6 @@ namespace _2HourGame.Model
 {
     class Island : PhysicsGameObject
     {
-
 		private GameObject islandBuilding;
 
         public int Gold { get; private set; }
