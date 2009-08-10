@@ -33,6 +33,7 @@ namespace _2HourGame.View.GameServices
             addTexture("gold");
             addTexture("goldGetAnimation");
             addTexture("goldLoseAnimation");
+            addTexture("healthBar");
             addTexture("house");
             addTexture("island");
             addTexture("shipGunwale");

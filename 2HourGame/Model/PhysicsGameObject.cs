@@ -28,6 +28,12 @@ namespace _2HourGame.Model
 
         //public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float scale, Color color, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, float zIndex)
             //: base(game, initialPosition, contentName, scale, color, spriteBatch, zIndex)
+        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale, float initialRotation)
+            : this(game, initialPosition, physicsSimulator, contentName, scale) 
+        {
+            this.Body.Rotation = initialRotation;
+        }
+
         public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale)
             : base(game, initialPosition, contentName, scale)
         {

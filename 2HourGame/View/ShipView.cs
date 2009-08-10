@@ -18,6 +18,7 @@ namespace _2HourGame.View
 
         CannonView LeftCannonView;
         CannonView RightCannonView;
+        HealthBarView healthBarView;
 
         //private const float ShipScale = 0.6f;
 
@@ -49,6 +50,7 @@ namespace _2HourGame.View
 
             LeftCannonView = initializeCannonView(CannonType.LeftCannon);
             RightCannonView = initializeCannonView(CannonType.RightCannon);
+            healthBarView = new HealthBarView(base.Game, spriteBatch, (Ship)gameObject);
         }
 
         public override void Draw(GameTime gameTime)
@@ -58,6 +60,7 @@ namespace _2HourGame.View
                 base.Draw(gameTime);
                 base.spriteBatch.Draw(gunwale, gameObject.Position, null, shipColor, gameObject.Rotation, gameObject.Origin, gameObject.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
                 base.spriteBatch.Draw(rigging, gameObject.Position, null, Color.White, gameObject.Rotation, gameObject.Origin, gameObject.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
+                healthBarView.Draw(gameTime);
             }
         }
 

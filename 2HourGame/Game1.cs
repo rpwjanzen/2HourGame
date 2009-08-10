@@ -94,7 +94,14 @@ namespace _2HourGame {
                 new Vector2((width / 4) * 3, (height / 4) * 3 - 50)
             }.ToList();
 
-            var ships = new ShipFactory(this, spriteBatch, physicsSimulator, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands);
+            var playerAngles = new[] {
+                (float)(Math.PI * 0.75),
+                (float)(Math.PI * 1.25),
+                (float)(Math.PI * 0.25),
+                (float)(Math.PI * 1.75)
+            }.ToList();
+
+            var ships = new ShipFactory(this, spriteBatch, physicsSimulator, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
             //foreach (var v in ships) {
             //    this.Components.Add(v);
             //}

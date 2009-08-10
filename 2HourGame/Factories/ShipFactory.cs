@@ -17,13 +17,13 @@ namespace _2HourGame.Factories
             this.CannonBallManager = cannonBallManager;
         }
 
-        public List<Ship> CreatePlayerShips(List<Color> colors, List<Vector2> locations, List<Island> islands) {
-            return colors.Zip3(locations, islands, (c, l, i) => CreatePlayerShip(c, l, i)).ToList();
+        public List<Ship> CreatePlayerShips(List<Color> colors, List<Vector2> locations, List<Island> islands, List<float> shipAngles) {
+            return colors.Zip4(locations, islands, shipAngles, (c, l, i, a) => CreatePlayerShip(c, l, i, a)).ToList();
         }
 
-        public Ship CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland)
+        public Ship CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
         {
-            Ship ship = new Ship(base.Game, shipLocation, base.PhysicsSimulator, playerIsland, CannonBallManager, "shipHull");
+            Ship ship = new Ship(base.Game, shipLocation, base.PhysicsSimulator, playerIsland, CannonBallManager, "shipHull", shipAngle);
             ShipView shipView = new ShipView(base.Game, color, "shipHull", Color.White, SpriteBatch, ship);
             base.Game.Components.Add(ship);
             base.Game.Components.Add(shipView);

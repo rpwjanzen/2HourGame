@@ -24,7 +24,7 @@ namespace _2HourGame.Model
         public event Notifiaction ShipSpawned;
         public event CannonFired CannonHasBeenFired;
 
-        private const double maxHealth = 5;
+        public readonly double maxHealth = 5;
         public double health { get; private set; }
         public bool isActive { get; private set; }
 
@@ -80,8 +80,8 @@ namespace _2HourGame.Model
 
         //public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager)
             //: base(game, position, "shipHull", ShipScale, Color.White, spriteBatch, physicsSimulator, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull))
-        public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager, string contentName)
-            : base(game, position, physicsSimulator, contentName, 0.6f)
+        public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager, string contentName, float rotation)
+            : base(game, position, physicsSimulator, contentName, 0.6f, rotation)
         {
             this.GoldCapacity = 5;
             this.Gold = 0;
@@ -98,6 +98,7 @@ namespace _2HourGame.Model
 
             Geometry.OnCollision += ShipCollision;
             this.Body.RotationalDragCoefficient = 2500.0f;
+            base.Rotation = rotation;
 
             ShipSank += hideShip;
             ShipSpawned += unHideShip;
