@@ -37,6 +37,9 @@ namespace _2HourGame.View
         {
             this.shipColor = shipColor;
 
+            LeftCannonView = initializeCannonView(CannonType.LeftCannon);
+            RightCannonView = initializeCannonView(CannonType.RightCannon);
+
             gameObject.ShipSank += hideShip;
             gameObject.ShipSpawned += unHideShip;
             gameObject.CannonHasBeenFired += playCannonViewFiringAnimation;
@@ -48,8 +51,6 @@ namespace _2HourGame.View
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
 
-            LeftCannonView = initializeCannonView(CannonType.LeftCannon);
-            RightCannonView = initializeCannonView(CannonType.RightCannon);
             healthBarView = new HealthBarView(base.Game, spriteBatch, (Ship)gameObject);
         }
 

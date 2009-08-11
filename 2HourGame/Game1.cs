@@ -38,7 +38,7 @@ namespace _2HourGame {
 			spriteBatch = new SpriteBatch(this.GraphicsDevice);
             PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
             PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
-            physicsComponent.Debug = true;
+            physicsComponent.Debug = false;
             this.Components.Add(physicsComponent);
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
@@ -134,7 +134,12 @@ namespace _2HourGame {
         protected override void Draw(GameTime gameTime) {
             this.GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
-            base.Draw(gameTime);
+            foreach (GameComponent gc in this.Components) 
+            {
+                if (gc is DrawableGameComponent)
+                    ((DrawableGameComponent)gc).Draw(gameTime);
+            }
+            //base.Draw(gameTime);
             spriteBatch.End();
         }
     }
