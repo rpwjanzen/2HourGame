@@ -63,11 +63,11 @@ namespace _2HourGame.View
             base.LoadContent();
         }
 
-        public override void Draw(GameTime gameTime)
+        public void CustomDraw(GameTime gameTime, Vector2 splitScreenOffset)
         {
-            spriteBatch.Draw(texture, gameObject.Position, null, Color, gameObject.Rotation, gameObject.Origin, gameObject.Scale, SpriteEffects.None, ZIndex);
+            spriteBatch.Draw(texture, gameObject.Position + splitScreenOffset, null, Color, gameObject.Rotation, gameObject.Origin, gameObject.Scale, SpriteEffects.None, ZIndex);
 
-            base.Draw(gameTime);
+            //base.Draw(gameTime);
         }
 
         private void gameObjectRemoved()

@@ -24,14 +24,25 @@ namespace _2HourGame {
     public class Game1 : Microsoft.Xna.Framework.Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        PlayerViewManager playerViewManager;
+        Texture2D alphaMask;
 
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
+
+            //graphics.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
         }
 
-        protected override void Initialize() {
+        protected override void Initialize()
+        {
+            // setup for alpha masks
+            GraphicsDevice.RenderState.StencilEnable = true;
+            GraphicsDevice.RenderState.StencilPass = StencilOperation.Replace;
+            GraphicsDevice.RenderState.ReferenceStencil = 1;
+            alphaMask = Content.Load<Texture2D>(@"Content\quarterScreenAlphaMask");
+
             float width = graphics.PreferredBackBufferWidth;
             float height = graphics.PreferredBackBufferHeight;
 
@@ -122,6 +133,16 @@ namespace _2HourGame {
             for(int i = 0; i < shipMovers.Count; i++) {
                 this.Components.Add(shipMovers[i]);
             }
+
+            var playerPositionEnums = new[] {
+                PlayerViewManager.PlayerViewPosition.UpperLeft,
+                PlayerViewManager.PlayerViewPosition.UpperRight,
+                PlayerViewManager.PlayerViewPosition.LowerLeft,
+                PlayerViewManager.PlayerViewPosition.LowerRight
+            }.ToList();
+
+            playerViewManager = new PlayerViewManager(ships, playerPositionEnums);
+ 
             //var targetShip = ships[0];
             //var controlledShip = ships[3];
             //var islands = playerIslands.Concat(goldIslands);
@@ -134,10 +155,19 @@ namespace _2HourGame {
         protected override void Draw(GameTime gameTime) {
             this.GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
-            foreach (GameComponent gc in this.Components) 
+
+            foreach (PlayerViewManager.PlayerViewPosition playerViewPosition in playerViewManager)
             {
-                if (gc is DrawableGameComponent)
-                    ((DrawableGameComponent)gc).Draw(gameTime);
+                GraphicsDevice.RenderState.StencilFunction = CompareFunction.Always;
+                //draw alpha mask
+                spriteBatch.Draw(alphaMask, playerViewManager.getScreenOffset(playerViewPosition), Color.Black);
+                GraphicsDevice.RenderState.StencilFunction = CompareFunction.Equal;
+                Vector2 splitScreenOffset = playerViewManager.drawOffset(playerViewPosition);
+                foreach (GameComponent gc in this.Components)
+                {
+                    if (gc is GameObjectView)
+                        ((GameObjectView)gc).CustomDraw(gameTime, splitScreenOffset);
+                }
             }
             //base.Draw(gameTime);
             spriteBatch.End();
