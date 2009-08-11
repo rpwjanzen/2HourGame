@@ -29,12 +29,30 @@ namespace _2HourGame.View
 
         public Vector2 drawOffset(PlayerViewPosition playerViewPosition)
         {
-            return ships[positions.IndexOf(playerViewPosition)].Position - new Vector2(screenWidth / 2f, screenHeight / 2f) + getScreenOffset(playerViewPosition);
+            //return getScreenOffset(playerViewPosition) - ships[positions.IndexOf(playerViewPosition)].Position - new Vector2(screenWidth / 2f, screenHeight / 2f);
+            return -ships[positions.IndexOf(playerViewPosition)].Position + new Vector2(screenWidth / 2f, screenHeight / 2f) + getScreenOffset(playerViewPosition);
         }
 
-        public Vector2 getScreenOffset(PlayerViewPosition playerViewPosition) 
+        private Vector2 getScreenOffset(PlayerViewPosition playerViewPosition)
         {
-            switch (playerViewPosition) 
+            switch (playerViewPosition)
+            {
+                case PlayerViewPosition.UpperLeft:
+                    return new Vector2(-screenWidth / 4, -screenHeight / 4);
+                case PlayerViewPosition.UpperRight:
+                    return new Vector2(screenWidth / 4, -screenHeight / 4);
+                case PlayerViewPosition.LowerLeft:
+                    return new Vector2(-screenWidth / 4, screenHeight / 4);
+                case PlayerViewPosition.LowerRight:
+                    return new Vector2(screenWidth / 4, screenHeight / 4);
+                default:
+                    return Vector2.Zero;
+            }
+        }
+
+        public Vector2 getPlayerScreenOffset(PlayerViewPosition playerViewPosition)
+        {
+            switch (playerViewPosition)
             {
                 case PlayerViewPosition.UpperLeft:
                     return new Vector2(0, 0);

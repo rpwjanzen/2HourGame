@@ -26,6 +26,22 @@ namespace _2HourGame.Model
 
         public override void Draw(GameTime gameTime)
         {
+            // get the frame to draw
+            int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
+                * animatedTextureInfo.framesPerSecond));
+
+            if (!(totalFrame == animatedTextureInfo.totalFrames * animatedTextureInfo.numAnimationIterations))
+            {
+                int frame = totalFrame % animatedTextureInfo.totalFrames;
+
+                Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
+
+                spriteBatch.Draw(base.texture, gameObject.Position + animatedTextureInfo.drawOffset(gameObject.Rotation), source, base.Color, gameObject.Rotation, gameObject.Origin, gameObject.Scale, SpriteEffects.None, base.ZIndex);
+            }
+        }
+
+        public override void Update(GameTime gameTime)
+        {
             if (firstDraw)
             {
                 firstDraw = false;
@@ -38,14 +54,8 @@ namespace _2HourGame.Model
 
             if (totalFrame == animatedTextureInfo.totalFrames * animatedTextureInfo.numAnimationIterations)
                 animationDone();
-            else
-            {
-                int frame = totalFrame % animatedTextureInfo.totalFrames;
 
-                Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
-
-                spriteBatch.Draw(base.texture, gameObject.Position + animatedTextureInfo.drawOffset(gameObject.Rotation), source, base.Color, gameObject.Rotation, gameObject.Origin, gameObject.Scale, SpriteEffects.None, base.ZIndex);
-            }
+            base.Update(gameTime);
         }
 
         /// <summary>
