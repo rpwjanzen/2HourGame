@@ -160,14 +160,15 @@ namespace _2HourGame {
             foreach (PlayerViewManager.PlayerViewPosition playerViewPosition in playerViewManager)
             {
                 GraphicsDevice.RenderState.ReferenceStencil++;
+                GraphicsDevice.RenderState.ColorWriteChannels = ColorWriteChannels.None;
                 spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
                 GraphicsDevice.RenderState.StencilFunction = CompareFunction.Always;
                 spriteBatch.Draw(alphaMask, playerViewManager.getPlayerScreenOffset(playerViewPosition), Color.White);
                 spriteBatch.End();
 
+                GraphicsDevice.RenderState.ColorWriteChannels = ColorWriteChannels.All;
                 spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, Matrix.CreateTranslation(new Vector3(playerViewManager.drawOffset(playerViewPosition), 0)));
                 GraphicsDevice.RenderState.StencilFunction = CompareFunction.Equal;
-
                 base.Draw(gameTime);
                 spriteBatch.End();
             }
