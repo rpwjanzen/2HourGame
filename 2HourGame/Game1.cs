@@ -38,7 +38,7 @@ namespace _2HourGame {
 
         protected override void Initialize()
         {
-            alphaMask = Content.Load<Texture2D>(@"Content\quarterScreenAlphaMask");
+            alphaMask = Content.Load<Texture2D>(@"Content\16pxSquareAlphaMask");
 
             float width = graphics.PreferredBackBufferWidth;
             float height = graphics.PreferredBackBufferHeight;
@@ -132,10 +132,10 @@ namespace _2HourGame {
             }
 
             var playerPositionEnums = new[] {
-                PlayerViewManager.PlayerViewPosition.UpperLeft,
-                PlayerViewManager.PlayerViewPosition.UpperRight,
-                PlayerViewManager.PlayerViewPosition.LowerLeft,
-                PlayerViewManager.PlayerViewPosition.LowerRight
+                PlayerViewManager.PlayerView.One,
+                PlayerViewManager.PlayerView.Two,
+                PlayerViewManager.PlayerView.Three,
+                PlayerViewManager.PlayerView.Four
             }.ToList();
 
             playerViewManager = new PlayerViewManager(ships, playerPositionEnums);
@@ -156,22 +156,31 @@ namespace _2HourGame {
             GraphicsDevice.RenderState.StencilEnable = true;
             GraphicsDevice.RenderState.StencilPass = StencilOperation.Replace;
             GraphicsDevice.RenderState.ReferenceStencil = 1;
-           
-            foreach (PlayerViewManager.PlayerViewPosition playerViewPosition in playerViewManager)
-            {
+
+            playerViewManager.prepareToDraw();
+            PlayerViewManager.PlayerView playerView = PlayerViewManager.PlayerView.One;
+            //foreach (PlayerViewManager.PlayerView playerView in playerViewManager)
+            //{
+                //DrawAlphaMap
+                // we use a different reference stencil for each alpha map so that they dont apply cumulatively
                 GraphicsDevice.RenderState.ReferenceStencil++;
-                GraphicsDevice.RenderState.ColorWriteChannels = ColorWriteChannels.None;
+                // we turn off the color write channels so that the alpha map image is not actually drawn
+                //GraphicsDevice.RenderState.ColorWriteChannels = ColorWriteChannels.None;
                 spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
                 GraphicsDevice.RenderState.StencilFunction = CompareFunction.Always;
-                spriteBatch.Draw(alphaMask, playerViewManager.getPlayerScreenOffset(playerViewPosition), Color.White);
+                foreach (MapSquare mapSquare in playerViewManager.getPlayerMapSquares(playerView))
+                {
+                    spriteBatch.Draw(alphaMask, mapSquare.origin, Color.White);
+                }
                 spriteBatch.End();
 
-                GraphicsDevice.RenderState.ColorWriteChannels = ColorWriteChannels.All;
-                spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, Matrix.CreateTranslation(new Vector3(playerViewManager.drawOffset(playerViewPosition), 0)));
+                //DrawGraphicsForAPlayer
+                //GraphicsDevice.RenderState.ColorWriteChannels = ColorWriteChannels.All;
+                spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, Matrix.CreateTranslation(new Vector3(playerViewManager.drawOffset(playerView), 0)));
                 GraphicsDevice.RenderState.StencilFunction = CompareFunction.Equal;
                 base.Draw(gameTime);
                 spriteBatch.End();
-            }
+            //}
         }
     }
 }
