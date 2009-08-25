@@ -55,7 +55,7 @@ namespace _2HourGame {
 			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch, physicsSimulator);
             this.Components.Add(cannonBallManager);
 
-            var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
+            //var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
 
             var playerColors = new[] {
                 Color.Blue,
@@ -161,11 +161,11 @@ namespace _2HourGame {
             PlayerViewManager.PlayerView playerView = PlayerViewManager.PlayerView.One;
             //foreach (PlayerViewManager.PlayerView playerView in playerViewManager)
             //{
-                //DrawAlphaMap
+                // Draw Alpha Map
                 // we use a different reference stencil for each alpha map so that they dont apply cumulatively
                 GraphicsDevice.RenderState.ReferenceStencil++;
                 // we turn off the color write channels so that the alpha map image is not actually drawn
-                //GraphicsDevice.RenderState.ColorWriteChannels = ColorWriteChannels.None;
+                // GraphicsDevice.RenderState.ColorWriteChannels = ColorWriteChannels.None;
                 spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
                 GraphicsDevice.RenderState.StencilFunction = CompareFunction.Always;
                 foreach (MapSquare mapSquare in playerViewManager.getPlayerMapSquares(playerView))
@@ -174,7 +174,7 @@ namespace _2HourGame {
                 }
                 spriteBatch.End();
 
-                //DrawGraphicsForAPlayer
+                // Draw Graphics For A Single Player
                 //GraphicsDevice.RenderState.ColorWriteChannels = ColorWriteChannels.All;
                 spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, Matrix.CreateTranslation(new Vector3(playerViewManager.drawOffset(playerView), 0)));
                 GraphicsDevice.RenderState.StencilFunction = CompareFunction.Equal;

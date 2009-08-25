@@ -68,7 +68,8 @@ namespace _2HourGame.View
                 float shrinkRatio = relativeShipPos.Length() / (screenHeight / 2);
                 //double radiansFromCenterToShip = Math.Atan(Convert.ToDouble(relativeShipPos.X / relativeShipPos.Y));
                 //shipScreenPosition.Add(center + new Vector2((float)Math.Sin(radiansFromCenterToShip) * screenHeight / 2, (float)Math.Cos(radiansFromCenterToShip) * screenHeight / 2));
-                shipScreenPosition.Add(center + (relativeShipPos * shrinkRatio));
+                //shipScreenPosition.Add(center + (relativeShipPos / shrinkRatio));
+                shipScreenPosition.Add(new Vector2(screenWidth / 2f, screenHeight / 2f) + (relativeShipPos / shrinkRatio));
             }
 
             // Each square goes to the closest ship (based on relative ship position), this may not be optimal but can be changed later.
@@ -115,7 +116,7 @@ namespace _2HourGame.View
         public Vector2 drawOffset(PlayerView playerView)
         {
             //return -ships[views.IndexOf(playerView)].Position + new Vector2(screenWidth / 2f, screenHeight / 2f) +getScreenOffset(playerViewPosition);
-            return Vector2.Zero;// -ships[views.IndexOf(playerView)].Position + new Vector2(screenWidth / 2f, screenHeight / 2f) + shipScreenPosition[(int)playerView];
+            return shipScreenPosition[(int)playerView] - ships[views.IndexOf(playerView)].Position;// + new Vector2(screenWidth / 4f, screenHeight / 4f);// shipScreenPosition[(int)playerView] 
         }
 
         //private Vector2 getScreenOffset(PlayerView playerView)
@@ -159,6 +160,10 @@ namespace _2HourGame.View
 
     }
 
+
+    /// <summary>
+    /// Represents a single square of map vision.
+    /// </summary>
     class MapSquare
     {
         const float mapSquareSize = 16;
@@ -170,7 +175,7 @@ namespace _2HourGame.View
         {
             get
             {
-                return new Vector2((x + 0.5f) * mapSquareSize, (y + 0.5f) * mapSquareSize);
+                return origin + new Vector2(mapSquareSize/2, mapSquareSize/2);
             }
         }
         public MapSquare(int x, int y) 
