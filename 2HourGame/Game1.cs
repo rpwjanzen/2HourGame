@@ -38,7 +38,7 @@ namespace _2HourGame {
 			spriteBatch = new SpriteBatch(this.GraphicsDevice);
             PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
             PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
-            physicsComponent.Debug = true;
+            physicsComponent.Debug = false;
             this.Components.Add(physicsComponent);
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);

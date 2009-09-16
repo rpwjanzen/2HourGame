@@ -20,8 +20,6 @@ namespace _2HourGame.View
         CannonView RightCannonView;
         HealthBarView healthBarView;
 
-        //private const float ShipScale = 0.6f;
-
         /// <summary>
         /// 
         /// </summary>
@@ -38,8 +36,6 @@ namespace _2HourGame.View
             this.shipColor = shipColor;
 
             gameObject.ShipSank += hideShip;
-            gameObject.ShipSpawned += unHideShip;
-            gameObject.CannonHasBeenFired += playCannonViewFiringAnimation;
         }
 
         protected override void LoadContent()
@@ -67,59 +63,20 @@ namespace _2HourGame.View
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            UpdateCannonView(LeftCannonView);
-            UpdateCannonView(RightCannonView);
         }
 
         private CannonView initializeCannonView(CannonType cannonType)
         {
-            GameObject cannon = new GameObject(Game, getCannonPosition(cannonType), "cannonAnimation", gameObject.Scale);
-
             CannonView newCannonView = new CannonView(
                 Game,
                 Color.White,
                 spriteBatch,
                 cannonType,
-                cannon
+                (Ship)gameObject
                 );
 
-            newCannonView.UpdateRotation(getCannonRotation(cannonType));
-
-            Game.Components.Add(cannon);
             Game.Components.Add(newCannonView);
             return newCannonView;
-        }
-
-        private void UpdateCannonView(CannonView cannonView)
-        {
-            cannonView.UpdateRotation(getCannonRotation(cannonView.cannonType));
-            cannonView.UpdatePosition(getCannonPosition(cannonView.cannonType));
-        }
-
-        private float getCannonRotation(CannonType cannonType)
-        {
-            if (cannonType == CannonType.LeftCannon)
-                return 2f * (float)Math.PI + gameObject.Rotation;
-            else
-                return (float)Math.PI + gameObject.Rotation;
-        }
-
-        private Vector2 getCannonPosition(CannonType cannonType)
-        {
-            if (cannonType == CannonType.LeftCannon)
-                return new Vector2(((Ship)gameObject).Body.GetBodyMatrix().Left.X, ((Ship)gameObject).Body.GetBodyMatrix().Left.Y) * (gameObject.XRadius - 8) + gameObject.Position;
-            else
-                return new Vector2(((Ship)gameObject).Body.GetBodyMatrix().Right.X, ((Ship)gameObject).Body.GetBodyMatrix().Right.Y) * (gameObject.XRadius - 8) + gameObject.Position;
-        }
-
-        private void playCannonViewFiringAnimation(CannonType cannonType, GameTime gameTime) 
-        {
-            // start the firing animation
-            if (cannonType == CannonType.LeftCannon)
-                LeftCannonView.PlayAnimation(gameTime);
-            else
-                RightCannonView.PlayAnimation(gameTime);
         }
 
         /// <summary>
@@ -127,19 +84,8 @@ namespace _2HourGame.View
         /// </summary>
         private void hideShip()
         {
-            LeftCannonView.isActive = false;
-            RightCannonView.isActive = false;
             ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).ShipSinking(gameObject.Position);
             ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).FloatingCrate(gameObject.Position);
-        }
-
-        /// <summary>
-        /// enables drawing, control, and physics of ship
-        /// </summary>
-        private void unHideShip()
-        {
-            LeftCannonView.isActive = true;
-            RightCannonView.isActive = true;
         }
     }
 }

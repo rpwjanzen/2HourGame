@@ -83,7 +83,7 @@ namespace _2HourGame.Model
         public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager, string contentName, float rotation)
             : base(game, position, physicsSimulator, contentName, 0.6f, rotation)
         {
-            this.GoldCapacity = 5;
+            this.GoldCapacity = 3;
             this.Gold = 0;
             this.HomeIsland = homeIsland;
             this.CannonBallManager = cannonBallManager;

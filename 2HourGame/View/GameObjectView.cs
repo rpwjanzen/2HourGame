@@ -21,7 +21,7 @@ namespace _2HourGame.View
 
         private string contentName;
 
-        protected GameObject gameObject;
+        public GameObject gameObject;
 
         //public GameObjectView(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch)
         //    : this(game, position, contentName, scale, color, spriteBatch, 0) {
