@@ -9,7 +9,7 @@ namespace _2HourGame.Model
     {
         List<Island> islands;
 
-        private Map(List<Island> islands) 
+        public Map(List<Island> islands) 
         {
             this.islands = islands;
         }

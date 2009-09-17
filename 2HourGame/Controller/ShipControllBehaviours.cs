@@ -23,5 +23,13 @@ namespace _2HourGame.Controller
                 player.FireCannon(gameTime, CannonType.RightCannon);
             }
         }
+
+        public static void PickupGold(GamePadState gs, Player player, GameTime gameTime) 
+        {
+            if (gs.IsButtonDown(Buttons.A)) 
+            {
+                player.AttemptPickupGold(gameTime);
+            }
+        }
     }
 }
