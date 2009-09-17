@@ -15,6 +15,10 @@ namespace _2HourGame.View
         {
             shipGoldView = 0,
             goldAnimation,
+            xboxControllerButtonA,
+            xboxControllerButtonB,
+            dig,
+            repair,
             cannonBall,
             cannonSmokeAnimation,
             shipRigging,

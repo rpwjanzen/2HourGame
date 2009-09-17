@@ -46,6 +46,24 @@ namespace _2HourGame.Model
             return GamePad.GetState(playerIndex);
         }
 
+        public bool ClosestInRangeIslandIsHomeAndShipTravelingSlowEnough() 
+        {
+            Island closestInRange = map.GetClosestInRangeIsland(ship, inRangeIslandMinimumRange);
+
+            if (closestInRange == homeIsland && ship.Speed <= maxShipSpeedForIslandInteraction)
+                return true;
+            return false;
+        }
+
+        public bool ClosestInRangeIslandIsNotHomeAndHasGoldAndShipTravelingSlowEnough()
+        {
+            Island closestInRange = map.GetClosestInRangeIsland(ship, inRangeIslandMinimumRange);
+
+            if (closestInRange != null && closestInRange != homeIsland && closestInRange.HasGold && ship.Speed <= maxShipSpeedForIslandInteraction)
+                return true;
+            return false;
+        }
+
         #region Controller Actions
         public void FireCannon(GameTime gameTime, CannonType cannonType) 
         {

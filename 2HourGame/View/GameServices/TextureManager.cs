@@ -29,6 +29,10 @@ namespace _2HourGame.View.GameServices
             addTexture("cannonAnimation");
             addTexture("cannonBall");
             addTexture("cannonSmokeAnimation");
+            addTexture("ControllerImages\\xboxControllerButtonA");
+            addTexture("ControllerImages\\xboxControllerButtonB");
+            addTexture("dig");
+            addTexture("repair");
             addTexture("floatingCrate");
             addTexture("gold");
             addTexture("goldGetAnimation");

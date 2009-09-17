@@ -109,9 +109,13 @@ namespace _2HourGame {
 
             var players = new PlayerFactory(map).CreatePlayers(new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four }, ships, playerIslands);
 
+            var shipActionViews = new ShipActionViewFactory(this, spriteBatch).CreateShipActionsViews(players).ToList();
+            for (int i = 0; i < shipActionViews.Count; i++)
+            {
+                this.Components.Add(shipActionViews[i]);
+            }
 
             var shipControllers = new ShipControllerFactory(this).CreateShipControllers(players).ToList();
-
             for (int i = 0; i < shipControllers.Count; i++)
             {
                 this.Components.Add(shipControllers[i]);
