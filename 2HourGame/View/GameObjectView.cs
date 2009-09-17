@@ -23,26 +23,6 @@ namespace _2HourGame.View
 
         public GameObject gameObject;
 
-        //public GameObjectView(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch)
-        //    : this(game, position, contentName, scale, color, spriteBatch, 0) {
-        //}
-
-        //public GameObjectView(Game game, Vector2 position, string contentName, float scale, Color color, SpriteBatch spriteBatch, float zIndex)
-        //    : base(game)
-        //{
-        //    this.Color = color;
-        //    this.Position = position;
-        //    this.contentName = contentName;
-        //    this.Scale = scale;
-        //    this.spriteBatch = spriteBatch;
-        //    this.ZIndex = zIndex;
-        //}
-
-        //public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, GameObject gameObject)
-        //    : this(game, contentName, color, spriteBatch, gameObject, 0)
-        //{
-        //}
-
         public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, GameObject gameObject, float zIndex)
             : base(game)
         {

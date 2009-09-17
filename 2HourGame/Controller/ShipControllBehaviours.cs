@@ -12,7 +12,7 @@ namespace _2HourGame.Controller
 {
     static class ShipControllBehaviours
     {
-        public static void FireCannons(GamePadState gs, Player player, GameTime gameTime) 
+        public static void FireCannons(GamePadState gs, GamePadState previousGamePadState, Player player, GameTime gameTime) 
         {
             if (gs.IsButtonDown(Buttons.LeftTrigger))
             {
@@ -24,12 +24,18 @@ namespace _2HourGame.Controller
             }
         }
 
-        public static void PickupGold(GamePadState gs, Player player, GameTime gameTime) 
+        public static void PickupGold(GamePadState gs, GamePadState previousGamePadState, Player player, GameTime gameTime) 
         {
-            if (gs.IsButtonDown(Buttons.A)) 
+            if (gs.IsButtonDown(Buttons.A) && previousGamePadState.IsButtonUp(Buttons.A)) 
             {
                 player.AttemptPickupGold(gameTime);
             }
+        }
+
+        public static void RepairShip(GamePadState gs, GamePadState previousGamePadState, Player player, GameTime gameTime) 
+        {
+            if (gs.IsButtonDown(Buttons.B) && previousGamePadState.IsButtonUp(Buttons.B))
+                player.AttemptRepair();
         }
     }
 }

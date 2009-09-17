@@ -20,8 +20,11 @@ namespace _2HourGame.Model
         Map map;
 
         // persistant state stuff for picking up gold
-        Island goldIsland;
-        float goldIslandMinimumRange;
+        Island inRangeIsland;
+        const float inRangeIslandMinimumRange = 100;
+        const float maxShipSpeedForIslandInteraction = 0.15f;
+        int numGoldButtonPresses;
+        const float numGoldButtonPressesRequired = 20;
 
         public int TotalGold
         {
@@ -35,8 +38,7 @@ namespace _2HourGame.Model
             this.homeIsland = homeIsland;
             this.map = map;
 
-            goldIsland = null;
-            goldIslandMinimumRange = 100;
+            inRangeIsland = null;
         }
 
         public GamePadState getGamePadState() 
@@ -52,30 +54,63 @@ namespace _2HourGame.Model
 
         public void AttemptPickupGold(GameTime gameTime) 
         {
-            // Gold Pickup Behaviour
-            if (goldIsland != null && ship.Speed > 0.15)
-                goldIsland = null;
-            else if (ship.Speed <= 0.15)
+            if (ship.isActive)
             {
-                Island closestInRangeIsland = map.GetClosestInRangeIsland(ship, goldIslandMinimumRange);
-                if (closestInRangeIsland != null)
+                // Gold Pickup Behaviour
+                if (inRangeIsland != null && ship.Speed > maxShipSpeedForIslandInteraction)
                 {
-                    if (closestInRangeIsland == homeIsland)
+                    inRangeIsland = null;
+                    numGoldButtonPresses = 0;
+                }
+                else if (ship.Speed <= maxShipSpeedForIslandInteraction)
+                {
+                    Island closestInRangeIsland = map.GetClosestInRangeIsland(ship, inRangeIslandMinimumRange);
+                    if (closestInRangeIsland != null)
                     {
-                        ship.UnloadGoldToIsland(closestInRangeIsland);
-                    }
-                    else
-                    {
-                        if (goldIsland == null)
+                        if (closestInRangeIsland == homeIsland)
                         {
-                            if (closestInRangeIsland != null && closestInRangeIsland != homeIsland)
+                            ship.UnloadGoldToIsland(closestInRangeIsland);
+                        }
+                        else
+                        {
+                            if (inRangeIsland == null)
                             {
-                                goldIsland = closestInRangeIsland;
+                                if (closestInRangeIsland != null && closestInRangeIsland != homeIsland)
+                                {
+                                    inRangeIsland = closestInRangeIsland;
+                                }
+                            }
+                            else if (inRangeIsland == closestInRangeIsland)
+                            {
+                                if (numGoldButtonPresses >= numGoldButtonPressesRequired)
+                                {
+                                    ship.LoadGoldFromIsland(inRangeIsland, gameTime);
+                                    numGoldButtonPresses = 0;
+                                }
+                                else
+                                    numGoldButtonPresses++;
                             }
                         }
-                        else if (goldIsland == closestInRangeIsland)
+                    }
+                }
+            }
+        }
+
+        public void AttemptRepair()
+        {
+            if (ship.isActive)
+            {
+                // Gold Pickup Behaviour
+                if (inRangeIsland != null && ship.Speed > maxShipSpeedForIslandInteraction)
+                    inRangeIsland = null;
+                else if (ship.Speed <= maxShipSpeedForIslandInteraction)
+                {
+                    Island closestInRangeIsland = map.GetClosestInRangeIsland(ship, inRangeIslandMinimumRange);
+                    if (closestInRangeIsland != null)
+                    {
+                        if (closestInRangeIsland == homeIsland)
                         {
-                            ship.LoadGoldFromIsland(goldIsland, gameTime);
+                            ship.Repair();
                         }
                     }
                 }

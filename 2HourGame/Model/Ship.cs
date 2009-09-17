@@ -26,6 +26,7 @@ namespace _2HourGame.Model
 
         public readonly double maxHealth = 5;
         public double health { get; private set; }
+        const double healthRepairAmount = 0.10;
         public bool isActive { get; private set; }
 
         public int GoldCapacity { get; private set; }
@@ -33,12 +34,6 @@ namespace _2HourGame.Model
 
         private bool IsFull {
             get { return this.Gold >= this.GoldCapacity; }
-        }
-
-        readonly int MinimumSecondsBetweenLoadingGold = 2;
-        TimeSpan LastGoldLoadTime = new TimeSpan();
-        private bool LoadCooldownHasExpired(GameTime now) {
-            return now.TotalGameTime.TotalSeconds - LastGoldLoadTime.TotalSeconds > MinimumSecondsBetweenLoadingGold;
         }
 
         CannonBallManager CannonBallManager { get; set; }
@@ -151,6 +146,14 @@ namespace _2HourGame.Model
                 Gold = 0;
             }
         }
+
+        public void Repair() 
+        {
+            health += healthRepairAmount;
+
+            if (health > maxHealth)
+                health = maxHealth;
+        }
         
         public void Thrust(float amount) {
             //get the forward vector
@@ -168,10 +171,9 @@ namespace _2HourGame.Model
         }
 
         public void LoadGoldFromIsland(Island island, GameTime now) {
-            if (island.HasGold && !this.IsFull && this.LoadCooldownHasExpired(now)) {
+            if (island.HasGold && !this.IsFull) {
                 island.RemoveGold();
                 this.AddGold();
-                this.LastGoldLoadTime = now.TotalGameTime;
                 ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this.Position);
             }
         }

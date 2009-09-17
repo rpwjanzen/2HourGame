@@ -10,7 +10,7 @@ using _2HourGame.Model;
 
 namespace _2HourGame.Controller
 {
-    delegate void ControllerBehaviour(GamePadState gs, Player player, GameTime gameTime);
+    delegate void ControllerBehaviour(GamePadState gs, GamePadState previousGamePadState, Player player, GameTime gameTime);
 
     class ShipController : GameComponent {
 
@@ -20,12 +20,15 @@ namespace _2HourGame.Controller
 
         ShipRelativeMoveBehavior moveShipBehavior = new ShipRelativeMoveBehavior();
 
+        GamePadState previousGamePadState;
+
         public ShipController(Game game, Player player)
             : base(game) {
             this.player = player;
 
             ProcessControllerBehaviours += ShipControllBehaviours.FireCannons;
             ProcessControllerBehaviours += ShipControllBehaviours.PickupGold;
+            ProcessControllerBehaviours += ShipControllBehaviours.RepairShip;
         }
 
         public override void Update(GameTime gameTime) {
@@ -34,7 +37,7 @@ namespace _2HourGame.Controller
 
             if (gs.IsConnected)
             {
-                ProcessControllerBehaviours(gs, player, gameTime);
+                ProcessControllerBehaviours(gs, previousGamePadState, player, gameTime);
 
                 moveShipBehavior.MoveShip(gs, player.ship);
             }
@@ -42,6 +45,9 @@ namespace _2HourGame.Controller
             else
             {
             }
+
+            previousGamePadState = gs;
+
             base.Update(gameTime);
         }
     }
