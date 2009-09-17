@@ -87,6 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIController.cs" />
+    <Compile Include="Controller\ShipControllBehaviours.cs" />
+    <Compile Include="Factories\PlayerFactory.cs" />
+    <Compile Include="Model\Map.cs" />
+    <Compile Include="Model\Player.cs" />
     <Compile Include="View\AnimationView.cs" />
     <Compile Include="View\AnimatedTextureInfo.cs" />
     <Compile Include="View\CannonView.cs" />
@@ -110,7 +114,7 @@
     <Compile Include="Factories\ShipFactory.cs" />
     <Compile Include="View\ShipGoldView.cs" />
     <Compile Include="Factories\ShipGoldViewFactory.cs" />
-    <Compile Include="Factories\ShipMoverFactory.cs" />
+    <Compile Include="Factories\ShipControllerFactory.cs" />
     <Compile Include="Model\ShipRelativeMoveBehavior.cs" />
     <Compile Include="Model\Island.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,7 +122,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Model\ScreenRelativeMoveBehavior.cs" />
     <Compile Include="Model\Ship.cs" />
-    <Compile Include="Model\ShipMover.cs" />
+    <Compile Include="Controller\ShipController.cs" />
     <Compile Include="View\GameServices\TextureManager.cs" />
     <Compile Include="Model\WorldBorder.cs" />
     <Compile Include="View\ShipView.cs" />

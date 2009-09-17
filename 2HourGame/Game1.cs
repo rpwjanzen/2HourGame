@@ -66,21 +66,12 @@ namespace _2HourGame {
             // maybe it's being re-evaluated each time and we are getting a bunch of extra objects
             var islandBuildingOffset = new Vector2(20, 20);
             var islandBuildings = new HouseFactory(this, spriteBatch).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
-            //foreach (var v in islandBuildings) {
-            //    this.Components.Add(v);
-            //}
 
             IslandFactory islandFactory = new IslandFactory(this, spriteBatch, physicsSimulator);
             var playerIslands = islandFactory.CreatePlayerIslands(islandPositions, islandBuildings);
-            //foreach (var v in playerIslands) {
-            //    this.Components.Add(v);
-            //}
 
             var goldIslands = new List<Island>();
             goldIslands.Add(islandFactory.CreateIsland(new Vector2(width / 2, height / 2), null, 16));
-            //foreach (var v in goldIslands) {
-            //    this.Components.Add(v);
-            //}
 
             List<Island> allIslands = new List<Island>(playerIslands.ToArray());
             allIslands.AddRange(goldIslands);
@@ -102,9 +93,6 @@ namespace _2HourGame {
             }.ToList();
 
             var ships = new ShipFactory(this, spriteBatch, physicsSimulator, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
-            //foreach (var v in ships) {
-            //    this.Components.Add(v);
-            //}
 
             var shipGoldViewFactory = new ShipGoldViewFactory(this, spriteBatch, 100);
             var playerGoldViews = ships.Zip(new[] {
@@ -117,11 +105,16 @@ namespace _2HourGame {
                 this.Components.Add(v);
             }
 
-            var shipMovers = new ShipMoverFactory(this, playerIslands.Concat(goldIslands)).CreateShipMovers(ships, new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four });
-            
-            for(int i = 0; i < shipMovers.Count; i++) {
-                this.Components.Add(shipMovers[i]);
+            var players = new PlayerFactory().CreatePlayers(new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four }, ships, playerIslands);
+
+
+            var shipControllers = new ShipControllerFactory(this).CreateShipControllers(players).ToList();
+
+            for (int i = 0; i < shipControllers.Count; i++)
+            {
+                this.Components.Add(shipControllers[i]);
             }
+
             //var targetShip = ships[0];
             //var controlledShip = ships[3];
             //var islands = playerIslands.Concat(goldIslands);

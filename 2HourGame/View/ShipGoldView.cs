@@ -51,13 +51,13 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            if (ship.CarriedGold != GoldPositions.Count) {
+            if (ship.Gold != GoldPositions.Count) {
                 this.GoldPositions = CalculatePositions(displayWidth);
             }
 
             for (int i = 0; i < GoldPositions.Count; i++)
             {
-                Color drawColor = i < ship.CarriedGold ? Color.White : Color.DarkGray;
+                Color drawColor = i < ship.Gold ? Color.White : Color.DarkGray;
 
                 spriteBatch.Draw(texture, GoldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGoldView) + (0.001f * i));
             }

@@ -33,16 +33,12 @@ namespace _2HourGame.View
         public override void Draw(GameTime gameTime)
         {
             // reference http://www.xnadevelopment.com/tutorials/notsohealthy/NotSoHealthy.shtml
-            //Draw the negative space for the health bar
-            //spriteBatch.Draw(texture, new Rectangle(base.game.Window.ClientBounds.Width / 2 - texture.Width / 2, 30, texture.Width, 44), new Rectangle(0, 45, texture.Width, 44), Color.Red);
+            if (ship.health != ship.maxHealth)
+            {
+                spriteBatch.Draw(texture, ship.Position + offset, null, Color.Red, 0f, origin, ship.Scale, SpriteEffects.None, zIndex + 0.001f);
+                spriteBatch.Draw(texture, ship.Position + offset, new Rectangle(0, 0, (int)(texture.Width * (ship.health / ship.maxHealth)), texture.Height), Color.Green, 0f, origin, ship.Scale, SpriteEffects.None, zIndex);
+            }
+        }
 
-            spriteBatch.Draw(texture, ship.Position + offset, null, Color.Red, 0f, origin, ship.Scale, SpriteEffects.None, zIndex + 0.001f);
-
-            spriteBatch.Draw(texture, ship.Position + offset, new Rectangle(0, 0, (int)(texture.Width * (ship.health / ship.maxHealth)), texture.Height), Color.Green, 0f, origin, ship.Scale, SpriteEffects.None, zIndex);
-
-            //Draw the current health level based on the current Health
-            //spriteBatch.Draw(texture, new Rectangle(this.Window.ClientBounds.Width / 2 - texture.Width / 2, 30, (int)(texture.Width * ((double)mCurrentHealth / 100)), 44),
-                 //new Rectangle(0, 45, texture.Width, 44), Color.Green);
-        }
     }
 }

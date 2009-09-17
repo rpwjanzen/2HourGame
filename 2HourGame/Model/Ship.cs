@@ -28,17 +28,8 @@ namespace _2HourGame.Model
         public double health { get; private set; }
         public bool isActive { get; private set; }
 
-        public Island HomeIsland { get; private set; }
-
         public int GoldCapacity { get; private set; }
-        int Gold { get; set; }
-        
-        public int TotalGold {
-            get { return HomeIsland.Gold + this.Gold; }
-        }
-        public int CarriedGold {
-            get { return this.Gold; }
-        }
+        public int Gold { get; private set; }
 
         private bool IsFull {
             get { return this.Gold >= this.GoldCapacity; }
@@ -78,14 +69,11 @@ namespace _2HourGame.Model
             return now.TotalGameTime.TotalSeconds - timeOfDeath.TotalSeconds > respawnTimeSeconds;
         }
 
-        //public Ship(Game game, Color playerColor, Vector2 position, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager)
-            //: base(game, position, "shipHull", ShipScale, Color.White, spriteBatch, physicsSimulator, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull))
-        public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator, Island homeIsland, CannonBallManager cannonBallManager, string contentName, float rotation)
+        public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator, CannonBallManager cannonBallManager, string contentName, float rotation)
             : base(game, position, physicsSimulator, contentName, 0.6f, rotation)
         {
             this.GoldCapacity = 3;
             this.Gold = 0;
-            this.HomeIsland = homeIsland;
             this.CannonBallManager = cannonBallManager;
             this.FiringVelocity = Vector2.UnitY;
             this.CannonCooldownTime = 2.0f;
