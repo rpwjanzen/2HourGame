@@ -30,7 +30,7 @@ namespace _2HourGame.View
         List<Vector2> GoldPositions { get; set; }
 
         // where is this ships goldview
-        GoldViewPosition Position { get; set; }
+        GoldViewPosition DisplayCorner { get; set; }
 
         public ShipGoldView(Game game, Ship ship, GoldViewPosition position , SpriteBatch spriteBatch, float displayWidth)
             : base(game)
@@ -39,20 +39,20 @@ namespace _2HourGame.View
             this.spriteBatch = spriteBatch;
             this.displayWidth = displayWidth;
             scale = 1f;
-            this.Position = position;
+            this.DisplayCorner = position;
         }
 
         protected override void LoadContent()
         {
             texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTexture("gold");
-            this.GoldPositions = CalculatePositions(displayWidth);
+            this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
             base.LoadContent();
         }
 
         public override void Draw(GameTime gameTime)
         {
             if (ship.Gold != GoldPositions.Count) {
-                this.GoldPositions = CalculatePositions(displayWidth);
+                this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
             }
 
             for (int i = 0; i < GoldPositions.Count; i++)
@@ -65,11 +65,11 @@ namespace _2HourGame.View
             base.Draw(gameTime);
         }
 
-        private List<Vector2> CalculatePositions(float displayWidth)
+        private List<Vector2> CalculateGoldCoinPositions(float displayWidth, GoldViewPosition displayCorner)
         {
             Vector2 position;
 
-            switch (this.Position) {
+            switch (displayCorner) {
                 case GoldViewPosition.UpperLeft:
                     position = new Vector2(
                         10,
@@ -91,7 +91,7 @@ namespace _2HourGame.View
                         720 - texture.Height - 10);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("displayCorner", "Unknown gold position");
             }
 
             float increment = displayWidth / ship.GoldCapacity;
