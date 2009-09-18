@@ -4,5 +4,6 @@
 **/obj
 **/Content/bin
 **/Content/obj
+**/Content/Thumbs.db
 **/*.cachefile
 **/*.bak
