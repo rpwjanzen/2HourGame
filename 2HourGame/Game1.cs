@@ -17,25 +17,78 @@ using _2HourGame.View;
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
 
-namespace _2HourGame {
+namespace _2HourGame
+{
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game {
+    public class Game1 : Microsoft.Xna.Framework.Game
+    {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        List<Ship> ships;
+        Viewport[] viewports;
 
-        public Game1() {
+        public Game1()
+        {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
         }
 
-        protected override void Initialize() {
-            float width = graphics.PreferredBackBufferWidth;
-            float height = graphics.PreferredBackBufferHeight;
+        protected override void Initialize()
+        {
+            int screenWidth = graphics.PreferredBackBufferWidth;
+            int screenHeight = graphics.PreferredBackBufferHeight;
 
-			spriteBatch = new SpriteBatch(this.GraphicsDevice);
+            spriteBatch = new SpriteBatch(this.GraphicsDevice);
+            CreateGameObjects(screenWidth, screenHeight);
+            InitializeViewports();
+
+            base.Initialize();
+        }
+
+        private void InitializeViewports()
+        {
+            int screenWidth = graphics.PreferredBackBufferWidth;
+            int screenHeight = graphics.PreferredBackBufferHeight;
+
+            viewports = new Viewport[4];
+            var viewportWidth = screenWidth / 2;
+            var viewportHeight = screenHeight / 2;
+            for (int i = 0; i < viewports.Length; i++)
+            {
+                viewports[i] = GraphicsDevice.Viewport;
+                viewports[i].Width = viewportWidth;
+                viewports[i].Height = viewportHeight;
+            }
+            viewports[1].X = viewportWidth + 1;
+            viewports[2].Y = viewportHeight + 1;
+            viewports[3].X = viewportWidth + 1;
+            viewports[3].Y = viewportHeight + 1;
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            for (int i = 0; i < viewports.Length; i++)
+            {
+                GraphicsDevice.Viewport = viewports[i];
+                this.GraphicsDevice.Clear(Color.CornflowerBlue);
+
+                var ship = ships[i];
+                // center on ship
+                var translateVector = new Vector3(-ship.Position + new Vector2(viewports[i].Width / 2, viewports[i].Height / 2), 0);
+                var playerTransformMatrix = Matrix.CreateTranslation(translateVector);
+                spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, playerTransformMatrix);
+                base.Draw(gameTime);
+                spriteBatch.End();
+            }
+
+
+        }
+
+        void CreateGameObjects(int width, int height)
+        {
             PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
             PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
             physicsComponent.Debug = false;
@@ -44,10 +97,10 @@ namespace _2HourGame {
             EffectManager effectManager = new EffectManager(this, spriteBatch);
             TextureManager textureManager = new TextureManager(this);
 
-			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch, physicsSimulator);
+            CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch, physicsSimulator);
             this.Components.Add(cannonBallManager);
 
-            var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
+            WorldBorder.AddWorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
 
             var playerColors = new[] {
                 Color.Blue,
@@ -62,7 +115,7 @@ namespace _2HourGame {
                 new Vector2((width / 4) - 100, (height / 4) * 3 + 50),
                 new Vector2((width / 4) * 3 + 100, (height / 4) * 3 + 50)
             }.ToList();
-            
+
             // maybe it's being re-evaluated each time and we are getting a bunch of extra objects
             var islandBuildingOffset = new Vector2(20, 20);
             var islandBuildings = new HouseFactory(this, spriteBatch).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
@@ -92,7 +145,7 @@ namespace _2HourGame {
                 (float)(Math.PI * 1.75)
             }.ToList();
 
-            var ships = new ShipFactory(this, spriteBatch, physicsSimulator, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
+            ships = new ShipFactory(this, spriteBatch, physicsSimulator, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
 
             var shipGoldViewFactory = new ShipGoldViewFactory(this, spriteBatch, 100);
             var playerGoldViews = ships.Zip(new[] {
@@ -101,7 +154,8 @@ namespace _2HourGame {
                 ShipGoldView.GoldViewPosition.LowerLeft, 
                 ShipGoldView.GoldViewPosition.LowerRight
             }, (s, p) => shipGoldViewFactory.CreateShipGoldView(s, p)).ToList();
-            foreach (var v in playerGoldViews) {
+            foreach (var v in playerGoldViews)
+            {
                 this.Components.Add(v);
             }
 
@@ -121,20 +175,14 @@ namespace _2HourGame {
                 this.Components.Add(shipControllers[i]);
             }
 
-            //var targetShip = ships[0];
-            //var controlledShip = ships[3];
-            //var islands = playerIslands.Concat(goldIslands);
-            //AIController playerFourController = new AIController(this, controlledShip, controlledShip.HomeIsland, islands.Where(i => i != controlledShip.HomeIsland).ToList(), targetShip);
-            //this.Components.Add(playerFourController);
-
-            base.Initialize();
         }
 
-        protected override void Draw(GameTime gameTime) {
-            this.GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
-            base.Draw(gameTime);
-            spriteBatch.End();
+        void DrawGameObjects()
+        {
+        }
+
+        void UpdateGameObjects()
+        {
         }
     }
 }
