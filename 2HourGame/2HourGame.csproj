@@ -94,6 +94,7 @@
     <Compile Include="Model\Player.cs" />
     <Compile Include="View\AnimationView.cs" />
     <Compile Include="View\AnimatedTextureInfo.cs" />
+    <Compile Include="View\Border.cs" />
     <Compile Include="View\CannonView.cs" />
     <Compile Include="Model\CannonBallManager.cs" />
     <Compile Include="Model\CannonBall.cs" />

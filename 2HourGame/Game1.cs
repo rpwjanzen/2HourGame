@@ -28,6 +28,9 @@ namespace _2HourGame
         SpriteBatch spriteBatch;
         List<Ship> ships;
         Viewport[] viewports;
+        Viewport screenViewport;
+        List<ShipGoldView> shipGoldViews;
+        Border border;
 
         public Game1()
         {
@@ -44,6 +47,8 @@ namespace _2HourGame
             spriteBatch = new SpriteBatch(this.GraphicsDevice);
             CreateGameObjects(screenWidth, screenHeight);
             InitializeViewports();
+            shipGoldViews = CreateShipGoldViews();
+            border = new Border();
 
             base.Initialize();
         }
@@ -52,6 +57,7 @@ namespace _2HourGame
         {
             int screenWidth = graphics.PreferredBackBufferWidth;
             int screenHeight = graphics.PreferredBackBufferHeight;
+            screenViewport = GraphicsDevice.Viewport;
 
             viewports = new Viewport[4];
             var viewportWidth = screenWidth / 2;
@@ -68,8 +74,26 @@ namespace _2HourGame
             viewports[3].Y = viewportHeight + 1;
         }
 
+        protected override void LoadContent()
+        {
+            LoadShipGoldViewsContent();
+            border.LoadContent(this.Content);
+
+            base.LoadContent();
+        }
+
+        private void LoadShipGoldViewsContent()
+        {
+            foreach (var gv in shipGoldViews)
+            {
+                gv.LoadContent();
+            }
+        }
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Viewport = screenViewport;
+            this.GraphicsDevice.Clear(Color.CornflowerBlue);
+
             for (int i = 0; i < viewports.Length; i++)
             {
                 GraphicsDevice.Viewport = viewports[i];
@@ -78,13 +102,20 @@ namespace _2HourGame
                 var ship = ships[i];
                 // center on ship
                 var translateVector = new Vector3(-ship.Position + new Vector2(viewports[i].Width / 2, viewports[i].Height / 2), 0);
-                var playerTransformMatrix = Matrix.CreateTranslation(translateVector);
+                var playerTransformMatrix = Matrix.CreateTranslation(translateVector) * Matrix.CreateScale(0.5f);
                 spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, playerTransformMatrix);
                 base.Draw(gameTime);
                 spriteBatch.End();
+
+                spriteBatch.Begin();
+                border.Draw(spriteBatch);
+                spriteBatch.End();
             }
 
-
+            GraphicsDevice.Viewport = screenViewport;
+            spriteBatch.Begin();
+            DrawShipGoldViews(gameTime);
+            spriteBatch.End();
         }
 
         void CreateGameObjects(int width, int height)
@@ -147,18 +178,6 @@ namespace _2HourGame
 
             ships = new ShipFactory(this, spriteBatch, physicsSimulator, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
 
-            var shipGoldViewFactory = new ShipGoldViewFactory(this, spriteBatch, 100);
-            var playerGoldViews = ships.Zip(new[] {
-                ShipGoldView.GoldViewPosition.UpperLeft,
-                ShipGoldView.GoldViewPosition.UpperRight, 
-                ShipGoldView.GoldViewPosition.LowerLeft, 
-                ShipGoldView.GoldViewPosition.LowerRight
-            }, (s, p) => shipGoldViewFactory.CreateShipGoldView(s, p)).ToList();
-            foreach (var v in playerGoldViews)
-            {
-                this.Components.Add(v);
-            }
-
             var map = new Map(allIslands);
 
             var players = new PlayerFactory(map).CreatePlayers(new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four }, ships, playerIslands);
@@ -175,6 +194,26 @@ namespace _2HourGame
                 this.Components.Add(shipControllers[i]);
             }
 
+        }
+
+        private List<ShipGoldView> CreateShipGoldViews()
+        {
+            var shipGoldViewFactory = new ShipGoldViewFactory(this, spriteBatch, 100);
+            var playerGoldViews = ships.Zip(new[] {
+                ShipGoldView.GoldViewPosition.UpperLeft,
+                ShipGoldView.GoldViewPosition.UpperRight, 
+                ShipGoldView.GoldViewPosition.LowerLeft, 
+                ShipGoldView.GoldViewPosition.LowerRight
+            }, (s, p) => shipGoldViewFactory.CreateShipGoldView(s, p)).ToList();
+            return playerGoldViews;
+        }
+
+        void DrawShipGoldViews(GameTime gameTime)
+        {
+            foreach (var gv in shipGoldViews)
+            {
+                gv.Draw(gameTime);
+            }
         }
 
         void DrawGameObjects()

@@ -42,7 +42,7 @@ namespace _2HourGame.View
             this.DisplayCorner = position;
         }
 
-        protected override void LoadContent()
+        public new void LoadContent()
         {
             texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTexture("gold");
             this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
