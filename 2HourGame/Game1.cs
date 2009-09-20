@@ -101,8 +101,10 @@ namespace _2HourGame
 
                 var ship = ships[i];
                 // center on ship
-                var translateVector = new Vector3(-ship.Position + new Vector2(viewports[i].Width / 2, viewports[i].Height / 2), 0);
-                var playerTransformMatrix = Matrix.CreateTranslation(translateVector) * Matrix.CreateScale(0.5f);
+                var scale = 0.5f;
+                var viewportCenter = new Vector2(viewports[i].Width / 2, viewports[i].Height / 2);
+                var translateVector = new Vector3(-ship.Position, 0);
+                var playerTransformMatrix = Matrix.CreateTranslation(translateVector) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(viewportCenter, 0));
                 spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, playerTransformMatrix);
                 base.Draw(gameTime);
                 spriteBatch.End();
