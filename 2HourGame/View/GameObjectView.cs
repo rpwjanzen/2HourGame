@@ -34,7 +34,10 @@ namespace _2HourGame.View
 
             this.texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
 
-            gameObject.GameObjectRemoved += gameObjectRemoved;
+            if (gameObject != null)
+            {
+                gameObject.GameObjectRemoved += gameObjectRemoved;
+            }
         }
 
         protected override void LoadContent()

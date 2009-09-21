@@ -188,6 +188,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="tower.png">
+      <Name>tower</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="border.png">
       <Name>border</Name>
       <Importer>TextureImporter</Importer>

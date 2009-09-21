@@ -90,8 +90,12 @@
     <Compile Include="Controller\ShipControllBehaviours.cs" />
     <Compile Include="Factories\PlayerFactory.cs" />
     <Compile Include="Factories\ShipActionViewFactory.cs" />
+    <Compile Include="Model\AIHelpers.cs" />
+    <Compile Include="Model\Cannon.cs" />
+    <Compile Include="Model\ICannonMountable.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\Tower.cs" />
     <Compile Include="View\AnimationView.cs" />
     <Compile Include="View\AnimatedTextureInfo.cs" />
     <Compile Include="View\Border.cs" />

@@ -45,6 +45,7 @@ namespace _2HourGame.View.GameServices
             addTexture("shipRigging");
             addTexture("shipSinking");
             addTexture("splashAnimation");
+            addTexture("tower");
         }
 
         private void addTexture(string textureName) 

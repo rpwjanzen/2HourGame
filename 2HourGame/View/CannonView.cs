@@ -10,33 +10,26 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.View
 {
-    public enum CannonType { LeftCannon, RightCannon }
+    public enum CannonType { LeftCannon, RightCannon, FrontCannon }
 
-    class CannonView : AnimationView
+    class CannonView<T> : AnimationView where T : PhysicsGameObject, ICannonMountable
     {
-        public CannonType cannonType { get; private set; }
-
-        public bool isActive;
-
         private const string cannonTextureName = "cannonAnimation";
         private readonly Vector2 cannonOrigin;
+        private Cannon<T> cannon;
 
-        public CannonView(Game game, Color color, SpriteBatch spriteBatch, CannonType cannonType, Ship gameObject)
-            : base(game, cannonTextureName, color, spriteBatch, ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo("cannonAnimation"), gameObject, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipCannon))
+        public CannonView(Game game, Color color, SpriteBatch spriteBatch, CannonType cannonType, Cannon<T> cannon)
+            : base(game, cannonTextureName, Color.White, spriteBatch, ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(cannonTextureName), null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon))
         {
-            this.cannonType = cannonType;
-            isActive = true;
+            this.cannon = cannon;
+            cannonOrigin = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTextureOrigin(cannonTextureName, cannon.Scale);
 
-            cannonOrigin = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTextureOrigin(cannonTextureName, gameObject.Scale);
-
-            gameObject.CannonHasBeenFired += playCannonViewFiringAnimation;
-            gameObject.ShipSank += hideShip;
-            gameObject.ShipSpawned += unHideShip;
+            cannon.CannonFired += playAnimation;
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if (isActive)
+            if (cannon.drawCannon())
             {
                 if (firstDraw)
                 {
@@ -57,10 +50,10 @@ namespace _2HourGame.View
                 Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
                 spriteBatch.Draw(
                     texture,
-                    getCannonPosition() + (cannonType == CannonType.LeftCannon ? animatedTextureInfo.drawOffset(getCannonRotation()) : -animatedTextureInfo.drawOffset(getCannonRotation())),
+                    cannon.getCannonPosition() + (cannon.cannonType == CannonType.LeftCannon ? animatedTextureInfo.drawOffset(cannon.getCannonRotation()) : -animatedTextureInfo.drawOffset(cannon.getCannonRotation())),
                     source,
                     Color,
-                    getCannonRotation(),
+                    cannon.getCannonRotation(),
                     cannonOrigin,
                     animatedTextureInfo.scale,
                     SpriteEffects.None,
@@ -69,48 +62,9 @@ namespace _2HourGame.View
             }
         }
 
-        private void playCannonViewFiringAnimation(CannonType cannonType, GameTime gameTime)
-        {
-            // start the firing animation
-            if (cannonType == this.cannonType)
-                PlayAnimation(gameTime);
-        }
-
-        private float getCannonRotation()
-        {
-            if (cannonType == CannonType.LeftCannon)
-                return 2f * (float)Math.PI + gameObject.Rotation;
-            else
-                return (float)Math.PI + gameObject.Rotation;
-        }
-
-        private Vector2 getCannonPosition()
-        {
-            if (cannonType == CannonType.LeftCannon)
-                return new Vector2(((Ship)gameObject).Body.GetBodyMatrix().Left.X, ((Ship)gameObject).Body.GetBodyMatrix().Left.Y) * (gameObject.XRadius - 8) + gameObject.Position;
-            else
-                return new Vector2(((Ship)gameObject).Body.GetBodyMatrix().Right.X, ((Ship)gameObject).Body.GetBodyMatrix().Right.Y) * (gameObject.XRadius - 8) + gameObject.Position;
-        }
-
-        private void PlayAnimation(GameTime gameTime) 
+        private void playAnimation(GameTime gameTime) 
         {
             animationStartTime = gameTime.TotalGameTime;
-        }
-
-        /// <summary>
-        /// disables drawing, control, and physics of ship
-        /// </summary>
-        private void hideShip()
-        {
-            isActive = false;
-        }
-
-        /// <summary>
-        /// enables drawing, control, and physics of ship
-        /// </summary>
-        private void unHideShip()
-        {
-            isActive = true;
         }
     }
 }
