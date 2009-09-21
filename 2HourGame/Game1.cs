@@ -16,6 +16,7 @@ using _2HourGame.Factories;
 using _2HourGame.View;
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
+using _2HourGame.Controller;
 
 namespace _2HourGame
 {
@@ -101,11 +102,17 @@ namespace _2HourGame
 
                 var ship = ships[i];
                 // center on ship
-                var scale = 0.5f;
-                var viewportCenter = new Vector2(viewports[i].Width / 2, viewports[i].Height / 2);
-                var translateVector = new Vector3(-ship.Position, 0);
-                var playerTransformMatrix = Matrix.CreateTranslation(translateVector) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(new Vector3(viewportCenter, 0));
-                spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, playerTransformMatrix);
+                var scale = 0.75f;
+                var viewportCenter = new Vector3(
+                    viewports[i].Width / 2.0f,
+                    viewports[i].Height / 2.0f,
+                    0.0f);
+                var playerCenter = new Vector3(-ship.Position, 0);
+                var playerToCenterOfViewport = Matrix.CreateTranslation(playerCenter)
+                    * Matrix.CreateScale(scale)
+                    * Matrix.CreateTranslation(viewportCenter);
+
+                spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None, playerToCenterOfViewport);
                 base.Draw(gameTime);
                 spriteBatch.End();
 
@@ -185,17 +192,10 @@ namespace _2HourGame
             var players = new PlayerFactory(map).CreatePlayers(new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four }, ships, playerIslands);
 
             var shipActionViews = new ShipActionViewFactory(this, spriteBatch).CreateShipActionsViews(players).ToList();
-            for (int i = 0; i < shipActionViews.Count; i++)
-            {
-                this.Components.Add(shipActionViews[i]);
-            }
+            this.Components.AddRange(shipActionViews);
 
             var shipControllers = new ShipControllerFactory(this).CreateShipControllers(players).ToList();
-            for (int i = 0; i < shipControllers.Count; i++)
-            {
-                this.Components.Add(shipControllers[i]);
-            }
-
+            this.Components.AddRange(shipControllers);
         }
 
         private List<ShipGoldView> CreateShipGoldViews()
@@ -216,14 +216,6 @@ namespace _2HourGame
             {
                 gv.Draw(gameTime);
             }
-        }
-
-        void DrawGameObjects()
-        {
-        }
-
-        void UpdateGameObjects()
-        {
         }
     }
 }
