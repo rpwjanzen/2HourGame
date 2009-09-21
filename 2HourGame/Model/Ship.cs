@@ -15,22 +15,29 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
-    public delegate void Notifiaction();
+    public delegate void Notification();
 
     class Ship : PhysicsGameObject, ICannonMountable
     {
-        public event Notifiaction ShipSank;
-        public event Notifiaction ShipSpawned;
+        public event Notification ShipSank;
+        public event Notification ShipSpawned;
 
-        public readonly double maxHealth = 5;
-        public double health { get; private set; }
+        readonly double maxHealth = 5;
+        double Health { get; set; }
+        public bool IsDamaged {
+            get { return Health < maxHealth; }
+        }
+        public double HealthPercentage
+        {
+            get { return Health / maxHealth; }
+        }
         const double healthRepairAmount = 0.10;
         public bool isActive { get; private set; }
 
         public int GoldCapacity { get; private set; }
         public int Gold { get; private set; }
 
-        private bool IsFull {
+        public bool IsFull {
             get { return this.Gold >= this.GoldCapacity; }
         }
 
@@ -59,7 +66,7 @@ namespace _2HourGame.Model
             this.GoldCapacity = 3;
             this.Gold = 0;
             this.FiringVelocity = Vector2.UnitY;
-            this.health = 5;
+            this.Health = 5;
             this.isActive = true;
             this.spawnPoint = position;
             this.setTimeOfDeathTimespan = false;
@@ -95,10 +102,8 @@ namespace _2HourGame.Model
 
         public void Repair()
         {
-            health += healthRepairAmount;
-
-            if (health > maxHealth)
-                health = maxHealth;
+            var repairedHealth = Health + healthRepairAmount;
+            Health = Math.Min(repairedHealth, maxHealth);
         }
 
         public void Thrust(float amount)
@@ -216,9 +221,9 @@ namespace _2HourGame.Model
             // if a ship is too close when it fires then the cannon ball it can have a speed of 0.
             // We could consider puttin the cannon ball in a collision group with the ship
             // and then creating it closer to the ship.
-            health -= (cannonBall.Speed != 0 ? cannonBall.Speed : 120)/75;
+            Health -= (cannonBall.Speed != 0 ? cannonBall.Speed : 120)/75;
 
-            if (health <= 0)
+            if (Health <= 0)
             {
                 ShipSank();
                 Gold = 0;
@@ -245,7 +250,7 @@ namespace _2HourGame.Model
         private void unHideShip()
         {
             base.Body.Position = spawnPoint;
-            health = maxHealth;
+            Health = maxHealth;
             AddToPhysicsSimulator();
             isActive = true;
         }

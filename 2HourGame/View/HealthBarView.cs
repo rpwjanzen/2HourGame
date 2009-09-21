@@ -33,10 +33,10 @@ namespace _2HourGame.View
         public override void Draw(GameTime gameTime)
         {
             // reference http://www.xnadevelopment.com/tutorials/notsohealthy/NotSoHealthy.shtml
-            if (ship.health != ship.maxHealth)
+            if (ship.IsDamaged)
             {
                 spriteBatch.Draw(texture, ship.Position + offset, null, Color.Red, 0f, origin, ship.Scale, SpriteEffects.None, zIndex + 0.001f);
-                spriteBatch.Draw(texture, ship.Position + offset, new Rectangle(0, 0, (int)(texture.Width * (ship.health / ship.maxHealth)), texture.Height), Color.Green, 0f, origin, ship.Scale, SpriteEffects.None, zIndex);
+                spriteBatch.Draw(texture, ship.Position + offset, new Rectangle(0, 0, (int)(texture.Width * (ship.HealthPercentage)), texture.Height), Color.Green, 0f, origin, ship.Scale, SpriteEffects.None, zIndex);
             }
         }
 

@@ -33,7 +33,7 @@ namespace _2HourGame.Controller
 
         public override void Update(GameTime gameTime) {
 
-            GamePadState gs = player.getGamePadState();
+            GamePadState gs = player.GamePadState;
 
             if (gs.IsConnected)
             {
