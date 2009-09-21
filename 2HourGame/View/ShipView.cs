@@ -16,8 +16,6 @@ namespace _2HourGame.View
         private Texture2D gunwale;
         private Texture2D rigging;
 
-        CannonView LeftCannonView;
-        CannonView RightCannonView;
         HealthBarView healthBarView;
 
         /// <summary>
@@ -35,7 +33,9 @@ namespace _2HourGame.View
         {
             this.shipColor = shipColor;
 
-            gameObject.ShipSank += hideShip;
+            gameObject.ShipSank += playShipSinkingAnimations;
+
+
         }
 
         protected override void LoadContent()
@@ -44,8 +44,9 @@ namespace _2HourGame.View
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
 
-            LeftCannonView = initializeCannonView(CannonType.LeftCannon);
-            RightCannonView = initializeCannonView(CannonType.RightCannon);
+            Game.Components.Add(new CannonView<Ship>(Game, Color.White, spriteBatch, CannonType.LeftCannon, ((Ship)gameObject).leftCannon));
+            Game.Components.Add(new CannonView<Ship>(Game, Color.White, spriteBatch, CannonType.RightCannon, ((Ship)gameObject).rightCannon));
+
             healthBarView = new HealthBarView(base.Game, spriteBatch, (Ship)gameObject);
         }
 
@@ -65,24 +66,7 @@ namespace _2HourGame.View
             base.Update(gameTime);
         }
 
-        private CannonView initializeCannonView(CannonType cannonType)
-        {
-            CannonView newCannonView = new CannonView(
-                Game,
-                Color.White,
-                spriteBatch,
-                cannonType,
-                (Ship)gameObject
-                );
-
-            Game.Components.Add(newCannonView);
-            return newCannonView;
-        }
-
-        /// <summary>
-        /// disables drawing, control, and physics of ship
-        /// </summary>
-        private void hideShip()
+        private void playShipSinkingAnimations()
         {
             ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).ShipSinking(gameObject.Position);
             ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).FloatingCrate(gameObject.Position);
