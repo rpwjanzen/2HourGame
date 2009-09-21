@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
@@ -22,23 +23,41 @@ namespace _2HourGame.Model
         /// <returns>The closest island if one exists, otherwise null.</returns>
         public Island GetClosestInRangeIsland(Ship ship, float range)
         {
+            Island closestIsland = ClosestIslandToPoint(ship.Position);
+
+            // We only want the closest island if it is in range
+            if (closestIsland != null
+                && DistanceToIsland(ship.Position, closestIsland) <= range)
+            {
+                return closestIsland;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private Island ClosestIslandToPoint(Vector2 point)
+        {
             Island closestIsland = null;
-            float closestIslandDistance = int.MaxValue;
+            float distanceToClosestIsland = int.MaxValue;
 
             foreach (Island i in islands)
             {
-                float distanceToIsland = (ship.Position - i.Position).Length();
-                if (distanceToIsland < closestIslandDistance)
+                float distanceToIsland = DistanceToIsland(point, i);
+                if (distanceToIsland < distanceToClosestIsland)
                 {
-                    closestIslandDistance = distanceToIsland;
+                    distanceToClosestIsland = distanceToIsland;
                     closestIsland = i;
                 }
             }
 
-            if (closestIslandDistance <= range)
-                return closestIsland;
-            else
-                return null;
+            return closestIsland;
+        }
+
+        private float DistanceToIsland(Vector2 point, Island island)
+        {
+            return Vector2.Distance(point, island.Position);
         }
     }
 }

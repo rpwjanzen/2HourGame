@@ -36,6 +36,8 @@ namespace _2HourGame.View
 
         SpriteBatch spriteBatch;
 
+        GoldPickupProgressView GoldPickupProgressView { get; set; }
+
         public ShipActionsView(Game game, Player player, SpriteBatch spriteBatch) 
             :base(game)
         {
@@ -46,13 +48,20 @@ namespace _2HourGame.View
             bButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(bButtonTextureName);
             digTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(digTextureName);
             repairTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(repairTextureName);
+            GoldPickupProgressView = new GoldPickupProgressView(game, spriteBatch, player);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            GamePadState gamePadState = player.getGamePadState();
+            GamePadState gamePadState = player.GamePadState;
 
-            if ((player.ClosestInRangeIslandIsNotHomeAndHasGoldAndShipTravelingSlowEnough() && player.ship.Gold < player.ship.GoldCapacity))
+            // dig icon display
+            if (player.ClosestInRangeIsland != player.HomeIsland
+                && player.ClosestInRangeIsland != null
+                && player.ClosestInRangeIsland != null
+                && player.ClosestInRangeIsland.HasGold
+                && player.ShipIsMovingSlowly
+                && !player.ship.IsFull)
             {
                 Color drawColor = gamePadState.IsButtonUp(Buttons.A) ? Color.White : Color.DarkGray;
 
@@ -60,7 +69,17 @@ namespace _2HourGame.View
                 spriteBatch.Draw(digTexture, player.ship.Position + digOffset, null, Color.White, 0, ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTextureOrigin(digTextureName, digScale), digScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.dig));
             }
 
-            if ((player.ClosestInRangeIslandIsHomeAndShipTravelingSlowEnough() && player.ship.health < player.ship.maxHealth))
+            // gold pickup progress
+            if (player.ClosestInRangeIsland != null
+                && player.ClosestInRangeIsland != player.HomeIsland)
+            {
+                GoldPickupProgressView.Draw(gameTime);
+            }
+
+            // repair icon display
+            if (player.ClosestInRangeIsland == player.HomeIsland
+                && player.ShipIsMovingSlowly
+                && player.ship.IsDamaged)
             {
                 Color drawColor = gamePadState.IsButtonUp(Buttons.B) ? Color.White : Color.DarkGray;
 
