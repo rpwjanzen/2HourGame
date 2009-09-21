@@ -7,4 +7,5 @@
 **/Content/Thumbs.db
 **/*.cachefile
 **/*.bak
+**/**/*.bak
 **/*.smp
