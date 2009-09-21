@@ -119,6 +119,7 @@
     <Compile Include="Model\PhysicsGameObject.cs" />
     <Compile Include="Factories\PhysicsGameObjectFactory.cs" />
     <Compile Include="Factories\ShipFactory.cs" />
+    <Compile Include="View\ProgressBar.cs" />
     <Compile Include="View\ShipActionsView.cs" />
     <Compile Include="View\ShipGoldView.cs" />
     <Compile Include="Factories\ShipGoldViewFactory.cs" />
