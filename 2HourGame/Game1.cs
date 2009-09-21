@@ -115,12 +115,6 @@ namespace _2HourGame {
             var shipControllers = new ShipControllerFactory(this).CreateShipControllers(players).ToList();
             this.Components.AddRange(shipControllers);
 
-            //var targetShip = ships[0];
-            //var controlledShip = ships[3];
-            //var islands = playerIslands.Concat(goldIslands);
-            //AIController playerFourController = new AIController(this, controlledShip, controlledShip.HomeIsland, islands.Where(i => i != controlledShip.HomeIsland).ToList(), targetShip);
-            //this.Components.Add(playerFourController);
-
             base.Initialize();
         }
 

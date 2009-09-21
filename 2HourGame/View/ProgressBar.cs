@@ -24,16 +24,20 @@ namespace _2HourGame.View
         /// </summary>
         public float Progress { get; set; }
 
-        public ProgressBar(ITextureManager textureManager) {
+        public ProgressBar() {
             FillColor = Color.Green;
             EmptyColor = Color.Yellow;
             Scale = 1.0f;
+        }
 
-            Origin = textureManager.getTextureOrigin("progressBar", Scale); 
+        public void LoadContent(ITextureManager textureManager)
+        {
+            Origin = textureManager.getTextureOrigin("progressBar", Scale);
             Texture = textureManager.getTexture("progressBar");
             ZIndex = ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.healthBar);
         }
 
+        // reference http://www.xnadevelopment.com/tutorials/notsohealthy/NotSoHealthy.shtml
         public void Draw(SpriteBatch spriteBatch)
         {
             var progressSoFarRectangle = new Rectangle(0, 0, (int)(Texture.Width * Progress), Texture.Height);
