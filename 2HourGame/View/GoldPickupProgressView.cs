@@ -48,6 +48,7 @@ namespace _2HourGame.View
         {
             if (Player.ClosestInRangeIsland != null
                 && Player.ClosestInRangeIsland != Player.HomeIsland
+                && Player.ClosestInRangeIsland.HasGold
                 && Player.ShipIsMovingSlowly
                 && !Player.ship.IsFull)
             {

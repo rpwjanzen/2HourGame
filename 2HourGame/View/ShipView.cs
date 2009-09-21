@@ -34,8 +34,7 @@ namespace _2HourGame.View
             this.shipColor = shipColor;
 
             gameObject.ShipSank += playShipSinkingAnimations;
-
-
+            healthBarView = new HealthBarView(base.Game, spriteBatch, (Ship)gameObject);
         }
 
         protected override void LoadContent()
@@ -47,7 +46,7 @@ namespace _2HourGame.View
             Game.Components.Add(new CannonView<Ship>(Game, Color.White, spriteBatch, CannonType.LeftCannon, ((Ship)gameObject).leftCannon));
             Game.Components.Add(new CannonView<Ship>(Game, Color.White, spriteBatch, CannonType.RightCannon, ((Ship)gameObject).rightCannon));
 
-            healthBarView = new HealthBarView(base.Game, spriteBatch, (Ship)gameObject);
+            healthBarView.LoadContent();
         }
 
         public override void Draw(GameTime gameTime)
@@ -63,6 +62,8 @@ namespace _2HourGame.View
 
         public override void Update(GameTime gameTime)
         {
+            healthBarView.Update(gameTime);
+
             base.Update(gameTime);
         }
 
