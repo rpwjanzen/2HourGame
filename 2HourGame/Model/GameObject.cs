@@ -39,7 +39,7 @@ namespace _2HourGame.Model
             this.game = game;
             this.Scale = scale;
 
-            Origin = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTextureOrigin(contentName, Scale);
+            Origin = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTextureOrigin(contentName);
 
             XRadius = Origin.X * Scale;
             YRadius = Origin.Y * Scale;
