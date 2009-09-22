@@ -51,13 +51,24 @@ namespace _2HourGame.View
             GoldPickupProgressView = new GoldPickupProgressView(game, spriteBatch, player);
         }
 
+        protected override void LoadContent()
+        {
+            GoldPickupProgressView.LoadContent();
+            base.LoadContent();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            GoldPickupProgressView.Update(gameTime);
+            base.Update(gameTime);
+        }
+
         public override void Draw(GameTime gameTime)
         {
             GamePadState gamePadState = player.GamePadState;
 
             // dig icon display
             if (player.ClosestInRangeIsland != player.HomeIsland
-                && player.ClosestInRangeIsland != null
                 && player.ClosestInRangeIsland != null
                 && player.ClosestInRangeIsland.HasGold
                 && player.ShipIsMovingSlowly
