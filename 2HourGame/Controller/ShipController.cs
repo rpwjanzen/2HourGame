@@ -26,9 +26,9 @@ namespace _2HourGame.Controller
             : base(game) {
             this.player = player;
 
-            ProcessControllerBehaviours += ShipControllBehaviours.FireCannons;
-            ProcessControllerBehaviours += ShipControllBehaviours.PickupGold;
-            ProcessControllerBehaviours += ShipControllBehaviours.RepairShip;
+            ProcessControllerBehaviours += ShipControlBehaviours.FireCannons;
+            ProcessControllerBehaviours += ShipControlBehaviours.PickupGold;
+            ProcessControllerBehaviours += ShipControlBehaviours.RepairShip;
         }
 
         public override void Update(GameTime gameTime) {
