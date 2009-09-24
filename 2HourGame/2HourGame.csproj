@@ -88,14 +88,23 @@
   <ItemGroup>
     <Compile Include="AIController.cs" />
     <Compile Include="Controller\ShipControlBehaviours.cs" />
+    <Compile Include="Controller\SimpleCannonController.cs" />
+    <Compile Include="Controller\SimpleCannonFirer.cs" />
     <Compile Include="Factories\PlayerFactory.cs" />
     <Compile Include="Factories\ShipActionViewFactory.cs" />
     <Compile Include="Model\AIHelpers.cs" />
     <Compile Include="Model\Cannon.cs" />
     <Compile Include="Model\GameComponentCollectionExtensions.cs" />
     <Compile Include="Model\ICannonMountable.cs" />
+    <Compile Include="Model\IPhysicsService.cs" />
     <Compile Include="Model\Map.cs" />
+    <Compile Include="Model\PhysicsService.cs" />
     <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\SimpleCannon.cs" />
+    <Compile Include="Model\SimpleCannonBall.cs" />
+    <Compile Include="Model\Timer.cs" />
+    <Compile Include="View\SimpleCannonBallView.cs" />
+    <Compile Include="View\SimpleCannonView.cs" />
     <Compile Include="Model\Tower.cs" />
     <Compile Include="View\AnimationView.cs" />
     <Compile Include="View\AnimatedTextureInfo.cs" />

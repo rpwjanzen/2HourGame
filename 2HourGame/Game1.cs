@@ -16,6 +16,7 @@ using _2HourGame.Factories;
 using _2HourGame.View;
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
+using _2HourGame.Controller;
 
 namespace _2HourGame {
     /// <summary>
@@ -40,6 +41,8 @@ namespace _2HourGame {
             PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
             physicsComponent.Debug = false;
             this.Components.Add(physicsComponent);
+
+            var physicsService = new PhysicsService(this, physicsSimulator);
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
             TextureManager textureManager = new TextureManager(this);
@@ -114,6 +117,14 @@ namespace _2HourGame {
 
             var shipControllers = new ShipControllerFactory(this).CreateShipControllers(players).ToList();
             this.Components.AddRange(shipControllers);
+
+            var simpleCannon = new SimpleCannon(this);
+            simpleCannon.Position = new Vector2(300, 300);
+            Components.Add(simpleCannon);
+            var simpleCannonView = new SimpleCannonView(this, simpleCannon, spriteBatch);
+            Components.Add(simpleCannonView);
+            var cannonController = new SimpleCannonFirer(this, simpleCannon);
+            Components.Add(cannonController);
 
             base.Initialize();
         }
