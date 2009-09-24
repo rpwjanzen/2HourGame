@@ -27,7 +27,6 @@ namespace _2HourGame.View
             ProgressBar = new ProgressBar();
             ProgressBar.FillColor = Color.Gold;
             ProgressBar.EmptyColor = Color.Gray;
-            ProgressBar.Scale = 1.0f;
         }
 
         public new void LoadContent()

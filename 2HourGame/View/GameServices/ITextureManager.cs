@@ -10,6 +10,6 @@ namespace _2HourGame.View.GameServices
     interface ITextureManager
     {
         Texture2D getTexture(string textureName);
-        Vector2 getTextureOrigin(string textureName, float scale);
+        Vector2 getTextureOrigin(string textureName);
     }
 }

@@ -66,7 +66,7 @@ namespace _2HourGame.View.GameServices
             }
         }
 
-        public Vector2 getTextureOrigin(string textureName, float scale)
+        public Vector2 getTextureOrigin(string textureName)
         {
             AnimatedTextureInfo animTextInfo = ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(textureName);
             Texture2D texture = getTexture(textureName);
