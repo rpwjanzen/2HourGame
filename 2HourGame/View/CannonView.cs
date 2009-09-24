@@ -22,7 +22,7 @@ namespace _2HourGame.View
             : base(game, cannonTextureName, Color.White, spriteBatch, ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(cannonTextureName), null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon))
         {
             this.cannon = cannon;
-            cannonOrigin = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTextureOrigin(cannonTextureName);
+            cannonOrigin = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTextureCentre(cannonTextureName, 1f);
 
             cannon.CannonFired += playAnimation;
         }

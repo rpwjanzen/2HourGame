@@ -14,8 +14,7 @@ namespace _2HourGame.Model
     {
         Game game;
 
-        TimeSpan LastFireTime { get; set; }
-        float CannonCooldownSeconds { get; set; }
+        Timer firingTimer;
 
         public CannonType cannonType { get; private set; }
 
@@ -38,8 +37,7 @@ namespace _2HourGame.Model
             this.game = game;
             this.cannonBallManager = cannonBallManager;
             this.parentObject = parentObject;
-            this.CannonCooldownSeconds = 2.0f;
-            LastFireTime = new TimeSpan();
+            firingTimer = new Timer(3f);
         }
 
         /// <summary>
@@ -49,9 +47,9 @@ namespace _2HourGame.Model
         /// <returns>Vector2.Zero if the cannon was not fired, the firingvector otherwise.</returns>
         public Vector2 attemptFireCannon(GameTime now) 
         {
-            if(CannonHasCooledDown(now) && parentObject.drawCannon())
+            if(firingTimer.TimerHasElapsed(now) && parentObject.drawCannon())
             {
-                LastFireTime = now.TotalGameTime;
+                firingTimer.resetTimer(now.TotalGameTime);
                 CannonFired(now);
                 return fireCannon();
             }
@@ -97,11 +95,6 @@ namespace _2HourGame.Model
             var cannonBall = this.cannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
 
             return thrust;
-        }
-
-        public bool CannonHasCooledDown(GameTime now)
-        {
-            return now.TotalGameTime.TotalSeconds - LastFireTime.TotalSeconds > this.CannonCooldownSeconds;
         }
     }
 }

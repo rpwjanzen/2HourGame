@@ -66,14 +66,14 @@ namespace _2HourGame.View.GameServices
             }
         }
 
-        public Vector2 getTextureOrigin(string textureName)
+        public Vector2 getTextureCentre(string textureName, float scale)
         {
             AnimatedTextureInfo animTextInfo = ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(textureName);
             Texture2D texture = getTexture(textureName);
             if (animTextInfo == null)
-                return new Vector2(texture.Width / 2, texture.Height / 2);
+                return new Vector2(texture.Width / 2, texture.Height / 2) * scale;
             else 
-                return animTextInfo.textureOrigin;
+                return animTextInfo.textureOrigin * scale;
         }
     }
 }

@@ -31,8 +31,8 @@ namespace _2HourGame.View
             floatingCrate,
             shipSinking,
             islandGoldView,
-            tower,
             house,
+            tower,
             island,
             splashAnimation
         }

@@ -39,7 +39,8 @@ namespace _2HourGame.Model
             this.game = game;
             this.Scale = scale;
 
-            Origin = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTextureOrigin(contentName);
+            // why is the scale here 1 and not scale???
+            Origin = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTextureCentre(contentName, 1);
 
             XRadius = Origin.X * Scale;
             YRadius = Origin.Y * Scale;
