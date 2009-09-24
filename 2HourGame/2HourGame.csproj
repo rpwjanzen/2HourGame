@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIController.cs" />
-    <Compile Include="Controller\ShipControllBehaviours.cs" />
+    <Compile Include="Controller\ShipControlBehaviours.cs" />
     <Compile Include="Factories\PlayerFactory.cs" />
     <Compile Include="Factories\ShipActionViewFactory.cs" />
     <Compile Include="Model\AIHelpers.cs" />

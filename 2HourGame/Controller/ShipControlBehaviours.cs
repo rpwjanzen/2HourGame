@@ -10,13 +10,13 @@ using _2HourGame.View;
 
 namespace _2HourGame.Controller
 {
-    static class ShipControllBehaviours
+    static class ShipControlBehaviours
     {
         public enum Action { FireLeftCannon, FireRightCannon, PickupGold, RepairShip };
 
         static Dictionary<Action, Buttons> actionKeys;
 
-        static ShipControllBehaviours()
+        static ShipControlBehaviours()
         {
             actionKeys = new Dictionary<Action, Buttons>();
 
