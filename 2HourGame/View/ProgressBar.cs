@@ -16,18 +16,35 @@ namespace _2HourGame.View
 
         public Color FillColor { get; set; }
         public Color EmptyColor { get; set; }
-        public float Scale { get; set; }
         public Vector2 Position { get; set; }
 
+        float progress;
         /// <summary>
-        /// [0.0f - 1.0f]
+        /// Clamped to [0.0f - 1.0f]
         /// </summary>
-        public float Progress { get; set; }
+        public float Progress {
+            get { return progress; }
+            set
+            {
+                progress = MathHelper.Clamp(value, 0.0f, 1.0f);
+            }
+        }
+        Vector2 Scale { get; set; }
+        public float Width
+        {
+            get { return Scale.X * Texture.Width; }
+            set { Scale = new Vector2(Scale.X * value / Texture.Width, Scale.Y); }
+        }
+        public float Height
+        {
+            get { return Scale.Y * Texture.Height; }
+            set { Scale = new Vector2(Scale.X, Scale.Y * value / Texture.Height); }
+        }
 
         public ProgressBar() {
             FillColor = Color.Green;
             EmptyColor = Color.Yellow;
-            Scale = 1.0f;
+            Scale = Vector2.One;
         }
 
         public void LoadContent(ITextureManager textureManager)
