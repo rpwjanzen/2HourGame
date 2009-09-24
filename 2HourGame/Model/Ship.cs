@@ -157,52 +157,20 @@ namespace _2HourGame.Model
             base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y) / 8);
         }
 
-        //public void FireCannon(GameTime now, CannonType cannonType)
-        //{
-        //    if ((cannonType == CannonType.LeftCannon && LeftCannonHasCooledDown(now)) ||
-        //        (cannonType == CannonType.RightCannon && RightCannonHasCooledDown(now)))
-        //    {
-        //        CannonFired(cannonType, now);
-
-        //        //get the right vector
-        //        Vector2 firingVector = cannonType == CannonType.LeftCannon ? new Vector2(base.Body.GetBodyMatrix().Left.X, base.Body.GetBodyMatrix().Left.Y) : new Vector2(base.Body.GetBodyMatrix().Right.X, base.Body.GetBodyMatrix().Right.Y);
-        //        var thrust = firingVector * 65.0f;
-
-        //        // take into account the ship's momentum
-        //        thrust += this.Velocity;
-
-        //        var cannonBallPostion = (firingVector * (this.XRadius + 5)) + this.Position;
-        //        var smokePosition = firingVector * (this.XRadius - 2) + this.Position;
-
-        //        ((IEffectManager)Game.Services.GetService(typeof(IEffectManager))).CannonSmokeEffect(smokePosition);
-        //        var cannonBall = this.CannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
-
-        //        base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y) / 8);
-
-        //        if (cannonType == CannonType.LeftCannon)
-        //            this.LastFireTimeLeft = now.TotalGameTime;
-        //        else
-        //            this.LastFireTimeRight = now.TotalGameTime;
-        //    }
-        //}
-
-
-        private bool ShipCollision(Geom geom1, Geom geom2, ContactList contactList)
+        /// <summary>
+        /// Handles ship getting hit by a cannonball
+        /// </summary>
+        /// <param name="myGeom">Source Geom</param>
+        /// <param name="otherGeom">Colliding Geom</param>
+        /// <param name="contactList">Contact points of collision</param>
+        /// <returns>True, if the event should be cancelled.</returns>
+        private bool ShipCollision(Geom myGeom, Geom otherGeom, ContactList contactList)
         {
-            if (geom1.Tag != null && geom2.Tag != null) {
-                if (geom1.Tag.GetType() == typeof(CannonBall) || geom2.Tag.GetType() == typeof(CannonBall)) {
-
-                    if (geom1.Tag.GetType() == typeof(CannonBall))
-                    {
-                        this.cannonBallManager.RemoveCannonBall((CannonBall)geom1.Tag);
-                        hitByCannonBall((CannonBall)geom1.Tag);
-                    }
-                    else
-                    {
-                        this.cannonBallManager.RemoveCannonBall((CannonBall)geom2.Tag);
-                        hitByCannonBall((CannonBall)geom2.Tag);
-                    }
-                }
+            var cannonBall = otherGeom.Tag as CannonBall;
+            if (cannonBall != null)
+            {
+                this.cannonBallManager.RemoveCannonBall(cannonBall);
+                hitByCannonBall(cannonBall);
             }
             return true;
         }
