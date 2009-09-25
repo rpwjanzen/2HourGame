@@ -8,21 +8,35 @@ namespace _2HourGame.Model
 {
     static class AIHelpers
     {
-        public static void getAngle(Vector2 heading, Vector2 positionToFace, double maxRotation) 
+        public static float GetFacingTowardsPoint(Vector2 point, Vector2 selfLocation, float initialFacing, float maxRotation)
         {
-            Vector2 normailzedHeading = (positionToFace - heading);
-            normailzedHeading.Normalize();
+            var delta = selfLocation - point;
+            // my rotation should match this angle (-180.0f - 180.0f)
+            var desiredRotation = MathHelper.ToDegrees((float)Math.Atan2(delta.Y, delta.X));
 
-            var dot = Vector2.Dot(heading, normailzedHeading);
-            var cross = heading.X * normailzedHeading.X - heading.Y * normailzedHeading.Y;
-            var angle = Math.Atan2(cross, dot);
+            // drawing is off by 90.0
+            desiredRotation -= 90.0f;
+            if (desiredRotation > 180.0f)
+                desiredRotation -= 360.0f;
+            else if (desiredRotation < -180.0f)
+                desiredRotation += 360.0f;
 
-            if (angle > maxRotation)
-                angle = maxRotation;
-            else if (angle < -maxRotation)
-                angle = -maxRotation;
+            var myRotation = MathHelper.ToDegrees(initialFacing);
+            // body rotations are 0 - 360.0f
+            myRotation -= 180.0f;
 
-            var newHeading = Vector2.Transform(heading, Matrix.CreateRotationZ((float)angle));
+            var angleDifference = (myRotation - desiredRotation);
+
+            if (Math.Abs(angleDifference) <= maxRotation)
+                return desiredRotation;
+
+            float newRotation;
+            if (angleDifference > 0)
+                newRotation = desiredRotation + maxRotation;
+            else
+                newRotation = desiredRotation - maxRotation;
+
+            return newRotation;
         }
     }
 }

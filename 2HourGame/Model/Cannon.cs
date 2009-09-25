@@ -24,6 +24,8 @@ namespace _2HourGame.Model
 
         private T parentObject;
 
+        public float facing { get; set; }
+
         public float Scale { 
             get 
             {
@@ -38,6 +40,7 @@ namespace _2HourGame.Model
             this.cannonBallManager = cannonBallManager;
             this.parentObject = parentObject;
             firingTimer = new Timer(3f);
+            facing = 0f;
         }
 
         /// <summary>
@@ -64,9 +67,9 @@ namespace _2HourGame.Model
         public float getCannonRotation()
         {
             if (cannonType == CannonType.LeftCannon)
-                return 2f * (float)Math.PI + parentObject.Rotation;
+                return 2f * (float)Math.PI + parentObject.Rotation + facing;
             else
-                return (float)Math.PI + parentObject.Rotation;
+                return (float)Math.PI + parentObject.Rotation + facing;
         }
 
         public Vector2 getCannonPosition()
@@ -79,6 +82,8 @@ namespace _2HourGame.Model
 
         private Vector2 fireCannon() 
         {
+            // TODO, ADD FACING TO firingVector
+
             //get the right vector
             Vector2 firingVector = cannonType == CannonType.LeftCannon
                 ? new Vector2(parentObject.Body.GetBodyMatrix().Left.X, parentObject.Body.GetBodyMatrix().Left.Y)

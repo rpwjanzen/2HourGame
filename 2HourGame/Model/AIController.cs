@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using System;
 
-using _2HourGame.Model;
-
-namespace _2HourGame {
+namespace _2HourGame.Model {
     class AIController : GameComponent {
         Island HomeIsland { get; set; }
         IEnumerable<Island> OtherIslands { get; set; }

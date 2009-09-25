@@ -105,6 +105,9 @@ namespace _2HourGame {
                 this.Components.Add(v);
             }
 
+            List<GameObject> shipsAsGameObjects = ships.Cast<GameObject>().ToList<GameObject>();
+            Tower aTower = new Tower(this, new Vector2(width / 2, height / 2), physicsSimulator, ships.Cast<GameObject>().ToList<GameObject>(), cannonBallManager);
+
             var map = new Map(allIslands);
 
             var players = new PlayerFactory(map).CreatePlayers(new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four }, ships, playerIslands);

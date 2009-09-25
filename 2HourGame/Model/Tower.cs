@@ -4,28 +4,34 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using FarseerGames.FarseerPhysics;
+using _2HourGame.View;
 
 namespace _2HourGame.Model
 {
     class Tower : PhysicsGameObject, ICannonMountable
     {
-        // to satisfy ICannonDrawable
+        // to satisfy ICannonMountable
         public Vector2 Velocity { get; private set; }
 
         List<GameObject> targets;
         float range;
 
+        const float maxCannonRotation = 0.1f;
+
         // code so that we dont switch targets too often
         GameObject currentTarget = null;
         Timer minTargetFocusTimer;
 
-        public Tower(Game game, Vector2 position, PhysicsSimulator physicsSimulator, List<GameObject> targets) 
+        Cannon<Tower> cannon;
+
+        public Tower(Game game, Vector2 position, PhysicsSimulator physicsSimulator, List<GameObject> targets, CannonBallManager cannonBallManager) 
             : base(game, position, physicsSimulator, "Tower", 1)
         {
             this.Velocity = Vector2.Zero;
             this.targets = targets;
             minTargetFocusTimer = new Timer(10f);
             range = 200;
+            cannon = new Cannon<Tower>(game, this, cannonBallManager, CannonType.FrontCannon);
         }
 
         public bool drawCannon()
@@ -42,7 +48,7 @@ namespace _2HourGame.Model
             if (currentTarget != null) 
             {
                 // steer towards the target and potentially fire!
-
+                cannon.facing = AIHelpers.GetFacingTowardsPoint(currentTarget.Position, this.Position, cannon.facing, maxCannonRotation);
             }
 
             base.Update(gameTime);
