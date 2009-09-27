@@ -86,12 +86,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Factories\TowerFactory.cs" />
     <Compile Include="Model\AIController.cs" />
     <Compile Include="Controller\ShipControlBehaviours.cs" />
     <Compile Include="Factories\PlayerFactory.cs" />
     <Compile Include="Factories\ShipActionViewFactory.cs" />
     <Compile Include="Model\AIHelpers.cs" />
     <Compile Include="Model\Cannon.cs" />
+    <Compile Include="Model\CollisionCategoryManager.cs" />
     <Compile Include="Model\GameComponentCollectionExtensions.cs" />
     <Compile Include="Model\ICannonMountable.cs" />
     <Compile Include="Model\Map.cs" />

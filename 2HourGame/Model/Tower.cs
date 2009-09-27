@@ -32,6 +32,7 @@ namespace _2HourGame.Model
             minTargetFocusTimer = new Timer(10f);
             range = 200;
             cannon = new Cannon<Tower>(game, this, cannonBallManager, CannonType.FrontCannon);
+            //base.Body.IsStatic = true;
         }
 
         public bool drawCannon()
