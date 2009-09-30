@@ -11,7 +11,7 @@ namespace _2HourGame.Model
 {
     public delegate void Notifation();
 
-    class GameObject : GameComponent
+    class GameObject : GameComponent, IGameObject
     {
         public virtual Vector2 Position { get; set; }
         public virtual float Rotation { get; set; } // in radians
@@ -20,9 +20,6 @@ namespace _2HourGame.Model
         public float YRadius { get; set; }
         public float Width { get { return XRadius * 2; } }
         public float Height { get { return YRadius * 2; } }
-        public bool IsCircle {
-            get { return this.XRadius == this.YRadius; }
-        }
 
         public float Scale;
 
