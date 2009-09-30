@@ -44,7 +44,7 @@ namespace _2HourGame.Model
 
                 Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
 
-                spriteBatch.Draw(base.texture, gameObject.Position + animatedTextureInfo.drawOffset(gameObject.Rotation), source, base.Color, gameObject.Rotation, gameObject.Origin, gameObject.Scale, SpriteEffects.None, base.ZIndex);
+                SpriteBatch.Draw(base.Texture, GameObject.Position + animatedTextureInfo.drawOffset(GameObject.Rotation), source, base.Color, GameObject.Rotation, GameObject.Origin, GameObject.Scale, SpriteEffects.None, base.ZIndex);
             }
         }
 
@@ -53,7 +53,7 @@ namespace _2HourGame.Model
         /// </summary>
         private void animationDone()
         {
-            base.Game.Components.Remove(gameObject);
+            base.Game.Components.Remove(GameObject);
             base.Game.Components.Remove(this);
         }
     }

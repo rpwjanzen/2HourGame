@@ -7,6 +7,9 @@ namespace _2HourGame.Model
 {
     interface IRotatable
     {
+        /// <summary>
+        /// The object's rotation in Radians
+        /// </summary>
         float Rotation { get; }
     }
 }

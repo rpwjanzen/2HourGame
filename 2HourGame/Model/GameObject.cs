@@ -9,8 +9,6 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
-    public delegate void Notifation();
-
     class GameObject : GameComponent, IGameObject
     {
         public virtual Vector2 Position { get; set; }
@@ -21,19 +19,15 @@ namespace _2HourGame.Model
         public float Width { get { return XRadius * 2; } }
         public float Height { get { return YRadius * 2; } }
 
-        public float Scale;
+        public float Scale { get; set; }
 
         public Vector2 Origin { get; private set; }
 
-        public Game game;
-
-        public event Notifation GameObjectRemoved;
-
+        public event EventHandler GameObjectRemoved;
         public GameObject(Game game, Vector2 position, string contentName, float scale)
             : base(game)
         {
             this.Position = position;
-            this.game = game;
             this.Scale = scale;
 
             // why is the scale here 1 and not scale???
@@ -48,7 +42,7 @@ namespace _2HourGame.Model
         /// </summary>
         public void removeGameObject()
         {
-            GameObjectRemoved();
+            GameObjectRemoved(this, EventArgs.Empty);
         }
     }
 }

@@ -43,19 +43,19 @@ namespace _2HourGame.View
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
 
-            Game.Components.Add(new CannonView<Ship>(Game, Color.White, spriteBatch, CannonType.LeftCannon, ((Ship)gameObject).leftCannon));
-            Game.Components.Add(new CannonView<Ship>(Game, Color.White, spriteBatch, CannonType.RightCannon, ((Ship)gameObject).rightCannon));
+            Game.Components.Add(new CannonView<Ship>(Game, Color.White, SpriteBatch, CannonType.LeftCannon, ((Ship)GameObject).leftCannon));
+            Game.Components.Add(new CannonView<Ship>(Game, Color.White, SpriteBatch, CannonType.RightCannon, ((Ship)GameObject).rightCannon));
 
             healthBarView.LoadContent();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if (((Ship)gameObject).isActive)
+            if (((Ship)GameObject).isActive)
             {
                 base.Draw(gameTime);
-                base.spriteBatch.Draw(gunwale, gameObject.Position, null, shipColor, gameObject.Rotation, gameObject.Origin, gameObject.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
-                base.spriteBatch.Draw(rigging, gameObject.Position, null, Color.White, gameObject.Rotation, gameObject.Origin, gameObject.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
+                base.SpriteBatch.Draw(gunwale, GameObject.Position, null, shipColor, GameObject.Rotation, GameObject.Origin, GameObject.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
+                base.SpriteBatch.Draw(rigging, GameObject.Position, null, Color.White, GameObject.Rotation, GameObject.Origin, GameObject.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
                 healthBarView.Draw(gameTime);
             }
         }
@@ -69,8 +69,8 @@ namespace _2HourGame.View
 
         private void playShipSinkingAnimations()
         {
-            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).ShipSinking(gameObject.Position);
-            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).FloatingCrate(gameObject.Position);
+            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).ShipSinking(GameObject.Position);
+            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).FloatingCrate(GameObject.Position);
         }
     }
 }

@@ -8,6 +8,9 @@ namespace _2HourGame.Model
 {
     interface IScalable
     {
-        Vector2 Scale { get; }
+        /// <summary>
+        /// The 1D object scale
+        /// </summary>
+        float Scale { get; }
     }
 }

@@ -8,6 +8,9 @@ namespace _2HourGame.Model
 {
     interface IPositionable
     {
+        /// <summary>
+        /// The 2D position of the object
+        /// </summary>
         Vector2 Position { get; }
     }
 }

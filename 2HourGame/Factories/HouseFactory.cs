@@ -24,7 +24,6 @@ namespace _2HourGame.Factories
             base.Game.Components.Add(house);
             base.Game.Components.Add(houseView);
             return house;
-            //return new GameObject(base.Game, houseLocation, "house", 1f, houseColor, base.SpriteBatch, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house));
         }
     }
 }

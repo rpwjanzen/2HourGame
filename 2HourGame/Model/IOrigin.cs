@@ -8,6 +8,9 @@ namespace _2HourGame.Model
 {
     interface IOrigin
     {
+        /// <summary>
+        /// The object's origin
+        /// </summary>
         Vector2 Origin { get; }
     }
 }

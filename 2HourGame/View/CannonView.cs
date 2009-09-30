@@ -48,8 +48,8 @@ namespace _2HourGame.View
                     frame = totalFrame % animatedTextureInfo.totalFrames;
 
                 Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
-                spriteBatch.Draw(
-                    texture,
+                SpriteBatch.Draw(
+                    Texture,
                     cannon.getCannonPosition() + (cannon.cannonType == CannonType.LeftCannon ? animatedTextureInfo.drawOffset(cannon.getCannonRotation()) : -animatedTextureInfo.drawOffset(cannon.getCannonRotation())),
                     source,
                     Color,
