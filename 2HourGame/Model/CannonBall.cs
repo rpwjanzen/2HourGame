@@ -12,8 +12,8 @@ namespace _2HourGame.Model
 {
     class CannonBall : PhysicsGameObject
     {
-       public CannonBall(Game game, Vector2 position, PhysicsSimulator physicsSimulator, string contentName)
-            : base(game, position, physicsSimulator, contentName, 0.5f)
+       public CannonBall(Game game, Vector2 position, string contentName)
+            : base(game, position, contentName, 0.5f)
         {
             base.Body.LinearDragCoefficient = 0.20f;
             base.Body.Mass = 0.5f;

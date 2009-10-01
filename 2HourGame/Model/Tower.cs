@@ -24,8 +24,8 @@ namespace _2HourGame.Model
 
         Cannon<Tower> cannon;
 
-        public Tower(Game game, Vector2 position, PhysicsSimulator physicsSimulator, List<GameObject> targets, CannonBallManager cannonBallManager) 
-            : base(game, position, physicsSimulator, "Tower", 1)
+        public Tower(Game game, Vector2 position, List<GameObject> targets, CannonBallManager cannonBallManager) 
+            : base(game, position, "Tower", 1)
         {
             this.Velocity = Vector2.Zero;
             this.targets = targets;

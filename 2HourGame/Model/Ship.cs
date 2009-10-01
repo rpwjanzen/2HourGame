@@ -58,8 +58,8 @@ namespace _2HourGame.Model
             return now.TotalGameTime.TotalSeconds - timeOfDeath.TotalSeconds > respawnTimeSeconds;
         }
 
-        public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator, CannonBallManager cannonBallManager, string contentName, float rotation)
-            : base(game, position, physicsSimulator, contentName, 0.6f, rotation)
+        public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, string contentName, float rotation)
+            : base(game, position, contentName, 0.6f, rotation)
         {
             this.GoldCapacity = 3;
             this.Gold = 0;

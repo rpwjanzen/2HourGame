@@ -99,6 +99,8 @@
     <Compile Include="Model\ICollidable.cs" />
     <Compile Include="Model\IGameObject.cs" />
     <Compile Include="Model\IOrigin.cs" />
+    <Compile Include="Model\IPhysicsGameObject.cs" />
+    <Compile Include="Model\IPhysicsSimulatorService.cs" />
     <Compile Include="Model\IPositionable.cs" />
     <Compile Include="Model\IRotatable.cs" />
     <Compile Include="Model\IScalable.cs" />

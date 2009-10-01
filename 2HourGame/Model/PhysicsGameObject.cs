@@ -14,7 +14,7 @@ using _2HourGame.View;
 
 namespace _2HourGame.Model
 {
-    class PhysicsGameObject : GameObject, ICollidable
+    class PhysicsGameObject : GameObject, IPhysicsGameObject
     {
         PhysicsSimulator physicsSimulator;
         public Geom Geometry { get; private set; }
@@ -26,13 +26,13 @@ namespace _2HourGame.Model
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale)
-            : this(game, initialPosition, physicsSimulator, contentName, scale, 0.0f) { }
+        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float scale)
+            : this(game, initialPosition, contentName, scale, 0.0f) { }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale, float initialRotation)
+        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float scale, float initialRotation)
             : base(game, initialPosition, contentName, scale)
         {
-            this.physicsSimulator = physicsSimulator;
+            this.physicsSimulator = ((IPhysicsSimulatorService)Game.Services.GetService(typeof(IPhysicsSimulatorService))).PhysicsSimulator;
 
             this.Body = BodyFactory.Instance.CreateEllipseBody(base.XRadius, base.YRadius, 1.0f);
             this.Body.Position = base.Position;
