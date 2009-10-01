@@ -29,6 +29,9 @@ namespace _2HourGame.View
         /// </summary>
         public int NumAnimationIterations { get; private set; }
 
+        /// <summary>
+        /// The point in the center of the window
+        /// </summary>
         public Vector2 WindowCenter {
             get
             {

@@ -44,7 +44,7 @@ namespace _2HourGame.Model
         GamePadState LastState;
 
         public override void Update(GameTime gameTime) {
-            this.PhysicsSimulator.Update(0.1f);
+            PhysicsSimulator.Update(((float)gameTime.ElapsedGameTime.Milliseconds) / 100.0f);
 
             GamePadState gs = GamePad.GetState(PlayerIndex.One);
             if (gs.IsConnected) {
