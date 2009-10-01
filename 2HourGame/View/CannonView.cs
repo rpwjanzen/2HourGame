@@ -71,7 +71,7 @@ namespace _2HourGame.View
                     source,
                     color,
                     cannon.Rotation,
-                    animatedTextureInfo.Origin,
+                    animatedTextureInfo.WindowCenter,
                     animatedTextureInfo.Scale,
                     SpriteEffects.None,
                     zIndex

@@ -40,7 +40,7 @@ namespace _2HourGame.Model
             this.FirstDraw = this.AnimatedTextureInfo != null;
 
             this.Scale = new Vector2(animatedTextureInfo.Scale, animatedTextureInfo.Scale);
-            this.Origin = animatedTextureInfo.Origin;            
+            this.Origin = animatedTextureInfo.WindowCenter;            
         }
 
         public override void Draw(GameTime gameTime)

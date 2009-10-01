@@ -121,7 +121,6 @@
     <Compile Include="Factories\IslandFactory.cs" />
     <Compile Include="View\GoldPickupProgressView.cs" />
     <Compile Include="View\HealthBarView.cs" />
-    <Compile Include="View\IDimension.cs" />
     <Compile Include="View\IslandsGoldView.cs" />
     <Compile Include="View\GameServices\IEffectManager.cs" />
     <Compile Include="View\GameServices\ITextureManager.cs" />

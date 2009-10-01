@@ -28,7 +28,8 @@ namespace _2HourGame.View
         /// The number of times to repeat the animation
         /// </summary>
         public int NumAnimationIterations { get; private set; }
-        public Vector2 Origin {
+
+        public Vector2 WindowCenter {
             get
             {
                 return new Vector2(WindowSize.X / 2f, WindowSize.Y / 2f);
