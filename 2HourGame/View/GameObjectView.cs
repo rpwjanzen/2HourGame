@@ -10,6 +10,9 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.View
 {
+    /// <summary>
+    /// 
+    /// </summary>
     class GameObjectView : DrawableGameComponent
     {
         protected Color Color { get; set; }
@@ -20,6 +23,15 @@ namespace _2HourGame.View
 
         string contentName;
 
+        /// <summary>
+        /// The view is automatically removed when it's GameObject is
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="contentName"></param>
+        /// <param name="color"></param>
+        /// <param name="spriteBatch"></param>
+        /// <param name="gameObject">The GameObject that this view draws</param>
+        /// <param name="zIndex"></param>
         public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, IGameObject gameObject, float zIndex)
             : base(game)
         {
@@ -46,7 +58,6 @@ namespace _2HourGame.View
         private void GameObjectRemoved(object sender, EventArgs e)
         {
             Game.Components.Remove(this);
-            GameObject = null;
         }
     }
 }

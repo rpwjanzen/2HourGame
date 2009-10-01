@@ -35,12 +35,22 @@ namespace _2HourGame.Model
 
             XRadius = Origin.X * Scale;
             YRadius = Origin.Y * Scale;
+
+            Game.Components.ComponentRemoved += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);
+        }
+
+        void Components_ComponentRemoved(object sender, GameComponentCollectionEventArgs e)
+        {
+            if (e.GameComponent == this)
+            {
+                RaiseGameObjectRemovedEvent();
+            }
         }
 
         /// <summary>
-        /// This must be called when you remove a game object that has a view so that the associated view also gets removed.
+        /// Occurs when this game object is removed from the Game's components
         /// </summary>
-        public void removeGameObject()
+        void RaiseGameObjectRemovedEvent()
         {
             GameObjectRemoved(this, EventArgs.Empty);
         }

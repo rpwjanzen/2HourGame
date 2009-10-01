@@ -51,7 +51,6 @@ namespace _2HourGame.Model
             foreach (CannonBall c in cannonBallsToRemove) 
             {
                 ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).SplashEffect(c.Position);
-                //c.removeGameObject();
                 RemoveCannonBall(c);
             }
         }
@@ -59,7 +58,6 @@ namespace _2HourGame.Model
         public void RemoveCannonBall(CannonBall cannonBall) 
         {
             cannonBall.RemoveFromPhysicsSimulator();
-            cannonBall.removeGameObject();
             base.Game.Components.Remove(cannonBall);
             cannonBalls.Remove(cannonBall);
         }

@@ -14,10 +14,10 @@ using _2HourGame.View;
 
 namespace _2HourGame.Model
 {
-    class PhysicsGameObject : GameObject
+    class PhysicsGameObject : GameObject, ICollidable
     {
         PhysicsSimulator physicsSimulator;
-        protected Geom Geometry { get; set; }
+        public Geom Geometry { get; private set; }
         public Body Body { get; private set; }
         public float Speed {
             get { return this.Body.LinearVelocity.Length(); }
@@ -26,15 +26,10 @@ namespace _2HourGame.Model
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
 
-        //public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float scale, Color color, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, float zIndex)
-            //: base(game, initialPosition, contentName, scale, color, spriteBatch, zIndex)
-        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale, float initialRotation)
-            : this(game, initialPosition, physicsSimulator, contentName, scale) 
-        {
-            this.Body.Rotation = initialRotation;
-        }
-
         public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale)
+            : this(game, initialPosition, physicsSimulator, contentName, scale, 0.0f) { }
+
+        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale, float initialRotation)
             : base(game, initialPosition, contentName, scale)
         {
             this.physicsSimulator = physicsSimulator;
@@ -43,6 +38,7 @@ namespace _2HourGame.Model
             this.Body.Position = base.Position;
             this.Body.LinearDragCoefficient = 0.95f;
             this.Body.RotationalDragCoefficient = 10.0f;
+            this.Body.Rotation = initialRotation;
             physicsSimulator.Add(this.Body);
 
             this.Geometry = GeomFactory.Instance.CreateEllipseGeom(this.Body, base.XRadius, base.YRadius, 12);
