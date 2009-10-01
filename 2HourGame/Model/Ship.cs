@@ -15,12 +15,10 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
-    public delegate void Notification();
-
     class Ship : PhysicsGameObject, ICannonMountable
     {
-        public event Notification ShipSank;
-        public event Notification ShipSpawned;
+        public event EventHandler ShipSank;
+        public event EventHandler ShipSpawned;
 
         readonly double maxHealth = 5;
         double Health { get; set; }
@@ -79,8 +77,8 @@ namespace _2HourGame.Model
             leftCannon = new Cannon<Ship>(game, this, cannonBallManager, CannonType.LeftCannon);
             rightCannon = new Cannon<Ship>(game, this, cannonBallManager, CannonType.RightCannon);
 
-            ShipSank += hideShip;
-            ShipSpawned += unHideShip;
+            ShipSank += ShipSankEventHandler;
+            ShipSpawned += ShipSpawnedEventHandler;
         }
 
         public override void Update(GameTime gameTime)
@@ -96,7 +94,7 @@ namespace _2HourGame.Model
             if (!isActive && respawnTimeIsOver(gameTime))
             {
                 isActive = true;
-                ShipSpawned();
+                ShipSpawned(this, EventArgs.Empty);
             }
         }
 
@@ -193,13 +191,24 @@ namespace _2HourGame.Model
 
             if (Health <= 0)
             {
-                ShipSank();
+                ShipSank(this, EventArgs.Empty);
                 Gold = 0;
             }
         }
 
         private void AddGold() {
             this.Gold++;
+        }
+
+        void ShipSankEventHandler(object sender, EventArgs e)
+        {
+            hideShip();
+        }
+
+
+        void ShipSpawnedEventHandler(object sender, EventArgs e)
+        {
+            unHideShip();
         }
 
         /// <summary>

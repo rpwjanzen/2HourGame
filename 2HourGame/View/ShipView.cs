@@ -33,7 +33,7 @@ namespace _2HourGame.View
         {
             this.shipColor = shipColor;
 
-            gameObject.ShipSank += playShipSinkingAnimations;
+            gameObject.ShipSank += this.ShipSankEventHandler;
             healthBarView = new HealthBarView(base.Game, spriteBatch, (Ship)gameObject);
         }
 
@@ -65,6 +65,11 @@ namespace _2HourGame.View
             healthBarView.Update(gameTime);
 
             base.Update(gameTime);
+        }
+
+        private void ShipSankEventHandler(object sender, EventArgs e)
+        {
+            this.playShipSinkingAnimations();
         }
 
         private void playShipSinkingAnimations()
