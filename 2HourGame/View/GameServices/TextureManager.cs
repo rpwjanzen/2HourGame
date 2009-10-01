@@ -73,7 +73,7 @@ namespace _2HourGame.View.GameServices
             if (animTextInfo == null)
                 return new Vector2(texture.Width / 2, texture.Height / 2) * scale;
             else 
-                return animTextInfo.textureOrigin * scale;
+                return animTextInfo.Origin * scale;
         }
 
         public Vector2 getTextureCentre(string textureName, Vector2 scale)
@@ -83,7 +83,7 @@ namespace _2HourGame.View.GameServices
             if (animTextInfo == null)
                 return new Vector2(texture.Width / 2, texture.Height / 2) * scale;
             else
-                return animTextInfo.textureOrigin * scale;
+                return animTextInfo.Origin * scale;
         }
     }
 }

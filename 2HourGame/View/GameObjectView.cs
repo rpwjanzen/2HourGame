@@ -19,6 +19,8 @@ namespace _2HourGame.View
         protected SpriteBatch SpriteBatch { get; set; }
         protected Texture2D Texture { get; set; }
         protected float ZIndex { get; set; }
+        protected Vector2 Scale { get; set; }
+        protected Vector2 Origin { get; set; }
         protected IGameObject GameObject { get; set; }
 
         string contentName;
@@ -42,15 +44,18 @@ namespace _2HourGame.View
             this.GameObject = gameObject;
 
             this.Texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
-            if (gameObject != null)
-            {
-                gameObject.GameObjectRemoved += GameObjectRemoved;
-            }
+            this.Origin = GetTextureCenter(this.Texture);
+            var scaleX = gameObject.Width / Texture.Width;
+            var scaleY = gameObject.Height / Texture.Height;
+
+            this.Scale = new Vector2(scaleX, scaleY);
+
+            gameObject.GameObjectRemoved += GameObjectRemoved;
         }
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Draw(Texture, GameObject.Position, null, Color, GameObject.Rotation, GameObject.Origin, GameObject.Scale, SpriteEffects.None, ZIndex);
+            SpriteBatch.Draw(Texture, GameObject.Position, null, Color, GameObject.Rotation, this.Origin, this.Scale, SpriteEffects.None, ZIndex);
 
             base.Draw(gameTime);
         }
@@ -58,6 +63,11 @@ namespace _2HourGame.View
         private void GameObjectRemoved(object sender, EventArgs e)
         {
             Game.Components.Remove(this);
+        }
+
+        private static Vector2 GetTextureCenter(Texture2D texture)
+        {
+            return new Vector2(texture.Width / 2.0f, texture.Height / 2.0f);
         }
     }
 }

@@ -57,9 +57,10 @@ namespace _2HourGame.Model
         {
             return now.TotalGameTime.TotalSeconds - timeOfDeath.TotalSeconds > respawnTimeSeconds;
         }
+        public bool IsCannonVisible { get { return isActive; } }
 
         public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, string contentName, float rotation)
-            : base(game, position, contentName, 0.6f, rotation)
+            : base(game, position, contentName, 34, 60, rotation)
         {
             this.GoldCapacity = 3;
             this.Gold = 0;
@@ -136,11 +137,6 @@ namespace _2HourGame.Model
         {
             island.AddGold(this.Gold);
             this.Gold = 0;
-        }
-
-        public bool drawCannon()
-        {
-            return isActive;
         }
 
         public void FireCannon(GameTime now, CannonType cannonType) 

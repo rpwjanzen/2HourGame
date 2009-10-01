@@ -25,7 +25,7 @@ namespace _2HourGame.Model
         Cannon<Tower> cannon;
 
         public Tower(Game game, Vector2 position, List<GameObject> targets, CannonBallManager cannonBallManager) 
-            : base(game, position, "Tower", 1)
+            : base(game, position, "Tower", 80, 200)
         {
             this.Velocity = Vector2.Zero;
             this.targets = targets;
@@ -35,8 +35,7 @@ namespace _2HourGame.Model
             //base.Body.IsStatic = true;
         }
 
-        public bool drawCannon()
-        {return true;}
+        public bool IsCannonVisible { get { return true; } }
 
         public override void Update(GameTime gameTime)
         {

@@ -20,7 +20,7 @@ namespace _2HourGame.Model
         }
 
         public Island(Game game, Vector2 position, int initialGold, GameObject islandBuilding, string contentName)
-            : base(game, position, contentName, 1f)
+            : base(game, position, contentName, 128, 128)
         {
 			this.islandBuilding = islandBuilding;
             this.Gold = initialGold;

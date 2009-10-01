@@ -16,27 +16,23 @@ namespace _2HourGame.Model
 
         public float XRadius { get; set; }
         public float YRadius { get; set; }
-        public float Width { get { return XRadius * 2; } }
-        public float Height { get { return YRadius * 2; } }
+        public float Width { get { return XRadius * 2.0f; } }
+        public float Height { get { return YRadius * 2.0f; } }
 
-        public float Scale { get; set; }
-
-        public Vector2 Origin { get; private set; }
-
+        /// <summary>
+        /// Occurs when this game object is removed from the Game's components
+        /// </summary>
         public event EventHandler GameObjectRemoved;
-        public GameObject(Game game, Vector2 position, string contentName, float scale)
+
+        public GameObject(Game game, Vector2 position, string contentName, float width, float height)
             : base(game)
         {
             this.Position = position;
-            this.Scale = scale;
 
-            // why is the scale here 1 and not scale???
-            Origin = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTextureCentre(contentName, 1);
+            XRadius = width / 2.0f;
+            YRadius = height / 2.0f;
 
-            XRadius = Origin.X * Scale;
-            YRadius = Origin.Y * Scale;
-
-            Game.Components.ComponentRemoved += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);
+            Game.Components.ComponentRemoved += Components_ComponentRemoved;
         }
 
         void Components_ComponentRemoved(object sender, GameComponentCollectionEventArgs e)
@@ -47,12 +43,12 @@ namespace _2HourGame.Model
             }
         }
 
-        /// <summary>
-        /// Occurs when this game object is removed from the Game's components
-        /// </summary>
         void RaiseGameObjectRemovedEvent()
         {
-            GameObjectRemoved(this, EventArgs.Empty);
+            if (GameObjectRemoved != null)
+            {
+                GameObjectRemoved(this, EventArgs.Empty);
+            }
         }
     }
 }

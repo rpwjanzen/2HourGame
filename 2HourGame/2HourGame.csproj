@@ -103,7 +103,6 @@
     <Compile Include="Model\IPhysicsSimulatorService.cs" />
     <Compile Include="Model\IPositionable.cs" />
     <Compile Include="Model\IRotatable.cs" />
-    <Compile Include="Model\IScalable.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Timer.cs" />
@@ -122,6 +121,7 @@
     <Compile Include="Factories\IslandFactory.cs" />
     <Compile Include="View\GoldPickupProgressView.cs" />
     <Compile Include="View\HealthBarView.cs" />
+    <Compile Include="View\IDimension.cs" />
     <Compile Include="View\IslandsGoldView.cs" />
     <Compile Include="View\GameServices\IEffectManager.cs" />
     <Compile Include="View\GameServices\ITextureManager.cs" />
