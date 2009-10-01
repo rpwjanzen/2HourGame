@@ -25,7 +25,7 @@ namespace _2HourGame.View
         Color color;
         Texture2D texture;
 
-        public CannonView(Game game, Color color, SpriteBatch spriteBatch, CannonType cannonType, Cannon<T> cannon) : base(game)
+        public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon<T> cannon) : base(game)
         {
             this.color = color;
             this.spriteBatch = spriteBatch;

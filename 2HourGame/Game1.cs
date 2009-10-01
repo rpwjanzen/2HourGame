@@ -47,7 +47,7 @@ namespace _2HourGame {
 			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch);
             this.Components.Add(cannonBallManager);
 
-            var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsComponent.PhysicsSimulator);
+            var worldBorder = new WorldBorder(this, new Rectangle(0, 0, (int)width, (int)height), physicsComponent.PhysicsSimulator);
 
             var playerColors = new[] {
                 Color.Blue,

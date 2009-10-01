@@ -24,27 +24,11 @@ namespace _2HourGame.Model
         /// </summary>
         public event EventHandler GameObjectRemoved;
 
-
         public GameObject(Game game, Vector2 position, string contentName, float width, float height)
-            : this(game, position, contentName, width, height, ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTextureCentre(contentName, 1))
-        {
-            // why is the scale in getTextureCentre aboce here 1 and not scale???
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="game"></param>
-        /// <param name="position"></param>
-        /// <param name="contentName"></param>
-        /// <param name="scale"></param>
-        /// <param name="origin">Optional, lets you specify an origin thats not the default one (that is based on the texture.)</param>
-        public GameObject(Game game, Vector2 position, string contentName, float width, float height, Vector2 origin)
             : base(game)
         {
             this.Position = position;
 
-            this.Origin = origin;
 			XRadius = width / 2.0f;
             YRadius = height / 2.0f;
 

@@ -27,26 +27,14 @@ namespace _2HourGame.Model
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float width, float height, float initialRotation)
-            : this(game, initialPosition, physicsSimulator, contentName, scale) 
+        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float width, float height, float initialRotation)
+            : this(game, initialPosition, contentName, width, height) 
         {
             this.Body.Rotation = initialRotation;
         }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float width, float height, Vector2 origin) 
-            :base(game, initialPosition, contentName, width, height, origin)
-        {
-            setup(physicsSimulator);
-        }
-
-
-        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale)
+        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float width, float height)
             : base(game, initialPosition, contentName, width, height)
-        {
-            setup(physicsSimulator);
-        }
-
-        public void setup(PhysicsSimulator physicsSimulator) 
         {
             this.physicsSimulator = ((IPhysicsSimulatorService)Game.Services.GetService(typeof(IPhysicsSimulatorService))).PhysicsSimulator;
 
@@ -54,7 +42,6 @@ namespace _2HourGame.Model
             this.Body.Position = base.Position;
             this.Body.LinearDragCoefficient = 0.95f;
             this.Body.RotationalDragCoefficient = 10.0f;
-            this.Body.Rotation = initialRotation;
             physicsSimulator.Add(this.Body);
 
             this.Geometry = GeomFactory.Instance.CreateEllipseGeom(this.Body, base.XRadius, base.YRadius, 12);

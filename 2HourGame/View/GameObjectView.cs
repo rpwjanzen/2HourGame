@@ -64,7 +64,7 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Draw(Texture, GameObject.Position + (textureOriginOffset * GameObject.Scale), null, Color, GameObject.Rotation, this.Origin, this.Scale, SpriteEffects.None, ZIndex);
+            SpriteBatch.Draw(Texture, GameObject.Position + (textureOriginOffset * this.Scale), null, Color, GameObject.Rotation, this.Origin, this.Scale, SpriteEffects.None, ZIndex);
 
             base.Draw(gameTime);
         }
