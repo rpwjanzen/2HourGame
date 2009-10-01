@@ -5,7 +5,7 @@ using System.Text;
 using FarseerGames.FarseerPhysics;
 using Microsoft.Xna.Framework;
 
-namespace _2HourGame.Model
+namespace _2HourGame.Model.GameServices
 {
     /// <summary>
     /// Holds all the logic for collision categories so that its all in one place.

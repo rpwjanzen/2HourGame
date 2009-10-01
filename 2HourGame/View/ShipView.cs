@@ -43,8 +43,8 @@ namespace _2HourGame.View
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
 
-            Game.Components.Add(new CannonView<Ship>(Game, Color.White, SpriteBatch, CannonType.LeftCannon, ((Ship)GameObject).leftCannon));
-            Game.Components.Add(new CannonView<Ship>(Game, Color.White, SpriteBatch, CannonType.RightCannon, ((Ship)GameObject).rightCannon));
+            Game.Components.Add(new CannonView<Ship>(Game, Color.White, SpriteBatch, ((Ship)GameObject).leftCannon));
+            Game.Components.Add(new CannonView<Ship>(Game, Color.White, SpriteBatch, ((Ship)GameObject).rightCannon));
 
             healthBarView.LoadContent();
         }

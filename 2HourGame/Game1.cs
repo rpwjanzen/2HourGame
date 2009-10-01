@@ -16,6 +16,7 @@ using _2HourGame.Factories;
 using _2HourGame.View;
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
+using _2HourGame.Model.GameServices;
 
 namespace _2HourGame {
     /// <summary>
@@ -48,7 +49,7 @@ namespace _2HourGame {
 			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch, physicsSimulator);
             this.Components.Add(cannonBallManager);
 
-            var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
+            var worldBorder = new WorldBorder(this, new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
 
             var playerColors = new[] {
                 Color.Blue,
@@ -108,7 +109,7 @@ namespace _2HourGame {
 
             //List<GameObject> shipsAsGameObjects = ships.Cast<GameObject>().ToList<GameObject>();
             //Tower aTower = new Tower(this, new Vector2(width / 2, height / 2), physicsSimulator, ships.Cast<GameObject>().ToList<GameObject>(), cannonBallManager);
-            var tower = new TowerFactory(this, cannonBallManager, physicsSimulator, spriteBatch).getTower(new Vector2(width / 2, height / 2), ships.Cast<GameObject>().ToList<GameObject>());
+            var tower = new TowerFactory(this, cannonBallManager, physicsSimulator, spriteBatch).getTower(new Vector2(width / 2-100, (height / 2)-20-100), ships.Cast<GameObject>().ToList<GameObject>());
 
             var map = new Map(allIslands);
 

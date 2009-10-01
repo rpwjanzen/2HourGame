@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using _2HourGame.Model;
 using Microsoft.Xna.Framework;
 using FarseerGames.FarseerPhysics;
 using Microsoft.Xna.Framework.Graphics;
+
+using _2HourGame.Model;
 using _2HourGame.View;
 
 namespace _2HourGame.Factories
@@ -24,10 +25,12 @@ namespace _2HourGame.Factories
         {
             Tower tower = new Tower(base.Game, position, base.PhysicsSimulator, targets, cannonBallManager);
             GameObjectView towerView = new GameObjectView(base.Game, "tower", Color.White, base.SpriteBatch, tower,
-                ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house));
+                ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house), new Vector2(-10, -110));
+            CannonView<Tower> cannonView = new CannonView<Tower>(base.Game, Color.White, SpriteBatch, tower.cannon);
 
             Game.Components.Add(tower);
             Game.Components.Add(towerView);
+            Game.Components.Add(cannonView);
 
             return tower;
         }

@@ -11,6 +11,7 @@ using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
 
 using _2HourGame.View;
+using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
@@ -26,16 +27,26 @@ namespace _2HourGame.Model
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
 
-        //public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float scale, Color color, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, float zIndex)
-            //: base(game, initialPosition, contentName, scale, color, spriteBatch, zIndex)
         public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale, float initialRotation)
             : this(game, initialPosition, physicsSimulator, contentName, scale) 
         {
             this.Body.Rotation = initialRotation;
         }
 
+        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale, Vector2 origin) 
+            :base(game, initialPosition, contentName, scale, origin)
+        {
+            setup(physicsSimulator);
+        }
+
+
         public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale)
             : base(game, initialPosition, contentName, scale)
+        {
+            setup(physicsSimulator);
+        }
+
+        public void setup(PhysicsSimulator physicsSimulator) 
         {
             this.physicsSimulator = physicsSimulator;
 
@@ -47,6 +58,8 @@ namespace _2HourGame.Model
 
             this.Geometry = GeomFactory.Instance.CreateEllipseGeom(this.Body, base.XRadius, base.YRadius, 12);
             this.Geometry.Tag = this;
+            this.Geometry.CollisionCategories = ((CollisionCategoryManager)Game.Services.GetService(typeof(CollisionCategoryManager))).getCollisionCategory(this.GetType());
+            this.Geometry.CollidesWith = ((CollisionCategoryManager)Game.Services.GetService(typeof(CollisionCategoryManager))).getCollidesWith(this.GetType());
             physicsSimulator.Add(Geometry);
         }
 

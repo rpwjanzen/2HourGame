@@ -18,7 +18,7 @@ namespace _2HourGame.View
         private readonly Vector2 cannonOrigin;
         private Cannon<T> cannon;
 
-        public CannonView(Game game, Color color, SpriteBatch spriteBatch, CannonType cannonType, Cannon<T> cannon)
+        public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon<T> cannon)
             : base(game, cannonTextureName, Color.White, spriteBatch, ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(cannonTextureName), null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon))
         {
             this.cannon = cannon;

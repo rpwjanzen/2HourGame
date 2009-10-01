@@ -16,23 +16,24 @@ namespace _2HourGame.Model
         List<GameObject> targets;
         float range;
 
-        const float maxCannonRotation = 0.1f;
+        const float maxCannonRotationDegrees = 1f;
 
         // code so that we dont switch targets too often
         GameObject currentTarget = null;
         Timer minTargetFocusTimer;
 
-        Cannon<Tower> cannon;
+        public Cannon<Tower> cannon { get; private set; }
 
         public Tower(Game game, Vector2 position, PhysicsSimulator physicsSimulator, List<GameObject> targets, CannonBallManager cannonBallManager) 
-            : base(game, position, physicsSimulator, "Tower", 1)
+            : base(game, position, physicsSimulator, "Tower", 0.5f, new Vector2(30, 30))
         {
             this.Velocity = Vector2.Zero;
             this.targets = targets;
             minTargetFocusTimer = new Timer(10f);
             range = 200;
             cannon = new Cannon<Tower>(game, this, cannonBallManager, CannonType.FrontCannon);
-            //base.Body.IsStatic = true;
+            game.Components.Add(cannon);
+            base.Body.IsStatic = true;
         }
 
         public bool drawCannon()
@@ -49,7 +50,7 @@ namespace _2HourGame.Model
             if (currentTarget != null) 
             {
                 // steer towards the target and potentially fire!
-                cannon.facing = AIHelpers.GetFacingTowardsPoint(currentTarget.Position, this.Position, cannon.facing, maxCannonRotation);
+                cannon.facingRadians = AIHelpers.GetFacingTowardsPointInRadians(currentTarget.Position, this.Position, cannon.facingRadians, maxCannonRotationDegrees);
             }
 
             base.Update(gameTime);

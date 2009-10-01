@@ -17,12 +17,21 @@ namespace _2HourGame.View
         protected Texture2D Texture { get; set; }
         protected float ZIndex { get; set; }
         protected IGameObject GameObject { get; set; }
+        /// <summary>
+        /// Stores offset to adjust drawing for objects where the collision area is not based on the texture size.
+        /// </summary>
+        private Vector2 textureOriginOffset;
 
         string contentName;
 
         public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, IGameObject gameObject, float zIndex)
+            : this(game, contentName, color, spriteBatch, gameObject, zIndex, Vector2.Zero)
+        { }
+
+        public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, IGameObject gameObject, float zIndex, Vector2 textureOriginOffset)
             : base(game)
         {
+            this.textureOriginOffset = textureOriginOffset;
             this.Color = color;
             this.contentName = contentName;
             this.SpriteBatch = spriteBatch;
@@ -38,7 +47,7 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Draw(Texture, GameObject.Position, null, Color, GameObject.Rotation, GameObject.Origin, GameObject.Scale, SpriteEffects.None, ZIndex);
+            SpriteBatch.Draw(Texture, GameObject.Position + (textureOriginOffset * GameObject.Scale), null, Color, GameObject.Rotation, GameObject.Origin, GameObject.Scale, SpriteEffects.None, ZIndex);
 
             base.Draw(gameTime);
         }

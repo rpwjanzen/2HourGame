@@ -4,13 +4,17 @@ using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
 
 using Microsoft.Xna.Framework;
+using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
     class WorldBorder {
         const int buffer = 100;
+        Game game;
 
-        public WorldBorder(Rectangle innerBorder, PhysicsSimulator physicsSimulator) {
+        public WorldBorder(Game game, Rectangle innerBorder, PhysicsSimulator physicsSimulator) {
+            this.game = game;
+
             var outerBorder = new Rectangle(innerBorder.X, innerBorder.X, innerBorder.Width, innerBorder.Height);
             outerBorder.Inflate(buffer, buffer);
 
@@ -83,8 +87,8 @@ namespace _2HourGame.Model
 
             var borderGeometry = GeomFactory.Instance.CreateRectangleGeom(borderBody, borderWidth, borderHeight);
             // prevent collisions with cannon balls
-            borderGeometry.CollisionCategories = CollisionCategory.Cat1;
-            borderGeometry.CollidesWith = CollisionCategory.All & ~CollisionCategory.Cat2;
+            borderGeometry.CollisionCategories = ((CollisionCategoryManager)game.Services.GetService(typeof(CollisionCategoryManager))).getCollisionCategory(this.GetType());
+            borderGeometry.CollidesWith = ((CollisionCategoryManager)game.Services.GetService(typeof(CollisionCategoryManager))).getCollidesWith(this.GetType());
             physicsSimulator.Add(borderGeometry);
         }
 

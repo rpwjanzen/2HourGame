@@ -8,14 +8,14 @@ namespace _2HourGame.Model
 {
     static class AIHelpers
     {
-        public static float GetFacingTowardsPoint(Vector2 point, Vector2 selfLocation, float initialFacing, float maxRotation)
+        public static float GetFacingTowardsPointInRadians(Vector2 point, Vector2 selfLocation, float initialFacing, float maxRotationDegrees)
         {
             var delta = selfLocation - point;
             // my rotation should match this angle (-180.0f - 180.0f)
             var desiredRotation = MathHelper.ToDegrees((float)Math.Atan2(delta.Y, delta.X));
 
             // drawing is off by 90.0
-            desiredRotation -= 90.0f;
+            //desiredRotation -= 90.0f;
             if (desiredRotation > 180.0f)
                 desiredRotation -= 360.0f;
             else if (desiredRotation < -180.0f)
@@ -27,16 +27,22 @@ namespace _2HourGame.Model
 
             var angleDifference = (myRotation - desiredRotation);
 
-            if (Math.Abs(angleDifference) <= maxRotation)
+            if (Math.Abs(angleDifference) <= maxRotationDegrees)
                 return desiredRotation;
 
-            float newRotation;
+            float changeInRotation;
             if (angleDifference > 0)
-                newRotation = desiredRotation + maxRotation;
+                changeInRotation = maxRotationDegrees;
             else
-                newRotation = desiredRotation - maxRotation;
+                changeInRotation = -maxRotationDegrees;
 
-            return newRotation;
+            float resultInRadians = initialFacing + MathHelper.ToRadians(changeInRotation);
+            if (resultInRadians < 0)
+                resultInRadians += 2f * (float)Math.PI;
+            else if (resultInRadians > Math.PI)
+                resultInRadians -= 2f * (float)Math.PI;
+
+            return resultInRadians;
         }
     }
 }

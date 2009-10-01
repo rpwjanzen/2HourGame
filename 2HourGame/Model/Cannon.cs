@@ -10,7 +10,7 @@ namespace _2HourGame.Model
 {
     public delegate void CannonFired(GameTime gameTime);
 
-    class Cannon<T> where T : PhysicsGameObject, ICannonMountable
+    class Cannon<T> : GameComponent where T : PhysicsGameObject, ICannonMountable
     {
         Game game;
 
@@ -24,7 +24,7 @@ namespace _2HourGame.Model
 
         private T parentObject;
 
-        public float facing { get; set; }
+        public float facingRadians;
 
         public float Scale { 
             get 
@@ -33,14 +33,15 @@ namespace _2HourGame.Model
             }
         }
 
-        public Cannon(Game game, T parentObject, CannonBallManager cannonBallManager, CannonType cannonType) 
+        public Cannon(Game game, T parentObject, CannonBallManager cannonBallManager, CannonType cannonType)
+            : base(game)
         {
             this.cannonType = cannonType;
             this.game = game;
             this.cannonBallManager = cannonBallManager;
             this.parentObject = parentObject;
             firingTimer = new Timer(3f);
-            facing = 0f;
+            facingRadians = 0f;
         }
 
         /// <summary>
@@ -67,17 +68,21 @@ namespace _2HourGame.Model
         public float getCannonRotation()
         {
             if (cannonType == CannonType.LeftCannon)
-                return 2f * (float)Math.PI + parentObject.Rotation + facing;
+                return 2f * (float)Math.PI + parentObject.Rotation + facingRadians;
+            else if (cannonType == CannonType.RightCannon)
+                return (float)Math.PI + parentObject.Rotation + facingRadians;
             else
-                return (float)Math.PI + parentObject.Rotation + facing;
+                return facingRadians;
         }
 
         public Vector2 getCannonPosition()
         {
             if (cannonType == CannonType.LeftCannon)
                 return new Vector2(parentObject.Body.GetBodyMatrix().Left.X, parentObject.Body.GetBodyMatrix().Left.Y) * (parentObject.XRadius - 8) + parentObject.Position;
-            else
+            else if (cannonType == CannonType.RightCannon)
                 return new Vector2(parentObject.Body.GetBodyMatrix().Right.X, parentObject.Body.GetBodyMatrix().Right.Y) * (parentObject.XRadius - 8) + parentObject.Position;
+            else
+                return new Vector2(0, -53) + parentObject.Position;
         }
 
         private Vector2 fireCannon() 
