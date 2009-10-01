@@ -15,10 +15,10 @@ using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
-    class PhysicsGameObject : GameObject
+    class PhysicsGameObject : GameObject, IPhysicsGameObject
     {
         PhysicsSimulator physicsSimulator;
-        protected Geom Geometry { get; set; }
+        public Geom Geometry { get; private set; }
         public Body Body { get; private set; }
         public float Speed {
             get { return this.Body.LinearVelocity.Length(); }
@@ -27,33 +27,34 @@ namespace _2HourGame.Model
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale, float initialRotation)
+        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float width, float height, float initialRotation)
             : this(game, initialPosition, physicsSimulator, contentName, scale) 
         {
             this.Body.Rotation = initialRotation;
         }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale, Vector2 origin) 
-            :base(game, initialPosition, contentName, scale, origin)
+        public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float width, float height, Vector2 origin) 
+            :base(game, initialPosition, contentName, width, height, origin)
         {
             setup(physicsSimulator);
         }
 
 
         public PhysicsGameObject(Game game, Vector2 initialPosition, PhysicsSimulator physicsSimulator, string contentName, float scale)
-            : base(game, initialPosition, contentName, scale)
+            : base(game, initialPosition, contentName, width, height)
         {
             setup(physicsSimulator);
         }
 
         public void setup(PhysicsSimulator physicsSimulator) 
         {
-            this.physicsSimulator = physicsSimulator;
+            this.physicsSimulator = ((IPhysicsSimulatorService)Game.Services.GetService(typeof(IPhysicsSimulatorService))).PhysicsSimulator;
 
             this.Body = BodyFactory.Instance.CreateEllipseBody(base.XRadius, base.YRadius, 1.0f);
             this.Body.Position = base.Position;
             this.Body.LinearDragCoefficient = 0.95f;
             this.Body.RotationalDragCoefficient = 10.0f;
+            this.Body.Rotation = initialRotation;
             physicsSimulator.Add(this.Body);
 
             this.Geometry = GeomFactory.Instance.CreateEllipseGeom(this.Body, base.XRadius, base.YRadius, 12);

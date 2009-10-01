@@ -37,19 +37,17 @@ namespace _2HourGame {
             float height = graphics.PreferredBackBufferHeight;
 
 			spriteBatch = new SpriteBatch(this.GraphicsDevice);
-            PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
-            PhysicsComponent physicsComponent = new PhysicsComponent(this, physicsSimulator);
-            physicsComponent.Debug = false;
+            PhysicsComponent physicsComponent = new PhysicsComponent(this, new PhysicsSimulator(Vector2.Zero));
             this.Components.Add(physicsComponent);
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
             TextureManager textureManager = new TextureManager(this);
             CollisionCategoryManager collisionCategoryManager = new CollisionCategoryManager(this); 
 
-			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch, physicsSimulator);
+			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch);
             this.Components.Add(cannonBallManager);
 
-            var worldBorder = new WorldBorder(this, new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
+            var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsComponent.PhysicsSimulator);
 
             var playerColors = new[] {
                 Color.Blue,
@@ -69,7 +67,7 @@ namespace _2HourGame {
             var islandBuildingOffset = new Vector2(20, 20);
             var islandBuildings = new HouseFactory(this, spriteBatch).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
 
-            IslandFactory islandFactory = new IslandFactory(this, spriteBatch, physicsSimulator);
+            IslandFactory islandFactory = new IslandFactory(this, spriteBatch);
             var playerIslands = islandFactory.CreatePlayerIslands(islandPositions, islandBuildings);
 
             var goldIslands = new List<Island>();
@@ -94,7 +92,7 @@ namespace _2HourGame {
                 (float)(Math.PI * 1.75)
             }.ToList();
 
-            var ships = new ShipFactory(this, spriteBatch, physicsSimulator, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
+            var ships = new ShipFactory(this, spriteBatch, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
 
             var shipGoldViewFactory = new ShipGoldViewFactory(this, spriteBatch, 100);
             var playerGoldViews = ships.Zip(new[] {
@@ -107,9 +105,7 @@ namespace _2HourGame {
                 this.Components.Add(v);
             }
 
-            //List<GameObject> shipsAsGameObjects = ships.Cast<GameObject>().ToList<GameObject>();
-            //Tower aTower = new Tower(this, new Vector2(width / 2, height / 2), physicsSimulator, ships.Cast<GameObject>().ToList<GameObject>(), cannonBallManager);
-            var tower = new TowerFactory(this, cannonBallManager, physicsSimulator, spriteBatch).getTower(new Vector2(width / 2-100, (height / 2)-20-100), ships.Cast<GameObject>().ToList<GameObject>());
+            var tower = new TowerFactory(this, cannonBallManager, spriteBatch).getTower(new Vector2(width / 2, height / 2), ships.Cast<GameObject>().ToList<GameObject>());
 
             var map = new Map(allIslands);
 

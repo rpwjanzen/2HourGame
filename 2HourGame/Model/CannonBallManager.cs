@@ -21,11 +21,11 @@ namespace _2HourGame.Model
 
         const float minimumCannonBallSpeed = 25f;
 
-        public CannonBallManager(Game game, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator)
+        public CannonBallManager(Game game, SpriteBatch spriteBatch)
             : base(game) {
             cannonBalls = new List<CannonBall>();
             this.spriteBatch = spriteBatch;
-            this.PhysicsSimulator = physicsSimulator;
+            this.PhysicsSimulator = ((IPhysicsSimulatorService)Game.Services.GetService(typeof(IPhysicsSimulatorService))).PhysicsSimulator;
         }
 
         public override void Update(GameTime gameTime)
@@ -35,7 +35,7 @@ namespace _2HourGame.Model
         }
 
         public CannonBall CreateCannonBall(Vector2 position, Vector2 firingForce) {
-            var cannonBall = new CannonBall(this.Game, position, this.PhysicsSimulator, "cannonBall");
+            var cannonBall = new CannonBall(this.Game, position, "cannonBall");
             var cannonBallView = new GameObjectView(base.Game, "cannonBall", Color.White, spriteBatch, cannonBall, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonBall));
             base.Game.Components.Add(cannonBall);
             base.Game.Components.Add(cannonBallView);
@@ -51,7 +51,6 @@ namespace _2HourGame.Model
             foreach (CannonBall c in cannonBallsToRemove) 
             {
                 ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).SplashEffect(c.Position);
-                //c.removeGameObject();
                 RemoveCannonBall(c);
             }
         }
@@ -59,7 +58,6 @@ namespace _2HourGame.Model
         public void RemoveCannonBall(CannonBall cannonBall) 
         {
             cannonBall.RemoveFromPhysicsSimulator();
-            cannonBall.removeGameObject();
             base.Game.Components.Remove(cannonBall);
             cannonBalls.Remove(cannonBall);
         }

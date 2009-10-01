@@ -8,30 +8,53 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
-    public delegate void CannonFired(GameTime gameTime);
+    class CannonFiredEventArgs : EventArgs
+    {
+        public GameTime FiredTime { get; private set; }
+        public CannonFiredEventArgs(GameTime gameTime)
+        {
+            this.FiredTime = gameTime;
+        }
+    }
 
     class Cannon<T> : GameComponent where T : PhysicsGameObject, ICannonMountable
     {
         Game game;
-
         Timer firingTimer;
 
         public CannonType cannonType { get; private set; }
-
-        public event CannonFired CannonFired;
+        public event EventHandler<CannonFiredEventArgs> CannonFired;
 
         CannonBallManager cannonBallManager { get; set; }
-
         private T parentObject;
-
-        public float facingRadians;
-
-        public float Scale { 
-            get 
-            {
-                return parentObject.Scale;   
-            }
+        public float facingRadians { get; set; }
+        public bool ShouldCannonDraw { get { return parentObject.IsCannonVisible; } }
+        public float Rotation
+        {
+			get
+			{
+	            if (cannonType == CannonType.LeftCannon)
+	                return 2f * (float)Math.PI + parentObject.Rotation + facingRadians;
+	            else if (cannonType == CannonType.RightCannon)
+	                return (float)Math.PI + parentObject.Rotation + facingRadians;
+	            else
+	                return facingRadians;
+			}
         }
+
+        public Vector2 Position
+        {
+			get
+			{
+	            if (cannonType == CannonType.LeftCannon)
+	                return new Vector2(parentObject.Body.GetBodyMatrix().Left.X, parentObject.Body.GetBodyMatrix().Left.Y) * (parentObject.XRadius - 8) + parentObject.Position;
+	            else if (cannonType == CannonType.RightCannon)
+	                return new Vector2(parentObject.Body.GetBodyMatrix().Right.X, parentObject.Body.GetBodyMatrix().Right.Y) * (parentObject.XRadius - 8) + parentObject.Position;
+	            else
+	                return new Vector2(0, -53) + parentObject.Position;
+			}
+        }
+
 
         public Cannon(Game game, T parentObject, CannonBallManager cannonBallManager, CannonType cannonType)
             : base(game)
@@ -51,38 +74,13 @@ namespace _2HourGame.Model
         /// <returns>Vector2.Zero if the cannon was not fired, the firingvector otherwise.</returns>
         public Vector2 attemptFireCannon(GameTime now) 
         {
-            if(firingTimer.TimerHasElapsed(now) && parentObject.drawCannon())
+            if(firingTimer.TimerHasElapsed(now) && parentObject.IsCannonVisible)
             {
                 firingTimer.resetTimer(now.TotalGameTime);
-                CannonFired(now);
+                RaiseCannonFiredEvent(now);
                 return fireCannon();
             }
             return Vector2.Zero;
-        }
-
-        public bool drawCannon()
-        {
-            return parentObject.drawCannon();
-        }
-
-        public float getCannonRotation()
-        {
-            if (cannonType == CannonType.LeftCannon)
-                return 2f * (float)Math.PI + parentObject.Rotation + facingRadians;
-            else if (cannonType == CannonType.RightCannon)
-                return (float)Math.PI + parentObject.Rotation + facingRadians;
-            else
-                return facingRadians;
-        }
-
-        public Vector2 getCannonPosition()
-        {
-            if (cannonType == CannonType.LeftCannon)
-                return new Vector2(parentObject.Body.GetBodyMatrix().Left.X, parentObject.Body.GetBodyMatrix().Left.Y) * (parentObject.XRadius - 8) + parentObject.Position;
-            else if (cannonType == CannonType.RightCannon)
-                return new Vector2(parentObject.Body.GetBodyMatrix().Right.X, parentObject.Body.GetBodyMatrix().Right.Y) * (parentObject.XRadius - 8) + parentObject.Position;
-            else
-                return new Vector2(0, -53) + parentObject.Position;
         }
 
         private Vector2 fireCannon() 
@@ -105,6 +103,14 @@ namespace _2HourGame.Model
             var cannonBall = this.cannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
 
             return thrust;
+        }
+
+        void RaiseCannonFiredEvent(GameTime gameTime)
+        {
+            if (CannonFired != null)
+            {
+                CannonFired(this, new CannonFiredEventArgs(gameTime));
+            }
         }
     }
 }

@@ -16,18 +16,17 @@ namespace _2HourGame.Model
 
         public float XRadius { get; set; }
         public float YRadius { get; set; }
-        public float Width { get { return XRadius * 2; } }
-        public float Height { get { return YRadius * 2; } }
+        public float Width { get { return XRadius * 2.0f; } }
+        public float Height { get { return YRadius * 2.0f; } }
 
-        public float Scale { get; set; }
-
-        public Vector2 Origin { get; private set; }
-
+        /// <summary>
+        /// Occurs when this game object is removed from the Game's components
+        /// </summary>
         public event EventHandler GameObjectRemoved;
 
 
-        public GameObject(Game game, Vector2 position, string contentName, float scale)
-            : this(game, position, contentName, scale, ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTextureCentre(contentName, 1))
+        public GameObject(Game game, Vector2 position, string contentName, float width, float height)
+            : this(game, position, contentName, width, height, ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTextureCentre(contentName, 1))
         {
             // why is the scale in getTextureCentre aboce here 1 and not scale???
         }
@@ -40,24 +39,33 @@ namespace _2HourGame.Model
         /// <param name="contentName"></param>
         /// <param name="scale"></param>
         /// <param name="origin">Optional, lets you specify an origin thats not the default one (that is based on the texture.)</param>
-        public GameObject(Game game, Vector2 position, string contentName, float scale, Vector2 origin)
+        public GameObject(Game game, Vector2 position, string contentName, float width, float height, Vector2 origin)
             : base(game)
         {
             this.Position = position;
-            this.Scale = scale;
 
             this.Origin = origin;
+			XRadius = width / 2.0f;
+            YRadius = height / 2.0f;
 
-            XRadius = Origin.X * Scale;
-            YRadius = Origin.Y * Scale;
+
+            Game.Components.ComponentRemoved += Components_ComponentRemoved;
         }
 
-        /// <summary>
-        /// This must be called when you remove a game object that has a view so that the associated view also gets removed.
-        /// </summary>
-        public void removeGameObject()
+        void Components_ComponentRemoved(object sender, GameComponentCollectionEventArgs e)
         {
-            GameObjectRemoved(this, EventArgs.Empty);
+            if (e.GameComponent == this)
+            {
+                RaiseGameObjectRemovedEvent();
+            }
+        }
+
+        void RaiseGameObjectRemovedEvent()
+        {
+            if (GameObjectRemoved != null)
+            {
+                GameObjectRemoved(this, EventArgs.Empty);
+            }
         }
     }
 }

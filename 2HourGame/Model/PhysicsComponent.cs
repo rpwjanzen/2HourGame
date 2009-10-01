@@ -8,8 +8,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _2HourGame.Model
 {
-    class PhysicsComponent : DrawableGameComponent {
-        PhysicsSimulator physicsSimulator;
+    class PhysicsComponent : DrawableGameComponent, IPhysicsSimulatorService
+    {
+        public PhysicsSimulator PhysicsSimulator { get; private set; }
         PhysicsSimulatorView physicsSimulatorView;        
         SpriteBatch spriteBatch;
 
@@ -18,7 +19,9 @@ namespace _2HourGame.Model
         public PhysicsComponent(Game game, PhysicsSimulator physicsSimulator)
             : base(game) {
             physicsSimulatorView = new PhysicsSimulatorView(physicsSimulator);
-            this.physicsSimulator = physicsSimulator;
+            this.PhysicsSimulator = physicsSimulator;
+            this.Debug = false;
+            Game.Services.AddService(typeof(IPhysicsSimulatorService), this);
         }
 
         protected override void LoadContent() {
@@ -41,7 +44,7 @@ namespace _2HourGame.Model
         GamePadState LastState;
 
         public override void Update(GameTime gameTime) {
-            this.physicsSimulator.Update(0.1f);
+            PhysicsSimulator.Update(((float)gameTime.ElapsedGameTime.Milliseconds) / 100.0f);
 
             GamePadState gs = GamePad.GetState(PlayerIndex.One);
             if (gs.IsConnected) {

@@ -7,54 +7,77 @@ using Microsoft.Xna.Framework.Graphics;
 
 using _2HourGame.View;
 using _2HourGame.Model;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
-    class AnimationView : GameObjectView
+    class AnimationView : DrawableGameComponent
     {
-        protected AnimatedTextureInfo animatedTextureInfo;
-        protected TimeSpan animationStartTime;
-        protected bool firstDraw;
+        protected AnimatedTextureInfo AnimatedTextureInfo;
+        protected TimeSpan AnimationStartTime;
+        protected bool FirstDraw;
+        protected IGameObject GameObject;
+        protected SpriteBatch SpriteBatch;
+
+        protected Vector2 Scale;
+        protected Texture2D Texture;
+        protected Color Color;
+        protected Vector2 Origin;
+        protected float ZIndex;
+
+        public event EventHandler AnimationFinished;
 
         public AnimationView(Game game, string contentName, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo,
-            GameObject gameObject, float zIndex)
-            : base(game, contentName, color, spriteBatch, gameObject, zIndex)
+            IGameObject gameObject, float zIndex) : base(game)
         {
-            this.animatedTextureInfo = animatedTextureInfo;
-            this.firstDraw = this.animatedTextureInfo != null ? true : false;
+            this.Texture = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
+            this.Color = color;
+            this.SpriteBatch = spriteBatch;
+            this.AnimatedTextureInfo = animatedTextureInfo;
+            this.GameObject = gameObject;
+            this.ZIndex = zIndex;
+
+            this.FirstDraw = this.AnimatedTextureInfo != null;
+
+            this.Scale = new Vector2(animatedTextureInfo.Scale, animatedTextureInfo.Scale);
+            this.Origin = animatedTextureInfo.WindowCenter;            
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if (firstDraw)
+            if (FirstDraw)
             {
-                firstDraw = false;
-                animationStartTime = gameTime.TotalGameTime;
+                FirstDraw = false;
+                AnimationStartTime = gameTime.TotalGameTime;
             }
 
             // get the frame to draw
-            int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
-                * animatedTextureInfo.framesPerSecond));
+            int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - AnimationStartTime.TotalSeconds)
+                * AnimatedTextureInfo.FramesPerSecond));
 
-            if (totalFrame == animatedTextureInfo.totalFrames * animatedTextureInfo.numAnimationIterations)
-                animationDone();
+            if (totalFrame == AnimatedTextureInfo.TotalFrames * AnimatedTextureInfo.NumAnimationIterations)
+            {
+                RaiseAnimationFinishedEvent();
+            } 
             else
             {
-                int frame = totalFrame % animatedTextureInfo.totalFrames;
+                int frame = totalFrame % AnimatedTextureInfo.TotalFrames;
+                int dx = (int)AnimatedTextureInfo.WindowSize.X * frame;
+                int width = (int)AnimatedTextureInfo.WindowSize.X;
+                int height = (int)AnimatedTextureInfo.WindowSize.Y;
 
-                Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
+                Rectangle source = new Rectangle(dx, 0, width, height);
 
-                SpriteBatch.Draw(base.Texture, GameObject.Position + animatedTextureInfo.drawOffset(GameObject.Rotation), source, base.Color, GameObject.Rotation, GameObject.Origin, GameObject.Scale, SpriteEffects.None, base.ZIndex);
+                SpriteBatch.Draw(Texture, GameObject.Position + AnimatedTextureInfo.GetRotatedOffset(GameObject.Rotation), source, Color, GameObject.Rotation, Origin, Scale, SpriteEffects.None, ZIndex);
             }
         }
 
-        /// <summary>
-        /// This animation is done so it should be removed from the list of components.
-        /// </summary>
-        private void animationDone()
+        void RaiseAnimationFinishedEvent()
         {
-            base.Game.Components.Remove(GameObject);
-            base.Game.Components.Remove(this);
+            if (AnimationFinished != null)
+            {
+                AnimationFinished(this, EventArgs.Empty);
+            }
         }
     }
 }

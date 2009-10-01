@@ -13,7 +13,7 @@ namespace _2HourGame.Factories
 
         CannonBallManager CannonBallManager { get; set; }
 
-        public ShipFactory(Game game, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, CannonBallManager cannonBallManager) : base(game, spriteBatch, physicsSimulator) {
+        public ShipFactory(Game game, SpriteBatch spriteBatch, CannonBallManager cannonBallManager) : base(game, spriteBatch) {
             this.CannonBallManager = cannonBallManager;
         }
 
@@ -23,12 +23,11 @@ namespace _2HourGame.Factories
 
         public Ship CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
         {
-            Ship ship = new Ship(base.Game, shipLocation, base.PhysicsSimulator, CannonBallManager, "shipHull", shipAngle);
+            Ship ship = new Ship(base.Game, shipLocation, CannonBallManager, "shipHull", shipAngle);
             ShipView shipView = new ShipView(base.Game, color, "shipHull", Color.White, SpriteBatch, ship);
             base.Game.Components.Add(ship);
             base.Game.Components.Add(shipView);
             return ship;
-            //return new Ship(base.Game, color, shipLocation, base.SpriteBatch, base.PhysicsSimulator, playerIsland, this.CannonBallManager);
         }
     }
 }

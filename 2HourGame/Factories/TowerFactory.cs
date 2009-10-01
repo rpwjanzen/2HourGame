@@ -15,15 +15,15 @@ namespace _2HourGame.Factories
     {
         CannonBallManager cannonBallManager;
 
-        public TowerFactory(Game game, CannonBallManager cannonBallManager, PhysicsSimulator physicsSimulator, SpriteBatch spriteBatch)
-            : base(game, spriteBatch, physicsSimulator)
+        public TowerFactory(Game game, CannonBallManager cannonBallManager, SpriteBatch spriteBatch)
+            : base(game, spriteBatch)
         {
             this.cannonBallManager = cannonBallManager;
         }
 
         public Tower getTower(Vector2 position, List<GameObject> targets) 
         {
-            Tower tower = new Tower(base.Game, position, base.PhysicsSimulator, targets, cannonBallManager);
+            Tower tower = new Tower(base.Game, position, targets, cannonBallManager);
             GameObjectView towerView = new GameObjectView(base.Game, "tower", Color.White, base.SpriteBatch, tower,
                 ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house), new Vector2(-10, -110));
             CannonView<Tower> cannonView = new CannonView<Tower>(base.Game, Color.White, SpriteBatch, tower.cannon);

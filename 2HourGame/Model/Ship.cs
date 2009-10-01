@@ -15,12 +15,10 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
-    public delegate void Notification();
-
     class Ship : PhysicsGameObject, ICannonMountable
     {
-        public event Notification ShipSank;
-        public event Notification ShipSpawned;
+        public event EventHandler ShipSank;
+        public event EventHandler ShipSpawned;
 
         readonly double maxHealth = 5;
         double Health { get; set; }
@@ -59,9 +57,10 @@ namespace _2HourGame.Model
         {
             return now.TotalGameTime.TotalSeconds - timeOfDeath.TotalSeconds > respawnTimeSeconds;
         }
+        public bool IsCannonVisible { get { return isActive; } }
 
-        public Ship(Game game, Vector2 position, PhysicsSimulator physicsSimulator, CannonBallManager cannonBallManager, string contentName, float rotation)
-            : base(game, position, physicsSimulator, contentName, 0.6f, rotation)
+        public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, string contentName, float rotation)
+            : base(game, position, contentName, 34, 60, rotation)
         {
             this.GoldCapacity = 3;
             this.Gold = 0;
@@ -79,8 +78,8 @@ namespace _2HourGame.Model
             leftCannon = new Cannon<Ship>(game, this, cannonBallManager, CannonType.LeftCannon);
             rightCannon = new Cannon<Ship>(game, this, cannonBallManager, CannonType.RightCannon);
 
-            ShipSank += hideShip;
-            ShipSpawned += unHideShip;
+            ShipSank += ShipSankEventHandler;
+            ShipSpawned += ShipSpawnedEventHandler;
         }
 
         public override void Update(GameTime gameTime)
@@ -96,7 +95,7 @@ namespace _2HourGame.Model
             if (!isActive && respawnTimeIsOver(gameTime))
             {
                 isActive = true;
-                ShipSpawned();
+                ShipSpawned(this, EventArgs.Empty);
             }
         }
 
@@ -138,11 +137,6 @@ namespace _2HourGame.Model
         {
             island.AddGold(this.Gold);
             this.Gold = 0;
-        }
-
-        public bool drawCannon()
-        {
-            return isActive;
         }
 
         public void FireCannon(GameTime now, CannonType cannonType) 
@@ -193,13 +187,24 @@ namespace _2HourGame.Model
 
             if (Health <= 0)
             {
-                ShipSank();
+                ShipSank(this, EventArgs.Empty);
                 Gold = 0;
             }
         }
 
         private void AddGold() {
             this.Gold++;
+        }
+
+        void ShipSankEventHandler(object sender, EventArgs e)
+        {
+            hideShip();
+        }
+
+
+        void ShipSpawnedEventHandler(object sender, EventArgs e)
+        {
+            unHideShip();
         }
 
         /// <summary>
