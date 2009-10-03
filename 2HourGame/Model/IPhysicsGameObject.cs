@@ -5,7 +5,7 @@ using System.Text;
 
 namespace _2HourGame.Model
 {
-    interface IPhysicsGameObject : IGameObject, ICollidable
+    interface IPhysicsGameObject : IGameObject//, ICollidable
     {
     }
 }

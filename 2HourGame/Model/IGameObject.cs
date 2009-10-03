@@ -13,7 +13,15 @@ namespace _2HourGame.Model
         /// Ocfurs when the GameObject is removed from the Game's collection of Components
         /// </summary>
         event EventHandler GameObjectRemoved;
+
+        /// <summary>
+        /// The GemObject's width
+        /// </summary>
         float Width { get; }
+
+        /// <summary>
+        /// The GameObject's height
+        /// </summary>
         float Height { get; }
     }
 }

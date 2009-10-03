@@ -17,8 +17,10 @@ namespace _2HourGame.Model
         }
     }
 
-    class Cannon<T> : GameComponent where T : PhysicsGameObject, ICannonMountable
+    class Cannon<T> : GameComponent where T : IPhysicsGameObject, ICannonMountable
     {
+        const float FiringSpeed = 65.0f;
+
         Game game;
         Timer firingTimer;
 
@@ -46,13 +48,33 @@ namespace _2HourGame.Model
         {
 			get
 			{
-	            if (cannonType == CannonType.LeftCannon)
-	                return new Vector2(parentObject.Body.GetBodyMatrix().Left.X, parentObject.Body.GetBodyMatrix().Left.Y) * (parentObject.XRadius - 8) + parentObject.Position;
-	            else if (cannonType == CannonType.RightCannon)
-	                return new Vector2(parentObject.Body.GetBodyMatrix().Right.X, parentObject.Body.GetBodyMatrix().Right.Y) * (parentObject.XRadius - 8) + parentObject.Position;
-	            else
-	                return new Vector2(0, -53) + parentObject.Position;
+                if (cannonType == CannonType.LeftCannon)
+                {
+                    return Left(parentObject) * ((parentObject.Width / 2.0f) - 8) + parentObject.Position;
+                }
+                else if (cannonType == CannonType.RightCannon)
+                {
+                    return Right(parentObject) * ((parentObject.Width / 2.0f) - 8) + parentObject.Position;
+                }
+                else
+                {
+                    return new Vector2(0, -53) + parentObject.Position;
+                }
 			}
+        }
+
+        Vector2 Left(IGameObject gameObject)
+        {
+            var rotationMatrix = Matrix.CreateRotationZ(parentObject.Rotation);
+            var left = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y);
+            return left;
+        }
+
+        Vector2 Right(IGameObject gameObject)
+        {
+            var rotationMatrix = Matrix.CreateRotationZ(parentObject.Rotation);
+            var right = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y);
+            return right;
         }
 
 
@@ -87,17 +109,17 @@ namespace _2HourGame.Model
         {
             // TODO, ADD FACING TO firingVector
 
-            //get the right vector
+            //get the direction the cannon is facing vector
             Vector2 firingVector = cannonType == CannonType.LeftCannon
-                ? new Vector2(parentObject.Body.GetBodyMatrix().Left.X, parentObject.Body.GetBodyMatrix().Left.Y)
-                : new Vector2(parentObject.Body.GetBodyMatrix().Right.X, parentObject.Body.GetBodyMatrix().Right.Y);
-            var thrust = firingVector * 65.0f;
+                ? Left(parentObject)
+                : Right(parentObject);
+            var thrust = firingVector * FiringSpeed;
 
             // take into account the ship's momentum
             thrust += parentObject.Velocity;
 
-            var cannonBallPostion = (firingVector * (parentObject.XRadius + 5)) + parentObject.Position;
-            var smokePosition = firingVector * (parentObject.XRadius - 2) + parentObject.Position;
+            var cannonBallPostion = (firingVector * ((parentObject.Width / 2.0f) + 5)) + parentObject.Position;
+            var smokePosition = firingVector * ((parentObject.Width / 2.0f) - 2) + parentObject.Position;
 
             ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).CannonSmokeEffect(smokePosition);
             var cannonBall = this.cannonBallManager.CreateCannonBall(cannonBallPostion, thrust);

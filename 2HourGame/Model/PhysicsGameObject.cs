@@ -27,19 +27,17 @@ namespace _2HourGame.Model
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float width, float height, float initialRotation)
-            : this(game, initialPosition, contentName, width, height) 
-        {
-            this.Body.Rotation = initialRotation;
-        }
-
         public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float width, float height)
+            : this(game, initialPosition, contentName, width, height, 0.0f) { }
+
+        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float width, float height, float initialRotation)
             : base(game, initialPosition, contentName, width, height)
         {
             this.physicsSimulator = ((IPhysicsSimulatorService)Game.Services.GetService(typeof(IPhysicsSimulatorService))).PhysicsSimulator;
 
             this.Body = BodyFactory.Instance.CreateEllipseBody(base.XRadius, base.YRadius, 1.0f);
             this.Body.Position = base.Position;
+            this.Body.Rotation = initialRotation;
             this.Body.LinearDragCoefficient = 0.95f;
             this.Body.RotationalDragCoefficient = 10.0f;
             physicsSimulator.Add(this.Body);
