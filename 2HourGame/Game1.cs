@@ -106,7 +106,7 @@ namespace _2HourGame {
                 this.Components.Add(v);
             }
 
-            var tower = new TowerFactory(this, cannonBallManager, spriteBatch).CreateTower(new Vector2(width / 2, height / 4), ships.Cast<IGameObject>().ToList<IGameObject>());
+            var tower = new TowerFactory(this, cannonBallManager, spriteBatch).CreateTower(new Vector2(width / 2, height / 2), ships.Cast<IGameObject>().ToList<IGameObject>());
 
             var map = new Map(allIslands);
 
