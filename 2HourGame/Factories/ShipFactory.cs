@@ -23,7 +23,7 @@ namespace _2HourGame.Factories
 
         public IShip CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
         {
-            IShip ship = new Ship(base.Game, shipLocation, CannonBallManager, "shipHull", shipAngle);
+            IShip ship = new Ship(base.Game, shipLocation, CannonBallManager, shipAngle);
             ShipView shipView = new ShipView(base.Game, color, "shipHull", Color.White, SpriteBatch, ship);
             base.Game.Components.Add(ship);
             base.Game.Components.Add(shipView);

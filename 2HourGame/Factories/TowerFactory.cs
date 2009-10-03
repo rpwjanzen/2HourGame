@@ -21,16 +21,17 @@ namespace _2HourGame.Factories
             this.cannonBallManager = cannonBallManager;
         }
 
-        public Tower getTower(Vector2 position, List<IGameObject> targets) 
+        public Tower CreateTower(Vector2 position, List<IGameObject> targets) 
         {
             Tower tower = new Tower(base.Game, position, targets, cannonBallManager);
-            GameObjectView towerView = new GameObjectView(base.Game, "tower", Color.White, base.SpriteBatch, tower,
-                ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house), new Vector2(-10, -110));
-            CannonView<Tower> cannonView = new CannonView<Tower>(base.Game, Color.White, SpriteBatch, tower.cannon);
+            TowerView towerView = new TowerView(Game, Color.White, SpriteBatch, tower);
+
+            //GameObjectView towerView = new GameObjectView(base.Game, "tower", Color.White, base.SpriteBatch, tower,
+                //ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house), new Vector2(-10, -110));
+
 
             Game.Components.Add(tower);
             Game.Components.Add(towerView);
-            Game.Components.Add(cannonView);
 
             return tower;
         }

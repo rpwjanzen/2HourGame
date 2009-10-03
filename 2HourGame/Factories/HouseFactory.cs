@@ -19,7 +19,7 @@ namespace _2HourGame.Factories
         public GameObject CreateHouse(Color houseColor, Vector2 houseLocation)
         {
             string contentName = "house";
-            GameObject house = new GameObject(base.Game, houseLocation, contentName, 50, 50);
+            GameObject house = new GameObject(base.Game, houseLocation, 50, 50);
             GameObjectView houseView = new GameObjectView(base.Game, contentName, houseColor, SpriteBatch, house, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house));
             base.Game.Components.Add(house);
             base.Game.Components.Add(houseView);

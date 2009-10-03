@@ -25,14 +25,15 @@ namespace _2HourGame.View
         Color color;
         Texture2D texture;
 
-        public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon<T> cannon) : base(game)
+        public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon<T> cannon)
+            : base(game)
         {
             this.color = color;
             this.spriteBatch = spriteBatch;
             this.cannon = cannon;
             cannon.CannonFired += HandleCannonFiredEvent;
-            
-            this.animatedTextureInfo = ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(cannonTextureName);
+
+            this.animatedTextureInfo = ((IEffectManager)Game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(cannonTextureName);
             this.texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTexture(cannonTextureName);
 
             this.zIndex = ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon);
@@ -42,49 +43,45 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            if (cannon.ShouldCannonDraw)
+            if (firstDraw)
             {
-                if (firstDraw)
-                {
-                    firstDraw = false;
-                    animationStartTime = gameTime.TotalGameTime;
-                }
-
-                // get the frame to draw
-                int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
-                    * animatedTextureInfo.FramesPerSecond));
-
-                int frame;
-                if (totalFrame >= animatedTextureInfo.TotalFrames)
-                    frame = 0;
-                else
-                    frame = totalFrame % animatedTextureInfo.TotalFrames;
-
-                int dx = (int)animatedTextureInfo.WindowSize.X * frame;
-                int width = (int)animatedTextureInfo.WindowSize.X;
-                int height = (int)animatedTextureInfo.WindowSize.Y;
-                Rectangle source = new Rectangle(dx, 0, width, height);
-                var cannonImageOffset = (cannon.cannonType == CannonType.LeftCannon ? animatedTextureInfo.GetRotatedOffset(cannon.Rotation) : -animatedTextureInfo.GetRotatedOffset(cannon.Rotation));
-                spriteBatch.Draw(
-                    texture,
-                    cannon.Position + cannonImageOffset,
-                    source,
-                    color,
-                    cannon.Rotation,
-                    animatedTextureInfo.WindowCenter,
-                    animatedTextureInfo.Scale,
-                    SpriteEffects.None,
-                    zIndex
-                );
+                firstDraw = false;
+                animationStartTime = gameTime.TotalGameTime;
             }
+
+            // get the frame to draw
+            int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
+                * this.animatedTextureInfo.FramesPerSecond));
+
+            int frame;
+            if (totalFrame >= animatedTextureInfo.TotalFrames)
+                frame = 0;
+            else
+                frame = totalFrame % animatedTextureInfo.TotalFrames;
+
+            int dx = (int)animatedTextureInfo.WindowSize.X * frame;
+            int width = (int)animatedTextureInfo.WindowSize.X;
+            int height = (int)animatedTextureInfo.WindowSize.Y;
+            Rectangle source = new Rectangle(dx, 0, width, height);
+            spriteBatch.Draw(
+                texture,
+                cannon.Position,
+                source,
+                color,
+                cannon.Rotation,
+                animatedTextureInfo.WindowCenter,
+                animatedTextureInfo.Scale,
+                SpriteEffects.None,
+                zIndex
+            );
         }
 
         void HandleCannonFiredEvent(object sender, CannonFiredEventArgs e)
         {
-            playAnimation(e.FiredTime);
+            StartAnimation(e.FiredTime);
         }
 
-        private void playAnimation(GameTime gameTime) 
+        private void StartAnimation(GameTime gameTime)
         {
             animationStartTime = gameTime.TotalGameTime;
         }

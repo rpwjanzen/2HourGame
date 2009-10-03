@@ -24,7 +24,7 @@ namespace _2HourGame.Model
         /// </summary>
         public event EventHandler GameObjectRemoved;
 
-        public GameObject(Game game, Vector2 position, string contentName, float width, float height)
+        public GameObject(Game game, Vector2 position, float width, float height)
             : base(game)
         {
             this.Position = position;

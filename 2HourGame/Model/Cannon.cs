@@ -17,76 +17,72 @@ namespace _2HourGame.Model
         }
     }
 
+    /// <summary>
+    /// A cannon that is mounted to another object. It's position is fixed relative to the attached to object.
+    /// </summary>
+    /// <typeparam name="T">The object the cannon is attached to</typeparam>
     class Cannon<T> : GameComponent where T : IGameObject, ICannonMountable
     {
-        const float FiringSpeed = 65.0f;
-
         Game game;
+
+        const float FiringSpeed = 65.0f;
+        
+        /// <summary>
+        /// Length of the cannon
+        /// </summary>
+        const float CannonBallOffset = 15.0f;
+
+        const float SmokeOffset = 13.0f;
         Timer firingTimer;
 
-        public CannonType cannonType { get; private set; }
-        public event EventHandler<CannonFiredEventArgs> CannonFired;
+        private T attachedToObject;
+        Vector2 positionalOffset;
+        float rotationalOffset;
 
-        CannonBallManager cannonBallManager { get; set; }
-        private T parentObject;
-        public float facingRadians { get; set; }
-        public bool ShouldCannonDraw { get { return parentObject.IsCannonVisible; } }
-        public float Rotation
-        {
-			get
-			{
-	            if (cannonType == CannonType.LeftCannon)
-	                return 2f * (float)Math.PI + parentObject.Rotation + facingRadians;
-	            else if (cannonType == CannonType.RightCannon)
-	                return (float)Math.PI + parentObject.Rotation + facingRadians;
-	            else
-	                return facingRadians;
-			}
-        }
+        CannonBallManager cannonBallManager;
+
+        public event EventHandler<CannonFiredEventArgs> CannonFired;
 
         public Vector2 Position
         {
-			get
-			{
-                if (cannonType == CannonType.LeftCannon)
-                {
-                    return Left(parentObject) * ((parentObject.Width / 2.0f) - 8) + parentObject.Position;
-                }
-                else if (cannonType == CannonType.RightCannon)
-                {
-                    return Right(parentObject) * ((parentObject.Width / 2.0f) - 8) + parentObject.Position;
-                }
-                else
-                {
-                    return new Vector2(0, -53) + parentObject.Position;
-                }
-			}
+            get
+            {
+                return RotatedOffset + attachedToObject.Position;
+            }
         }
 
-        Vector2 Left(IGameObject gameObject)
+        Vector2 RotatedOffset
         {
-            var rotationMatrix = Matrix.CreateRotationZ(parentObject.Rotation);
-            var left = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y);
-            return left;
+            get
+            {
+                var rotationMatrix = Matrix.CreateRotationZ(attachedToObject.Rotation);
+                return Vector2.Transform(positionalOffset, rotationMatrix);
+            }
         }
 
-        Vector2 Right(IGameObject gameObject)
+        public float LocalRotation { get; set; }
+        public float Rotation
         {
-            var rotationMatrix = Matrix.CreateRotationZ(parentObject.Rotation);
-            var right = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y);
-            return right;
+            get
+            {
+                return LocalRotation + rotationalOffset + attachedToObject.Rotation;
+            }
+            set
+            {
+                LocalRotation = value - rotationalOffset - attachedToObject.Rotation;
+            }
         }
 
-
-        public Cannon(Game game, T parentObject, CannonBallManager cannonBallManager, CannonType cannonType)
+        public Cannon(Game game, T parentObject, CannonBallManager cannonBallManager, Vector2 positionalOffset, float rotationalOffset)
             : base(game)
         {
-            this.cannonType = cannonType;
             this.game = game;
+            this.attachedToObject = parentObject;
             this.cannonBallManager = cannonBallManager;
-            this.parentObject = parentObject;
+            this.positionalOffset = positionalOffset;
+            this.rotationalOffset = rotationalOffset;
+
             firingTimer = new Timer(3f);
-            facingRadians = 0f;
         }
 
         /// <summary>
@@ -96,7 +92,7 @@ namespace _2HourGame.Model
         /// <returns>Vector2.Zero if the cannon was not fired, the firingvector otherwise.</returns>
         public Vector2 attemptFireCannon(GameTime now) 
         {
-            if(firingTimer.TimerHasElapsed(now) && parentObject.IsCannonVisible)
+            if(firingTimer.TimerHasElapsed(now) && attachedToObject.IsCannonVisible)
             {
                 firingTimer.resetTimer(now.TotalGameTime);
                 RaiseCannonFiredEvent(now);
@@ -107,19 +103,15 @@ namespace _2HourGame.Model
 
         private Vector2 fireCannon() 
         {
-            // TODO, ADD FACING TO firingVector
-
             //get the direction the cannon is facing vector
-            Vector2 firingVector = cannonType == CannonType.LeftCannon
-                ? Left(parentObject)
-                : Right(parentObject);
+            Vector2 firingVector = Vector2.Transform(-Vector2.UnitY, Matrix.CreateRotationZ(this.Rotation));
             var thrust = firingVector * FiringSpeed;
 
             // take into account the ship's momentum
-            thrust += parentObject.Velocity;
+            thrust += attachedToObject.Velocity;
 
-            var cannonBallPostion = (firingVector * ((parentObject.Width / 2.0f) + 5)) + parentObject.Position;
-            var smokePosition = firingVector * ((parentObject.Width / 2.0f) - 2) + parentObject.Position;
+            var cannonBallPostion = firingVector * CannonBallOffset + this.Position;
+            var smokePosition = firingVector * SmokeOffset + this.Position;
 
             ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).CannonSmokeEffect(smokePosition);
             var cannonBall = this.cannonBallManager.CreateCannonBall(cannonBallPostion, thrust);

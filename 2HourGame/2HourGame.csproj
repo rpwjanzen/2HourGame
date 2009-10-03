@@ -146,6 +146,7 @@
     <Compile Include="View\GameServices\TextureManager.cs" />
     <Compile Include="Model\WorldBorder.cs" />
     <Compile Include="View\ShipView.cs" />
+    <Compile Include="View\TowerView.cs" />
     <Compile Include="View\ZIndexManager.cs" />
   </ItemGroup>
   <ItemGroup>

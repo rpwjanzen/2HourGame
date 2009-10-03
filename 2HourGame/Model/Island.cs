@@ -17,8 +17,8 @@ namespace _2HourGame.Model
             get { return this.Gold > 0; }
         }
 
-        public Island(Game game, Vector2 position, int initialGold, string contentName)
-            : base(game, position, contentName, 128, 128)
+        public Island(Game game, Vector2 position, int initialGold)
+            : base(game, position, 128, 128)
         {
             this.Gold = initialGold;
             base.Body.IsStatic = true;

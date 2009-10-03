@@ -16,46 +16,63 @@ namespace _2HourGame.Model
         List<IGameObject> targets;
         float range;
 
+        // XXX: sometimes ship cannot lock on properly (moves lefe<->right continuously)
         const float maxCannonRotationDegrees = 1f;
+        const float toleranceInDegrees = 5.0f;
 
         // code so that we dont switch targets too often
         IGameObject currentTarget = null;
         Timer minTargetFocusTimer;
 
-        public Cannon<Tower> cannon { get; private set; }
+        public Cannon<Tower> Cannon { get; private set; }
 
         public Tower(Game game, Vector2 position, List<IGameObject> targets, CannonBallManager cannonBallManager) 
-            : base(game, position, "Tower", 0.5f, 0.5f)//, new Vector2(30, 30))
+            : base(game, position, 40, 100)
         {
             this.Velocity = Vector2.Zero;
             this.targets = targets;
             minTargetFocusTimer = new Timer(10f);
             range = 200;
-            cannon = new Cannon<Tower>(game, this, cannonBallManager, CannonType.FrontCannon);
-            game.Components.Add(cannon);
+            Cannon = new Cannon<Tower>(game, this, cannonBallManager, new Vector2(0, -35), 0.0f);
             base.Body.IsStatic = true;
         }
 
-        public bool IsCannonVisible { get { return true; } }
-
         public override void Update(GameTime gameTime)
         {
-            if (currentTarget == null || targetIsOutOfRange(currentTarget) || minTargetFocusTimer.TimerHasElapsed(gameTime))
+            if (currentTarget == null || targetIsOutOfRange(currentTarget))// || minTargetFocusTimer.TimerHasElapsed(gameTime))
             {
                 currentTarget = getClosestToSelf(getInRangeTargets(targets));
                 minTargetFocusTimer.resetTimer(gameTime.TotalGameTime);
             }
 
-            if (currentTarget != null) 
+            // XXX: Dirty hack!
+            var ship = currentTarget as Ship;
+
+            if (currentTarget != null && ship != null && ship.IsAlive) 
             {
                 // steer towards the target and potentially fire!
-                cannon.facingRadians = AIHelpers.GetFacingTowardsPointInRadians(currentTarget.Position, this.Position, cannon.facingRadians, maxCannonRotationDegrees);
+                var direction = AIHelpers.GetRotationToPointInRadians(currentTarget.Position, Cannon.Position, Cannon.Rotation, MathHelper.ToRadians(toleranceInDegrees));
+                if(direction == AIHelpers.RotationDirection.Left) {
+                    RotateCannonLeft();
+                }else if(direction == AIHelpers.RotationDirection.Right) {
+                    RotateCannonRight();
+                } else if(direction == AIHelpers.RotationDirection.None) {
+                    Cannon.attemptFireCannon(gameTime);
+                }
             }
 
             base.Update(gameTime);
         }
 
+        void RotateCannonLeft()
+        {
+            Cannon.LocalRotation -= MathHelper.ToRadians(maxCannonRotationDegrees);
+        }
 
+        void RotateCannonRight()
+        {
+            Cannon.LocalRotation += MathHelper.ToRadians(maxCannonRotationDegrees);
+        }
 
         private List<IGameObject> getInRangeTargets(List<IGameObject> allTargets) 
         {
@@ -100,5 +117,14 @@ namespace _2HourGame.Model
         {
             return Vector2.Distance(first.Position, second.Position);
         }
+
+        #region ICannonMountable Members
+
+        public bool IsCannonVisible
+        {
+            get { return true; }
+        }
+
+        #endregion
     }
 }

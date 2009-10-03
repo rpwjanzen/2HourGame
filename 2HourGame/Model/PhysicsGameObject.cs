@@ -27,11 +27,11 @@ namespace _2HourGame.Model
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float width, float height)
-            : this(game, initialPosition, contentName, width, height, 0.0f) { }
+        public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height)
+            : this(game, initialPosition, width, height, 0.0f) { }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, string contentName, float width, float height, float initialRotation)
-            : base(game, initialPosition, contentName, width, height)
+        public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height, float initialRotation)
+            : base(game, initialPosition, width, height)
         {
             this.physicsSimulator = ((IPhysicsSimulatorService)Game.Services.GetService(typeof(IPhysicsSimulatorService))).PhysicsSimulator;
 

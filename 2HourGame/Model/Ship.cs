@@ -17,6 +17,7 @@ namespace _2HourGame.Model
 {
     class Ship : PhysicsGameObject, IShip
     {
+        const float CannonBuffer = -8.0f;
         public event EventHandler ShipSank;
         public event EventHandler ShipSpawned;
 
@@ -59,8 +60,8 @@ namespace _2HourGame.Model
         }
         public bool IsCannonVisible { get { return IsAlive; } }
 
-        public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, string contentName, float rotation)
-            : base(game, position, contentName, 34, 60, rotation)
+        public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, float rotation)
+            : base(game, position, 34, 60, rotation)
         {
             this.GoldCapacity = 3;
             this.Gold = 0;
@@ -72,14 +73,22 @@ namespace _2HourGame.Model
 
             Geometry.OnCollision += ShipCollision;
             this.Body.RotationalDragCoefficient = 2500.0f;
-            base.Rotation = rotation;
             this.cannonBallManager = cannonBallManager;
 
-            LeftCannon = new Cannon<IShip>(game, this, cannonBallManager, CannonType.LeftCannon);
-            RightCannon = new Cannon<IShip>(game, this, cannonBallManager, CannonType.RightCannon);
+            var rotationMatrix = Matrix.Identity;
+
+            var leftCannonOffset = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y) * ((this.Width / 2.0f) + CannonBuffer);
+            var leftCannonRotation = MathHelper.ToRadians(-90);
+            LeftCannon = new Cannon<IShip>(game, this, cannonBallManager, leftCannonOffset, leftCannonRotation);
+
+            var rightCannonOffset = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y) * ((this.Width / 2.0f) + CannonBuffer);
+            var rightCannonRotation = MathHelper.ToRadians(90);
+            RightCannon = new Cannon<IShip>(game, this, cannonBallManager, rightCannonOffset, rightCannonRotation);
 
             ShipSank += ShipSankEventHandler;
             ShipSpawned += ShipSpawnedEventHandler;
+
+            base.Rotation = rotation;
         }
 
         public override void Update(GameTime gameTime)

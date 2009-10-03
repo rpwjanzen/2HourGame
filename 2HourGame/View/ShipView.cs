@@ -19,6 +19,10 @@ namespace _2HourGame.View
         HealthBarView healthBarView;
         IShip ship;
 
+        CannonView<IShip> LeftCannonView;
+        CannonView<IShip> RightCannonView;
+        
+
         /// <summary>
         /// 
         /// </summary>
@@ -37,15 +41,14 @@ namespace _2HourGame.View
 
             ship.ShipSank += this.ShipSankEventHandler;
             healthBarView = new HealthBarView(base.Game, spriteBatch, ship);
+            LeftCannonView = new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.LeftCannon);
+            RightCannonView = new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.RightCannon);
         }
 
         protected override void LoadContent()
         {            
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
-
-            Game.Components.Add(new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.LeftCannon));
-            Game.Components.Add(new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.RightCannon));
 
             healthBarView.LoadContent();
 
@@ -55,11 +58,15 @@ namespace _2HourGame.View
         public override void Draw(GameTime gameTime)
         {
             if (ship.IsAlive)
-            {
-                base.Draw(gameTime);
+            {                
                 base.SpriteBatch.Draw(gunwale, GameObject.Position, null, shipOutlineColor, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
                 base.SpriteBatch.Draw(rigging, GameObject.Position, null, Color.White, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
+
+                LeftCannonView.Draw(gameTime);
+                RightCannonView.Draw(gameTime);
                 healthBarView.Draw(gameTime);
+
+                base.Draw(gameTime);
             }
         }
 

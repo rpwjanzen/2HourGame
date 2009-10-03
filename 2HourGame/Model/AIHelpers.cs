@@ -8,41 +8,47 @@ namespace _2HourGame.Model
 {
     static class AIHelpers
     {
-        public static float GetFacingTowardsPointInRadians(Vector2 point, Vector2 selfLocation, float initialFacing, float maxRotationDegrees)
+        public enum RotationDirection { None, Left, Right }
+
+        public static RotationDirection GetRotationToPointInRadians(Vector2 targetPosition, Vector2 myPosition, float initialFacingRadians, float toleranceInRadians)
         {
-            var delta = selfLocation - point;
+            var delta = myPosition - targetPosition;
             // my rotation should match this angle (-180.0f - 180.0f)
-            var desiredRotation = MathHelper.ToDegrees((float)Math.Atan2(delta.Y, delta.X));
+            var desiredRotationInDegrees = MathHelper.ToDegrees((float)Math.Atan2(delta.Y, delta.X));
 
-            // drawing is off by 90.0
-            //desiredRotation -= 90.0f;
-            if (desiredRotation > 180.0f)
-                desiredRotation -= 360.0f;
-            else if (desiredRotation < -180.0f)
-                desiredRotation += 360.0f;
+            // something is wrong in here, so we need to -90 to get it to aim properly
+            desiredRotationInDegrees -= 90.0f;
+            if (desiredRotationInDegrees > 180.0f)
+                desiredRotationInDegrees -= 360.0f;
+            else if (desiredRotationInDegrees < -180.0f)
+                desiredRotationInDegrees += 360.0f;
 
-            var myRotation = MathHelper.ToDegrees(initialFacing);
+            var myRotationInDegrees = MathHelper.ToDegrees(initialFacingRadians);
             // body rotations are 0 - 360.0f
-            myRotation -= 180.0f;
+            myRotationInDegrees -= 180.0f;
 
-            var angleDifference = (myRotation - desiredRotation);
+            var angleDifference = (myRotationInDegrees - desiredRotationInDegrees);
 
-            if (Math.Abs(angleDifference) <= maxRotationDegrees)
-                return desiredRotation;
-
-            float changeInRotation;
-            if (angleDifference > 0)
-                changeInRotation = maxRotationDegrees;
-            else
-                changeInRotation = -maxRotationDegrees;
-
-            float resultInRadians = initialFacing + MathHelper.ToRadians(changeInRotation);
-            if (resultInRadians < 0)
-                resultInRadians += 2f * (float)Math.PI;
-            else if (resultInRadians > Math.PI)
-                resultInRadians -= 2f * (float)Math.PI;
-
-            return resultInRadians;
+            var toleranceInDegrees = MathHelper.ToDegrees(toleranceInRadians);
+            if (angleDifference > (180.0f - toleranceInDegrees))
+            {
+                return RotationDirection.Left;
+            }
+            else if (angleDifference > (0 + toleranceInDegrees))
+            {
+                return RotationDirection.Right;
+            }
+            else if (angleDifference > (-180.0f - -toleranceInDegrees))
+            {
+                return RotationDirection.Left;
+            }
+            else if (angleDifference < (-180.0f + -toleranceInDegrees))
+            {
+                return RotationDirection.Right;
+            }
+            else {
+                return RotationDirection.None;
+            }
         }
     }
 }

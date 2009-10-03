@@ -30,7 +30,7 @@ namespace _2HourGame
             textureInfos.Add("goldGetAnimation", new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, 1, new Vector2(0, -50)));
             textureInfos.Add("splashAnimation", new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, 1, new Vector2(0, -7)));
             textureInfos.Add("cannonSmokeAnimation", new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, 1, new Vector2(0, 0)));
-            textureInfos.Add("cannonAnimation", new AnimatedTextureInfo(new Vector2(27, 12), 8, 4, 0.6f, 1, new Vector2(0, 4)));
+            textureInfos.Add("cannonAnimation", new AnimatedTextureInfo(new Vector2(12, 27), 8, 4, 0.6f, 1, new Vector2(4, 0)));
             textureInfos.Add("goldLoseAnimation", new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, 1, new Vector2(0, 20)));
             textureInfos.Add("boatHitByCannonAnimation", new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, 1, new Vector2(0, 0)));
             textureInfos.Add("shipSinking", new AnimatedTextureInfo(new Vector2(100, 100), 1, 0.3, 0.3f, 1, new Vector2(0, 0)));
@@ -111,7 +111,7 @@ namespace _2HourGame
 
         private void addAnimationView(Vector2 position, string contentName, AnimatedTextureInfo animTextInfo, Color color, float zIndex)
         {
-            GameObject animationObject = new GameObject(game, position, contentName, animTextInfo.WindowSize.X, animTextInfo.WindowSize.Y);
+            GameObject animationObject = new GameObject(game, position, animTextInfo.WindowSize.X, animTextInfo.WindowSize.Y);
             game.Components.Add(animationObject);
 
             var animationView = new AnimationView(game, contentName, color, spriteBatch, animTextInfo, animationObject, zIndex);
