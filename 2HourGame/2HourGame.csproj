@@ -99,10 +99,12 @@
     <Compile Include="Model\ICannonMountable.cs" />
     <Compile Include="Model\ICollidable.cs" />
     <Compile Include="Model\IGameObject.cs" />
+    <Compile Include="Model\IHealth.cs" />
     <Compile Include="Model\IOrigin.cs" />
     <Compile Include="Model\IPhysicsSimulatorService.cs" />
     <Compile Include="Model\IPositionable.cs" />
     <Compile Include="Model\IRotatable.cs" />
+    <Compile Include="Model\IShip.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Timer.cs" />
@@ -139,7 +141,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Model\ScreenRelativeMoveBehavior.cs" />
     <Compile Include="Model\Ship.cs" />
     <Compile Include="Controller\ShipController.cs" />
     <Compile Include="View\GameServices\TextureManager.cs" />

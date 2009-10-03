@@ -13,18 +13,18 @@ namespace _2HourGame.Model
         // to satisfy ICannonMountable
         public Vector2 Velocity { get; private set; }
 
-        List<GameObject> targets;
+        List<IGameObject> targets;
         float range;
 
         const float maxCannonRotationDegrees = 1f;
 
         // code so that we dont switch targets too often
-        GameObject currentTarget = null;
+        IGameObject currentTarget = null;
         Timer minTargetFocusTimer;
 
         public Cannon<Tower> cannon { get; private set; }
 
-        public Tower(Game game, Vector2 position, List<GameObject> targets, CannonBallManager cannonBallManager) 
+        public Tower(Game game, Vector2 position, List<IGameObject> targets, CannonBallManager cannonBallManager) 
             : base(game, position, "Tower", 0.5f, 0.5f)//, new Vector2(30, 30))
         {
             this.Velocity = Vector2.Zero;
@@ -57,11 +57,11 @@ namespace _2HourGame.Model
 
 
 
-        private List<GameObject> getInRangeTargets(List<GameObject> allTargets) 
+        private List<IGameObject> getInRangeTargets(List<IGameObject> allTargets) 
         {
-            List<GameObject> inRangeTargets = new List<GameObject>();
+            List<IGameObject> inRangeTargets = new List<IGameObject>();
 
-            foreach (GameObject g in allTargets) 
+            foreach (IGameObject g in allTargets) 
             {
                 if (getDistanceBetween(g, this) <= range)
                     inRangeTargets.Add(g);
@@ -70,14 +70,14 @@ namespace _2HourGame.Model
             return inRangeTargets;
         }
 
-        private GameObject getClosestToSelf(List<GameObject> inRangeTargets) 
+        private IGameObject getClosestToSelf(List<IGameObject> inRangeTargets) 
         {
-            GameObject closest = null;
+            IGameObject closest = null;
             float closestDistance = float.MaxValue;
 
             float distanceBetween;
 
-            foreach (GameObject t in inRangeTargets) 
+            foreach (IGameObject t in inRangeTargets) 
             {
                 distanceBetween = getDistanceBetween(t, this);
 
@@ -91,14 +91,14 @@ namespace _2HourGame.Model
             return closest;
         }
 
-        private bool targetIsOutOfRange(GameObject target) 
+        private bool targetIsOutOfRange(IGameObject target) 
         {
             return getDistanceBetween(this, target) > range;
         }
 
-        private float getDistanceBetween(GameObject first, GameObject second) 
+        private float getDistanceBetween(IGameObject first, IGameObject second) 
         {
-            return (first.Position - second.Position).Length();
+            return Vector2.Distance(first.Position, second.Position);
         }
     }
 }

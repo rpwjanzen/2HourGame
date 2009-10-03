@@ -12,17 +12,14 @@ namespace _2HourGame.Model
 {
     class Island : PhysicsGameObject
     {
-		private GameObject islandBuilding;
-
         public int Gold { get; private set; }
         public bool HasGold {
             get { return this.Gold > 0; }
         }
 
-        public Island(Game game, Vector2 position, int initialGold, GameObject islandBuilding, string contentName)
+        public Island(Game game, Vector2 position, int initialGold, string contentName)
             : base(game, position, contentName, 128, 128)
         {
-			this.islandBuilding = islandBuilding;
             this.Gold = initialGold;
             base.Body.IsStatic = true;
         }

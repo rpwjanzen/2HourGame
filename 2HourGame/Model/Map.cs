@@ -21,7 +21,7 @@ namespace _2HourGame.Model
         /// <param name="ship"></param>
         /// <param name="range">Minimum range to look for islands.</param>
         /// <returns>The closest island if one exists, otherwise null.</returns>
-        public Island GetClosestInRangeIsland(Ship ship, float range)
+        public Island GetClosestInRangeIsland(IShip ship, float range)
         {
             Island closestIsland = ClosestIslandToPoint(ship.Position);
 

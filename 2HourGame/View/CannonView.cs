@@ -12,7 +12,7 @@ namespace _2HourGame.View
 {
     public enum CannonType { LeftCannon, RightCannon, FrontCannon }
 
-    class CannonView<T> : DrawableGameComponent where T : PhysicsGameObject, ICannonMountable
+    class CannonView<T> : DrawableGameComponent where T : IGameObject, ICannonMountable
     {
         private const string cannonTextureName = "cannonAnimation";
         private Cannon<T> cannon;

@@ -21,7 +21,7 @@ namespace _2HourGame.Factories
             this.cannonBallManager = cannonBallManager;
         }
 
-        public Tower getTower(Vector2 position, List<GameObject> targets) 
+        public Tower getTower(Vector2 position, List<IGameObject> targets) 
         {
             Tower tower = new Tower(base.Game, position, targets, cannonBallManager);
             GameObjectView towerView = new GameObjectView(base.Game, "tower", Color.White, base.SpriteBatch, tower,

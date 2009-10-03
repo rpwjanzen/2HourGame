@@ -68,10 +68,10 @@ namespace _2HourGame {
             var islandBuildings = new HouseFactory(this, spriteBatch).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
 
             IslandFactory islandFactory = new IslandFactory(this, spriteBatch);
-            var playerIslands = islandFactory.CreatePlayerIslands(islandPositions, islandBuildings);
+            var playerIslands = islandFactory.CreatePlayerIslands(islandPositions);
 
             var goldIslands = new List<Island>();
-            goldIslands.Add(islandFactory.CreateIsland(new Vector2(width / 2, height / 2), null, 16));
+            goldIslands.Add(islandFactory.CreateIsland(new Vector2(width / 2, height / 2), 16));
 
             List<Island> allIslands = new List<Island>(playerIslands.ToArray());
             allIslands.AddRange(goldIslands);
@@ -92,7 +92,8 @@ namespace _2HourGame {
                 (float)(Math.PI * 1.75)
             }.ToList();
 
-            var ships = new ShipFactory(this, spriteBatch, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
+            var ships = new ShipFactory(this, spriteBatch, cannonBallManager)
+                .CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
 
             var shipGoldViewFactory = new ShipGoldViewFactory(this, spriteBatch, 100);
             var playerGoldViews = ships.Zip(new[] {
@@ -105,7 +106,7 @@ namespace _2HourGame {
                 this.Components.Add(v);
             }
 
-            var tower = new TowerFactory(this, cannonBallManager, spriteBatch).getTower(new Vector2(width / 2, height / 2), ships.Cast<GameObject>().ToList<GameObject>());
+            var tower = new TowerFactory(this, cannonBallManager, spriteBatch).getTower(new Vector2(width / 2, height / 2), ships.Cast<IGameObject>().ToList<IGameObject>());
 
             var map = new Map(allIslands);
 

@@ -17,7 +17,7 @@ namespace _2HourGame.View
         private Texture2D rigging;
 
         HealthBarView healthBarView;
-        Ship ship;
+        IShip ship;
 
         /// <summary>
         /// 
@@ -29,7 +29,7 @@ namespace _2HourGame.View
         /// <param name="color"></param>
         /// <param name="spriteBatch"></param>
         /// <param name="gameObject">The game object that this is a view for.  Must be of type Ship.</param>
-        public ShipView(Game game, Color shipOutlineColor, string contentName, Color color, SpriteBatch spriteBatch, Ship ship)
+        public ShipView(Game game, Color shipOutlineColor, string contentName, Color color, SpriteBatch spriteBatch, IShip ship)
             : base(game, contentName, color, spriteBatch, ship, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull)) 
         {
             this.shipOutlineColor = shipOutlineColor;
@@ -44,8 +44,8 @@ namespace _2HourGame.View
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
 
-            Game.Components.Add(new CannonView<Ship>(Game, Color.White, SpriteBatch, ship.leftCannon));
-            Game.Components.Add(new CannonView<Ship>(Game, Color.White, SpriteBatch, ship.rightCannon));
+            Game.Components.Add(new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.LeftCannon));
+            Game.Components.Add(new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.RightCannon));
 
             healthBarView.LoadContent();
 
@@ -54,7 +54,7 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            if (((Ship)GameObject).isActive)
+            if (ship.IsAlive)
             {
                 base.Draw(gameTime);
                 base.SpriteBatch.Draw(gunwale, GameObject.Position, null, shipOutlineColor, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));

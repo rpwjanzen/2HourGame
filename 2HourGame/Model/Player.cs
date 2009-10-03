@@ -13,7 +13,7 @@ namespace _2HourGame.Model
     {
         PlayerIndex playerIndex;
 
-        public Ship ship { get; private set; }
+        public IShip ship { get; private set; }
         public Island ClosestInRangeIsland
         {
             get { return map.GetClosestInRangeIsland(ship, inRangeIslandMinimumRange); }
@@ -45,7 +45,7 @@ namespace _2HourGame.Model
             get { return homeIsland.Gold + ship.Gold; }
         }
 
-        public Player(PlayerIndex playerIndex, Ship ship, Island homeIsland, Map map)
+        public Player(PlayerIndex playerIndex, IShip ship, Island homeIsland, Map map)
         {
             this.playerIndex = playerIndex;
             this.ship = ship;
@@ -59,9 +59,9 @@ namespace _2HourGame.Model
             ship.FireCannon(gameTime, cannonType);
         }
 
-        public void AttemptPickupGold(GameTime gameTime)
+        public void AttemptPickupGold()
         {
-            if (!ship.isActive)
+            if (!ship.IsAlive)
             {
                 return;
             }
@@ -85,7 +85,7 @@ namespace _2HourGame.Model
 
             if (numGoldButtonPresses >= numGoldButtonPressesRequired)
             {
-                ship.LoadGoldFromIsland(ClosestInRangeIsland, gameTime);
+                ship.LoadGoldFromIsland(ClosestInRangeIsland);
                 numGoldButtonPresses = 0;
             }
             else
@@ -96,7 +96,7 @@ namespace _2HourGame.Model
 
         public void AttemptRepair()
         {
-            if (!ship.isActive)
+            if (!ship.IsAlive)
             {
                 return;
             }
