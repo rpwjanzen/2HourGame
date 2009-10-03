@@ -15,11 +15,11 @@ using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
-    class PhysicsGameObject : GameObject, IPhysicsGameObject
+    class PhysicsGameObject : GameObject
     {
         PhysicsSimulator physicsSimulator;
-        public Geom Geometry { get; private set; }
-        public Body Body { get; private set; }
+        protected Geom Geometry { get; set; }
+        protected Body Body { get; set; }
         public float Speed {
             get { return this.Body.LinearVelocity.Length(); }
         }

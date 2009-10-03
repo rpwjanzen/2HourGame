@@ -17,7 +17,7 @@ namespace _2HourGame.Model
         }
     }
 
-    class Cannon<T> : GameComponent where T : IPhysicsGameObject, ICannonMountable
+    class Cannon<T> : GameComponent where T : IGameObject, ICannonMountable
     {
         const float FiringSpeed = 65.0f;
 

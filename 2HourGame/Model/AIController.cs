@@ -45,7 +45,7 @@ namespace _2HourGame.Model {
                 desiredRotation += 360.0f;
             } else { }
 
-            var myRotation = MathHelper.ToDegrees(this.ControlledShip.Body.Rotation);
+            var myRotation = MathHelper.ToDegrees(this.ControlledShip.Rotation);
             // body rotations are 0 - 360.0f
             myRotation -= 180.0f;
 
