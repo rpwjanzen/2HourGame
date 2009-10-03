@@ -13,11 +13,11 @@ namespace _2HourGame.View
     class HealthBarView : DrawableGameComponent
     {
         SpriteBatch spriteBatch;
-        Ship ship;
+        IShip ship;
         Vector2 offset;
         ProgressBar progressBar;
 
-        public HealthBarView(Game game, SpriteBatch spriteBatch, Ship ship)
+        public HealthBarView(Game game, SpriteBatch spriteBatch, IShip ship)
             :base(game)
         {
             this.ship = ship;

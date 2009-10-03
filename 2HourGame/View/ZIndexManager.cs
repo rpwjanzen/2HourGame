@@ -23,6 +23,7 @@ namespace _2HourGame.View
             cannonSmokeAnimation,
             shipRigging,
             cannon,
+            tower,
             goldLoseAnimation,
             boatHitByCannonAnimation,
             healthBar,
@@ -31,7 +32,6 @@ namespace _2HourGame.View
             floatingCrate,
             shipSinking,
             islandGoldView,
-            tower,
             house,
             island,
             splashAnimation

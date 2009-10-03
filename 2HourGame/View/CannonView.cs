@@ -12,24 +12,37 @@ namespace _2HourGame.View
 {
     public enum CannonType { LeftCannon, RightCannon, FrontCannon }
 
-    class CannonView<T> : AnimationView where T : PhysicsGameObject, ICannonMountable
+    class CannonView<T> : DrawableGameComponent where T : IGameObject, ICannonMountable
     {
         private const string cannonTextureName = "cannonAnimation";
-        private readonly Vector2 cannonOrigin;
         private Cannon<T> cannon;
 
-        public CannonView(Game game, Color color, SpriteBatch spriteBatch, CannonType cannonType, Cannon<T> cannon)
-            : base(game, cannonTextureName, Color.White, spriteBatch, ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(cannonTextureName), null, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon))
-        {
-            this.cannon = cannon;
-            cannonOrigin = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTextureOrigin(cannonTextureName);
+        bool firstDraw;
+        TimeSpan animationStartTime;
+        AnimatedTextureInfo animatedTextureInfo;
+        float zIndex;
+        SpriteBatch spriteBatch;
+        Color color;
+        Texture2D texture;
 
-            cannon.CannonFired += playAnimation;
+        public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon<T> cannon) : base(game)
+        {
+            this.color = color;
+            this.spriteBatch = spriteBatch;
+            this.cannon = cannon;
+            cannon.CannonFired += HandleCannonFiredEvent;
+            
+            this.animatedTextureInfo = ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(cannonTextureName);
+            this.texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTexture(cannonTextureName);
+
+            this.zIndex = ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon);
+
+            this.firstDraw = true;
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if (cannon.drawCannon())
+            if (cannon.ShouldCannonDraw)
             {
                 if (firstDraw)
                 {
@@ -39,27 +52,36 @@ namespace _2HourGame.View
 
                 // get the frame to draw
                 int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
-                    * animatedTextureInfo.framesPerSecond));
+                    * animatedTextureInfo.FramesPerSecond));
 
                 int frame;
-                if (totalFrame >= animatedTextureInfo.totalFrames)
+                if (totalFrame >= animatedTextureInfo.TotalFrames)
                     frame = 0;
                 else
-                    frame = totalFrame % animatedTextureInfo.totalFrames;
+                    frame = totalFrame % animatedTextureInfo.TotalFrames;
 
-                Rectangle source = new Rectangle((int)animatedTextureInfo.imageSize.X * frame, 0, (int)animatedTextureInfo.imageSize.X, (int)animatedTextureInfo.imageSize.Y);
+                int dx = (int)animatedTextureInfo.WindowSize.X * frame;
+                int width = (int)animatedTextureInfo.WindowSize.X;
+                int height = (int)animatedTextureInfo.WindowSize.Y;
+                Rectangle source = new Rectangle(dx, 0, width, height);
+                var cannonImageOffset = (cannon.cannonType == CannonType.LeftCannon ? animatedTextureInfo.GetRotatedOffset(cannon.Rotation) : -animatedTextureInfo.GetRotatedOffset(cannon.Rotation));
                 spriteBatch.Draw(
                     texture,
-                    cannon.getCannonPosition() + (cannon.cannonType == CannonType.LeftCannon ? animatedTextureInfo.drawOffset(cannon.getCannonRotation()) : -animatedTextureInfo.drawOffset(cannon.getCannonRotation())),
+                    cannon.Position + cannonImageOffset,
                     source,
-                    Color,
-                    cannon.getCannonRotation(),
-                    cannonOrigin,
-                    animatedTextureInfo.scale,
+                    color,
+                    cannon.Rotation,
+                    animatedTextureInfo.WindowCenter,
+                    animatedTextureInfo.Scale,
                     SpriteEffects.None,
-                    ZIndex
+                    zIndex
                 );
             }
+        }
+
+        void HandleCannonFiredEvent(object sender, CannonFiredEventArgs e)
+        {
+            playAnimation(e.FiredTime);
         }
 
         private void playAnimation(GameTime gameTime) 

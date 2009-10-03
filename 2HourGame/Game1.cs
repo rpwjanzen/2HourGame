@@ -17,6 +17,7 @@ using _2HourGame.View;
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
 using _2HourGame.Controller;
+using _2HourGame.Model.GameServices;
 
 namespace _2HourGame
 {
@@ -27,7 +28,7 @@ namespace _2HourGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        List<Ship> ships;
+        List<IShip> ships;
         Viewport[] viewports;
         Viewport screenViewport;
         List<ShipGoldView> shipGoldViews;
@@ -136,11 +137,12 @@ namespace _2HourGame
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
             TextureManager textureManager = new TextureManager(this);
+            CollisionCategoryManager collisionCategoryManager = new CollisionCategoryManager(this); 
 
-            CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch, physicsSimulator);
+            CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch);
             this.Components.Add(cannonBallManager);
 
-            WorldBorder.AddWorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
+            WorldBorder.AddWorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator, this);
 
             var playerColors = new[] {
                 Color.Blue,
@@ -160,11 +162,11 @@ namespace _2HourGame
             var islandBuildingOffset = new Vector2(20, 20);
             var islandBuildings = new HouseFactory(this, spriteBatch).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
 
-            IslandFactory islandFactory = new IslandFactory(this, spriteBatch, physicsSimulator);
-            var playerIslands = islandFactory.CreatePlayerIslands(islandPositions, islandBuildings);
+            IslandFactory islandFactory = new IslandFactory(this, spriteBatch);
+            var playerIslands = islandFactory.CreatePlayerIslands(islandPositions);
 
             var goldIslands = new List<Island>();
-            goldIslands.Add(islandFactory.CreateIsland(new Vector2(width / 2, height / 2), null, 16));
+            goldIslands.Add(islandFactory.CreateIsland(new Vector2(width / 2, height / 2), 16));
 
             List<Island> allIslands = new List<Island>(playerIslands.ToArray());
             allIslands.AddRange(goldIslands);
@@ -185,7 +187,9 @@ namespace _2HourGame
                 (float)(Math.PI * 1.75)
             }.ToList();
 
-            ships = new ShipFactory(this, spriteBatch, physicsSimulator, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
+            ships = new ShipFactory(this, spriteBatch, cannonBallManager).CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
+
+            var tower = new TowerFactory(this, cannonBallManager, spriteBatch).getTower(new Vector2(width / 2, height / 2), ships.Cast<IGameObject>().ToList<IGameObject>());
 
             var map = new Map(allIslands);
 

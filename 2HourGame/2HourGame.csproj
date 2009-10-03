@@ -86,16 +86,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AIController.cs" />
+    <Compile Include="Factories\TowerFactory.cs" />
+    <Compile Include="Model\AIController.cs" />
     <Compile Include="Controller\ShipControlBehaviours.cs" />
     <Compile Include="Factories\PlayerFactory.cs" />
     <Compile Include="Factories\ShipActionViewFactory.cs" />
     <Compile Include="Model\AIHelpers.cs" />
     <Compile Include="Model\Cannon.cs" />
+    <Compile Include="Model\GameServices\CollisionCategoryManager.cs" />
     <Compile Include="Model\GameComponentCollectionExtensions.cs" />
+    <Compile Include="Model\GameServices\ICollisionCategoryManager.cs" />
     <Compile Include="Model\ICannonMountable.cs" />
+    <Compile Include="Model\ICollidable.cs" />
+    <Compile Include="Model\IGameObject.cs" />
+    <Compile Include="Model\IHealth.cs" />
+    <Compile Include="Model\IOrigin.cs" />
+    <Compile Include="Model\IPhysicsSimulatorService.cs" />
+    <Compile Include="Model\IPositionable.cs" />
+    <Compile Include="Model\IRotatable.cs" />
+    <Compile Include="Model\IShip.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\Timer.cs" />
     <Compile Include="Model\Tower.cs" />
     <Compile Include="View\AnimationView.cs" />
     <Compile Include="View\AnimatedTextureInfo.cs" />
@@ -130,7 +142,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Model\ScreenRelativeMoveBehavior.cs" />
     <Compile Include="Model\Ship.cs" />
     <Compile Include="Controller\ShipController.cs" />
     <Compile Include="View\GameServices\TextureManager.cs" />

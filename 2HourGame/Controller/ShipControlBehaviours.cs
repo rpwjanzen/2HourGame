@@ -44,7 +44,7 @@ namespace _2HourGame.Controller
             var pickupGoldButton = actionKeys[Action.PickupGold];
             if (gs.IsButtonDown(pickupGoldButton) && previousGamePadState.IsButtonUp(pickupGoldButton))
             {
-                player.AttemptPickupGold(gameTime);
+                player.AttemptPickupGold();
             }
         }
 

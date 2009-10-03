@@ -24,7 +24,7 @@ namespace _2HourGame.View
 
         float scale;
 
-        Ship ship;
+        IShip ship;
 
         // where to display the gold
         List<Vector2> GoldPositions { get; set; }
@@ -32,7 +32,7 @@ namespace _2HourGame.View
         // where is this ships goldview
         GoldViewPosition DisplayCorner { get; set; }
 
-        public ShipGoldView(Game game, Ship ship, GoldViewPosition position , SpriteBatch spriteBatch, float displayWidth)
+        public ShipGoldView(Game game, IShip ship, GoldViewPosition position , SpriteBatch spriteBatch, float displayWidth)
             : base(game)
         {
             this.ship = ship;

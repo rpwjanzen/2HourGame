@@ -13,22 +13,21 @@ namespace _2HourGame.Factories
 
         CannonBallManager CannonBallManager { get; set; }
 
-        public ShipFactory(Game game, SpriteBatch spriteBatch, PhysicsSimulator physicsSimulator, CannonBallManager cannonBallManager) : base(game, spriteBatch, physicsSimulator) {
+        public ShipFactory(Game game, SpriteBatch spriteBatch, CannonBallManager cannonBallManager) : base(game, spriteBatch) {
             this.CannonBallManager = cannonBallManager;
         }
 
-        public List<Ship> CreatePlayerShips(List<Color> colors, List<Vector2> locations, List<Island> islands, List<float> shipAngles) {
+        public List<IShip> CreatePlayerShips(List<Color> colors, List<Vector2> locations, List<Island> islands, List<float> shipAngles) {
             return colors.Zip4(locations, islands, shipAngles, (c, l, i, a) => CreatePlayerShip(c, l, i, a)).ToList();
         }
 
-        public Ship CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
+        public IShip CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
         {
-            Ship ship = new Ship(base.Game, shipLocation, base.PhysicsSimulator, CannonBallManager, "shipHull", shipAngle);
+            IShip ship = new Ship(base.Game, shipLocation, CannonBallManager, "shipHull", shipAngle);
             ShipView shipView = new ShipView(base.Game, color, "shipHull", Color.White, SpriteBatch, ship);
             base.Game.Components.Add(ship);
             base.Game.Components.Add(shipView);
             return ship;
-            //return new Ship(base.Game, color, shipLocation, base.SpriteBatch, base.PhysicsSimulator, playerIsland, this.CannonBallManager);
         }
     }
 }

@@ -4,40 +4,41 @@ using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
 
 using Microsoft.Xna.Framework;
+using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
     static class WorldBorder {
         const int buffer = 100;
 
-        public static void AddWorldBorder(Rectangle innerBorder, PhysicsSimulator physicsSimulator) {
+        public static void AddWorldBorder(Rectangle innerBorder, PhysicsSimulator physicsSimulator, Game game) {
             var outerBorder = new Rectangle(innerBorder.X, innerBorder.X, innerBorder.Width, innerBorder.Height);
             outerBorder.Inflate(buffer, buffer);
 
-            AddLeftBorder(physicsSimulator, innerBorder, outerBorder);
-            AddRightBorder(physicsSimulator, innerBorder, outerBorder);
-            AddTopBorder(physicsSimulator, innerBorder, outerBorder);
-            AddBottomBorder(physicsSimulator, innerBorder, outerBorder);
+            AddLeftBorder(physicsSimulator, innerBorder, outerBorder, game);
+            AddRightBorder(physicsSimulator, innerBorder, outerBorder, game);
+            AddTopBorder(physicsSimulator, innerBorder, outerBorder, game);
+            AddBottomBorder(physicsSimulator, innerBorder, outerBorder, game);
         }
 
-        private static void AddBottomBorder(PhysicsSimulator physicsSimulator, Rectangle innerBorder, Rectangle outerBorder) {
+        private static void AddBottomBorder(PhysicsSimulator physicsSimulator, Rectangle innerBorder, Rectangle outerBorder, Game game) {
             var r = CreateBottomBorderRectangle(innerBorder, outerBorder);
-            CreateBorder(r, physicsSimulator);
+            CreateBorder(r, physicsSimulator, game);
         }
 
-        private static void AddTopBorder(PhysicsSimulator physicsSimulator, Rectangle innerBorder, Rectangle outerBorder) {
+        private static void AddTopBorder(PhysicsSimulator physicsSimulator, Rectangle innerBorder, Rectangle outerBorder, Game game) {
             var r = CreateTopBorderRectangle(innerBorder, outerBorder);
-            CreateBorder(r, physicsSimulator);
+            CreateBorder(r, physicsSimulator, game);
         }
 
-        private static void AddRightBorder(PhysicsSimulator physicsSimulator, Rectangle innerBorder, Rectangle outerBorder) {
+        private static void AddRightBorder(PhysicsSimulator physicsSimulator, Rectangle innerBorder, Rectangle outerBorder, Game game) {
             var r = CreateRightBorderRectangle(innerBorder, outerBorder);
-            CreateBorder(r, physicsSimulator);
+            CreateBorder(r, physicsSimulator, game);
         }
 
-        private static void AddLeftBorder(PhysicsSimulator physicsSimulator, Rectangle innerBorder, Rectangle outerBorder) {
+        private static void AddLeftBorder(PhysicsSimulator physicsSimulator, Rectangle innerBorder, Rectangle outerBorder, Game game) {
             var r = CreateLeftBorderRectangle(innerBorder, outerBorder);
-            CreateBorder(r, physicsSimulator);
+            CreateBorder(r, physicsSimulator, game);
         }
 
         private static Rectangle CreateLeftBorderRectangle(Rectangle innerBorder, Rectangle outerBorder) {
@@ -72,7 +73,7 @@ namespace _2HourGame.Model
             return new Rectangle(x, y, width, height);
         }
 
-        private static void CreateBorder(Rectangle rectangle, PhysicsSimulator physicsSimulator) {
+        private static void CreateBorder(Rectangle rectangle, PhysicsSimulator physicsSimulator, Game game) {
             var borderWidth = rectangle.Width;
             var borderHeight = rectangle.Height;
             var borderCenter = CalculateCenter(rectangle);
@@ -84,8 +85,8 @@ namespace _2HourGame.Model
 
             var borderGeometry = GeomFactory.Instance.CreateRectangleGeom(borderBody, borderWidth, borderHeight);
             // prevent collisions with cannon balls
-            borderGeometry.CollisionCategories = CollisionCategory.Cat1;
-            borderGeometry.CollidesWith = CollisionCategory.All & ~CollisionCategory.Cat2;
+            borderGeometry.CollisionCategories = ((CollisionCategoryManager)game.Services.GetService(typeof(CollisionCategoryManager))).getCollisionCategory(typeof(WorldBorder));
+            borderGeometry.CollidesWith = ((CollisionCategoryManager)game.Services.GetService(typeof(CollisionCategoryManager))).getCollidesWith(typeof(WorldBorder));
             physicsSimulator.Add(borderGeometry);
         }
 

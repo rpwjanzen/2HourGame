@@ -3,15 +3,13 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using System;
 
-using _2HourGame.Model;
-
-namespace _2HourGame {
+namespace _2HourGame.Model {
     class AIController : GameComponent {
         Island HomeIsland { get; set; }
         IEnumerable<Island> OtherIslands { get; set; }
-        Ship ControlledShip { get; set; }
+        IShip ControlledShip { get; set; }
         float ProximityRadius { get; set; }
-        Ship TargetShip { get; set; }
+        IShip TargetShip { get; set; }
 
         /// <summary>
         /// An AIController should have access to all information a user of the system has.
@@ -20,7 +18,7 @@ namespace _2HourGame {
         /// <param name="controlledShip">The ship that the AI is controlling</param>
         /// <param name="homeIsland">The ship's home island</param>
         /// <param name="islands">All islands in the game(excluding the ships home island)</param>
-        public AIController(Game game, Ship controlledShip, Island homeIsland, List<Island> otherIslands, Ship targetShip)
+        public AIController(Game game, IShip controlledShip, Island homeIsland, List<Island> otherIslands, IShip targetShip)
             : base(game) {
             this.ControlledShip = controlledShip;
             this.HomeIsland = homeIsland;
@@ -47,7 +45,7 @@ namespace _2HourGame {
                 desiredRotation += 360.0f;
             } else { }
 
-            var myRotation = MathHelper.ToDegrees(this.ControlledShip.Body.Rotation);
+            var myRotation = MathHelper.ToDegrees(this.ControlledShip.Rotation);
             // body rotations are 0 - 360.0f
             myRotation -= 180.0f;
 

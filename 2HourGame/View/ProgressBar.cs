@@ -49,7 +49,7 @@ namespace _2HourGame.View
 
         public void LoadContent(ITextureManager textureManager)
         {
-            Origin = textureManager.getTextureOrigin("progressBar");
+            Origin = textureManager.getTextureCentre("progressBar", Scale);
             Texture = textureManager.getTexture("progressBar");
             ZIndex = ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.healthBar);
         }

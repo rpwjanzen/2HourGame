@@ -14,7 +14,7 @@ namespace _2HourGame.Factories
             this.DisplayWidth = displayWidth;
         }
 
-        public ShipGoldView CreateShipGoldView(Ship ship, ShipGoldView.GoldViewPosition position) {
+        public ShipGoldView CreateShipGoldView(IShip ship, ShipGoldView.GoldViewPosition position) {
             return new ShipGoldView(base.Game, ship, position, base.SpriteBatch, this.DisplayWidth);
         }
     }

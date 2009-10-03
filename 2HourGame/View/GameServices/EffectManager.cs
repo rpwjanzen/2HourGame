@@ -17,6 +17,7 @@ namespace _2HourGame
         SpriteBatch spriteBatch;
 
         Dictionary<String, AnimatedTextureInfo> textureInfos;
+        Dictionary<AnimationView, GameObject> currentAnimations;
 
         public EffectManager(Game game, SpriteBatch spriteBatch) 
         {
@@ -34,6 +35,8 @@ namespace _2HourGame
             textureInfos.Add("boatHitByCannonAnimation", new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, 1, new Vector2(0, 0)));
             textureInfos.Add("shipSinking", new AnimatedTextureInfo(new Vector2(100, 100), 1, 0.3, 0.3f, 1, new Vector2(0, 0)));
             textureInfos.Add("floatingCrate", new AnimatedTextureInfo(new Vector2(20, 20), 6, 3, 0.7f, 3, new Vector2(5, 5)));
+
+            currentAnimations = new Dictionary<AnimationView, GameObject>();
         }
 
         public void GoldPickupEffect(Vector2 position)
@@ -108,9 +111,24 @@ namespace _2HourGame
 
         private void addAnimationView(Vector2 position, string contentName, AnimatedTextureInfo animTextInfo, Color color, float zIndex)
         {
-            GameObject animationObject = new GameObject(game, position, contentName, animTextInfo.scale);
+            GameObject animationObject = new GameObject(game, position, contentName, animTextInfo.WindowSize.X, animTextInfo.WindowSize.Y);
             game.Components.Add(animationObject);
-            game.Components.Add(new AnimationView(game, contentName, color, spriteBatch, animTextInfo, animationObject, zIndex));
+
+            var animationView = new AnimationView(game, contentName, color, spriteBatch, animTextInfo, animationObject, zIndex);
+            animationView.AnimationFinished += HandleAnimationFinished;
+            game.Components.Add(animationView);
+
+            currentAnimations.Add(animationView, animationObject);
+        }
+
+        private void HandleAnimationFinished(object sender, EventArgs e)
+        {
+            var av = sender as AnimationView;
+            var ao = currentAnimations[av];
+            game.Components.Remove(av);
+            game.Components.Remove(ao);
+
+            currentAnimations.Remove(av);
         }
     }
 }
