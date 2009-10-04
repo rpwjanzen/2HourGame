@@ -14,10 +14,18 @@ namespace _2HourGame.Model
         public virtual Vector2 Position { get; set; }
         public virtual float Rotation { get; set; } // in radians
 
-        public float XRadius { get; set; }
-        public float YRadius { get; set; }
-        public float Width { get { return XRadius * 2.0f; } }
-        public float Height { get { return YRadius * 2.0f; } }
+        public float HalfWidth
+        {
+            get { return Width / 2.0f; }
+        }
+
+        public float HalfHeight
+        {
+            get { return Height / 2.0f; }
+        }
+
+        public float Width { get; private set; }
+        public float Height { get; private set; }
 
         /// <summary>
         /// Occurs when this game object is removed from the Game's components
@@ -29,9 +37,8 @@ namespace _2HourGame.Model
         {
             this.Position = position;
 
-			XRadius = width / 2.0f;
-            YRadius = height / 2.0f;
-
+            Width = width;
+            Height = height;
 
             Game.Components.ComponentRemoved += Components_ComponentRemoved;
         }

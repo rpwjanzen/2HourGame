@@ -15,11 +15,27 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
+    class ShipSankEventArgs : EventArgs
+    {
+        public GameTime SinkTime { get; private set; }
+        public ShipSankEventArgs(GameTime sinkTime)
+        {
+            this.SinkTime = sinkTime;
+        }
+    }
+    class ShipSpawnedEventArgs : EventArgs
+    {
+        public GameTime SpawnTime { get; private set; }
+        public ShipSpawnedEventArgs(GameTime spawnTime)
+        {
+            this.SpawnTime = spawnTime;
+        }
+    }
     class Ship : PhysicsGameObject, IShip
     {
         const float CannonBuffer = -8.0f;
-        public event EventHandler ShipSank;
-        public event EventHandler ShipSpawned;
+        public event EventHandler<ShipSankEventArgs> ShipSank;
+        public event EventHandler<ShipSpawnedEventArgs> ShipSpawned;
 
         readonly double maxHealth = 5;
         double Health { get; set; }
@@ -52,7 +68,6 @@ namespace _2HourGame.Model
         Vector2 FiringVelocity { get; set; }
         Vector2 spawnPoint;
         TimeSpan timeOfDeath;
-        bool setTimeOfDeathTimespan;
         double respawnTimeSeconds = 10;
         bool respawnTimeIsOver(GameTime now) 
         {
@@ -69,9 +84,8 @@ namespace _2HourGame.Model
             this.Health = 5;
             this.IsAlive = true;
             this.spawnPoint = position;
-            this.setTimeOfDeathTimespan = false;
 
-            Geometry.OnCollision += ShipCollision;
+            this.OnCollision += ShipCollision;
             this.Body.RotationalDragCoefficient = 2500.0f;
             this.cannonBallManager = cannonBallManager;
 
@@ -95,16 +109,10 @@ namespace _2HourGame.Model
         {
             base.Update(gameTime);
 
-            if (setTimeOfDeathTimespan)
-            {
-                setTimeOfDeathTimespan = false;
-                timeOfDeath = gameTime.TotalGameTime;
-            }
-
             if (!IsAlive && respawnTimeIsOver(gameTime))
             {
                 IsAlive = true;
-                ShipSpawned(this, EventArgs.Empty);
+                RaiseShipSpawnedEvent(gameTime);
             }
         }
 
@@ -163,25 +171,20 @@ namespace _2HourGame.Model
         /// <summary>
         /// Handles ship getting hit by a cannonball
         /// </summary>
-        /// <param name="myGeom">Source Geom</param>
-        /// <param name="otherGeom">Colliding Geom</param>
-        /// <param name="contactList">Contact points of collision</param>
-        /// <returns>True, if the event should be cancelled.</returns>
-        private bool ShipCollision(Geom myGeom, Geom otherGeom, ContactList contactList)
+        private void ShipCollision(object sender, CollisionEventArgs e)
         {
-            var cannonBall = otherGeom.Tag as CannonBall;
+            var cannonBall = e.Other as CannonBall;
             if (cannonBall != null)
             {
                 this.cannonBallManager.RemoveCannonBall(cannonBall);
-                hitByCannonBall(cannonBall);
+                hitByCannonBall(cannonBall, e.CollisionTime);
             }
-            return true;
         }
 
         /// <summary>
         /// Ships status reaction to being hit by a cannon ball.
         /// </summary>
-        private void hitByCannonBall(CannonBall cannonBall) 
+        private void hitByCannonBall(CannonBall cannonBall, GameTime gameTime) 
         {
             if (Gold > 0)
             {
@@ -196,7 +199,7 @@ namespace _2HourGame.Model
 
             if (Health <= 0)
             {
-                ShipSank(this, EventArgs.Empty);
+                RaiseShipSankEvent(gameTime);
                 Gold = 0;
             }
         }
@@ -205,13 +208,14 @@ namespace _2HourGame.Model
             this.Gold++;
         }
 
-        void ShipSankEventHandler(object sender, EventArgs e)
+        void ShipSankEventHandler(object sender, ShipSankEventArgs e)
         {
+            this.timeOfDeath = e.SinkTime.TotalGameTime;
             hideShip();
         }
 
 
-        void ShipSpawnedEventHandler(object sender, EventArgs e)
+        void ShipSpawnedEventHandler(object sender, ShipSpawnedEventArgs e)
         {
             unHideShip();
         }
@@ -221,7 +225,6 @@ namespace _2HourGame.Model
         /// </summary>
         private void hideShip()
         {
-            setTimeOfDeathTimespan = true;
             RemoveFromPhysicsSimulator();
             IsAlive = false;
         }
@@ -235,6 +238,22 @@ namespace _2HourGame.Model
             Health = maxHealth;
             AddToPhysicsSimulator();
             IsAlive = true;
+        }
+
+        void RaiseShipSankEvent(GameTime sinkTime)
+        {
+            if (ShipSank != null)
+            {
+                ShipSank(this, new ShipSankEventArgs(sinkTime));
+            }
+        }
+
+        void RaiseShipSpawnedEvent(GameTime spawnTime)
+        {
+            if (ShipSpawned != null)
+            {
+                ShipSpawned(this, new ShipSpawnedEventArgs(spawnTime));
+            }
         }
     }
 }

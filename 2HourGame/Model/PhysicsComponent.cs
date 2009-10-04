@@ -11,6 +11,8 @@ namespace _2HourGame.Model
     class PhysicsComponent : DrawableGameComponent, IPhysicsSimulatorService
     {
         public PhysicsSimulator PhysicsSimulator { get; private set; }
+        public GameTime CollisionTime { get; private set; }
+
         PhysicsSimulatorView physicsSimulatorView;        
         SpriteBatch spriteBatch;
 
@@ -44,6 +46,7 @@ namespace _2HourGame.Model
         GamePadState LastState;
 
         public override void Update(GameTime gameTime) {
+            this.CollisionTime = gameTime;
             PhysicsSimulator.Update(((float)gameTime.ElapsedGameTime.Milliseconds) / 100.0f);
 
             GamePadState gs = GamePad.GetState(PlayerIndex.One);

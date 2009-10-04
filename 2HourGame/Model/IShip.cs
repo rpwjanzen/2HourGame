@@ -47,7 +47,7 @@ namespace _2HourGame.Model
         /// <summary>
         /// Occurs when the ship sinks
         /// </summary>
-        event EventHandler ShipSank;
+        event EventHandler<ShipSankEventArgs> ShipSank;
 
         /// <summary>
         /// Rotates the ship with the given force

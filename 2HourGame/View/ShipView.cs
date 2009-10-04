@@ -21,7 +21,8 @@ namespace _2HourGame.View
 
         CannonView<IShip> LeftCannonView;
         CannonView<IShip> RightCannonView;
-        
+
+        IEffectManager effectManager;
 
         /// <summary>
         /// 
@@ -51,6 +52,8 @@ namespace _2HourGame.View
         {
             LeftCannonView.Initialize();
             RightCannonView.Initialize();
+
+            effectManager = (IEffectManager)base.Game.Services.GetService(typeof(IEffectManager));
 
             base.Initialize();
         }
@@ -85,8 +88,8 @@ namespace _2HourGame.View
 
         private void playShipSinkingAnimations()
         {
-            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.ShipSinking, GameObject.Position);
-            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.FloatingCrate, GameObject.Position);
+            effectManager.PlayAnimation(Animation.ShipSinking, GameObject.Position);
+            effectManager.PlayAnimation(Animation.FloatingCrate, GameObject.Position);
         }
     }
 }
