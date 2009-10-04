@@ -41,6 +41,8 @@ namespace _2HourGame {
             this.Components.Add(physicsComponent);
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
+            this.Components.Add(effectManager);
+
             TextureManager textureManager = new TextureManager(this);
             this.Components.Add(textureManager);
             CollisionCategoryManager collisionCategoryManager = new CollisionCategoryManager(this); 

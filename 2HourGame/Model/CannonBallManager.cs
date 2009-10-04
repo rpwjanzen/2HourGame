@@ -50,7 +50,7 @@ namespace _2HourGame.Model
 
             foreach (CannonBall c in cannonBallsToRemove) 
             {
-                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).SplashEffect(c.Position);
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.Splash, c.Position);
                 RemoveCannonBall(c);
             }
         }

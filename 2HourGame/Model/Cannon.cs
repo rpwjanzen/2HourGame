@@ -113,7 +113,7 @@ namespace _2HourGame.Model
             var cannonBallPostion = firingVector * CannonBallOffset + this.Position;
             var smokePosition = firingVector * SmokeOffset + this.Position;
 
-            ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).CannonSmokeEffect(smokePosition);
+            ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.CannonSmoke, smokePosition);
             var cannonBall = this.cannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
 
             return thrust;

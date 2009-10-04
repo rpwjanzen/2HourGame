@@ -37,7 +37,7 @@ namespace _2HourGame.View
 
         protected override void LoadContent()
         {
-            this.animatedTextureInfo = ((IEffectManager)Game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(cannonTextureName);
+            this.animatedTextureInfo = ((IEffectManager)Game.Services.GetService(typeof(IEffectManager)))[Animation.CannonFired];
             this.texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))[cannonTextureName];
 
             this.zIndex = ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon);

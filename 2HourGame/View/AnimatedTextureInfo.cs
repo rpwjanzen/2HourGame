@@ -30,6 +30,11 @@ namespace _2HourGame.View
         public int NumAnimationIterations { get; private set; }
 
         /// <summary>
+        /// The name of the image the animation is in
+        /// </summary>
+        public string ContentName { get; private set; }
+
+        /// <summary>
         /// The point in the center of the window
         /// </summary>
         public Vector2 WindowCenter {
@@ -38,12 +43,13 @@ namespace _2HourGame.View
                 return new Vector2(WindowSize.X / 2f, WindowSize.Y / 2f);
             }
         }
+
         /// <summary>
         /// The amount to offset the animation draw position by
         /// </summary>
         private Vector2 offset;
 
-        public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, int numAnimationIterations, Vector2 offset)
+        public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, int numAnimationIterations, Vector2 offset, string contentName)
         {
             this.WindowSize = imageSize;
             this.TotalFrames = totalFrames;
@@ -51,6 +57,7 @@ namespace _2HourGame.View
             this.Scale = scale;
             this.NumAnimationIterations = numAnimationIterations;
             this.offset = offset;
+            this.ContentName = contentName;
         }
         /// <summary>
         /// Calculates the animation draw position offset rotated by the given amount of radians

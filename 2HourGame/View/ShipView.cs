@@ -85,8 +85,8 @@ namespace _2HourGame.View
 
         private void playShipSinkingAnimations()
         {
-            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).ShipSinking(GameObject.Position);
-            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).FloatingCrate(GameObject.Position);
+            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.ShipSinking, GameObject.Position);
+            ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.FloatingCrate, GameObject.Position);
         }
     }
 }

@@ -138,7 +138,7 @@ namespace _2HourGame.Model
             {
                 island.RemoveGold();
                 this.AddGold();
-                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).GoldPickupEffect(this.Position);
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.GetGold, this.Position);
             }
         }
 
@@ -186,7 +186,7 @@ namespace _2HourGame.Model
             if (Gold > 0)
             {
                 Gold--;
-                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).BoatHitByCannonEffect(cannonBall.Position);
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.BoatHitByCannon, cannonBall.Position);
             }
 
             // if a ship is too close when it fires then the cannon ball it can have a speed of 0.

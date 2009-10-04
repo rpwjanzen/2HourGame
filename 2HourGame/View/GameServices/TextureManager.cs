@@ -10,7 +10,6 @@ namespace _2HourGame.View.GameServices
     class TextureManager : GameComponent, ITextureManager
     {
         Dictionary<string, Texture2D> loadedTextures;
-        bool initialized;
 
         public Texture2D this[string index] {
             get { return loadedTextures[index]; }
@@ -18,18 +17,13 @@ namespace _2HourGame.View.GameServices
 
         public TextureManager(Game game) : base(game)
         {
-            initialized = false;
             loadedTextures = new Dictionary<string, Texture2D>();
             game.Services.AddService(typeof(ITextureManager), this);
         }
 
         public override void Initialize()
         {
-            if (Game.GraphicsDevice != null)
-            {
-                this.LoadTextures();
-                initialized = true;
-            }
+            this.LoadTextures();
             base.Initialize();
         }
 
