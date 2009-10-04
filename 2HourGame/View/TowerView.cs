@@ -20,6 +20,13 @@ namespace _2HourGame.View
             this.towerCannonView = new CannonView<Tower>(game, color, spriteBatch, tower.Cannon);
         }
 
+        public override void Initialize()
+        {
+            towerCannonView.Initialize();
+
+            base.Initialize();
+        }
+
         public override void Draw(GameTime gameTime)
         {
             if (tower.IsCannonVisible)

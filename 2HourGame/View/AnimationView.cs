@@ -27,10 +27,12 @@ namespace _2HourGame.Model
 
         public event EventHandler AnimationFinished;
 
+        string contentName;
+
         public AnimationView(Game game, string contentName, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo,
             IGameObject gameObject, float zIndex) : base(game)
         {
-            this.Texture = ((ITextureManager)game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
+            this.contentName = contentName;
             this.Color = color;
             this.SpriteBatch = spriteBatch;
             this.AnimatedTextureInfo = animatedTextureInfo;
@@ -38,9 +40,15 @@ namespace _2HourGame.Model
             this.ZIndex = zIndex;
 
             this.FirstDraw = this.AnimatedTextureInfo != null;
+        }
 
-            this.Scale = new Vector2(animatedTextureInfo.Scale, animatedTextureInfo.Scale);
-            this.Origin = animatedTextureInfo.WindowCenter;            
+        protected override void LoadContent()
+        {
+            this.Texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))[contentName];
+            this.Scale = new Vector2(AnimatedTextureInfo.Scale, AnimatedTextureInfo.Scale);
+            this.Origin = AnimatedTextureInfo.WindowCenter;            
+
+            base.LoadContent();
         }
 
         public override void Draw(GameTime gameTime)

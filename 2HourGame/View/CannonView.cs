@@ -28,17 +28,21 @@ namespace _2HourGame.View
         public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon<T> cannon)
             : base(game)
         {
+            this.firstDraw = true;
             this.color = color;
             this.spriteBatch = spriteBatch;
             this.cannon = cannon;
             cannon.CannonFired += HandleCannonFiredEvent;
+        }
 
+        protected override void LoadContent()
+        {
             this.animatedTextureInfo = ((IEffectManager)Game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(cannonTextureName);
-            this.texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager))).getTexture(cannonTextureName);
+            this.texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))[cannonTextureName];
 
             this.zIndex = ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon);
 
-            this.firstDraw = true;
+            base.LoadContent();
         }
 
         public override void Draw(GameTime gameTime)

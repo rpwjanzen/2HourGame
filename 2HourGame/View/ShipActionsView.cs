@@ -44,27 +44,28 @@ namespace _2HourGame.View
             this.player = player;
             this.spriteBatch = spriteBatch;
 
-            aButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(aButtonTextureName);
-            bButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(bButtonTextureName);
-            digTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(digTextureName);
-            repairTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(repairTextureName);
             GoldPickupProgressView = new GoldPickupProgressView(game, spriteBatch, player);
+            Game.Components.Add(GoldPickupProgressView);
         }
 
         protected override void LoadContent()
         {
-            GoldPickupProgressView.LoadContent();
-            base.LoadContent();
-        }
+            aButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[aButtonTextureName];
+            bButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[bButtonTextureName];
+            digTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[digTextureName];
+            repairTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[repairTextureName];
 
-        public override void Update(GameTime gameTime)
-        {
-            GoldPickupProgressView.Update(gameTime);
-            base.Update(gameTime);
+            base.LoadContent();
         }
 
         public override void Draw(GameTime gameTime)
         {
+            // gold pickup progress
+            GoldPickupProgressView.Enabled = player.ClosestInRangeIsland != null
+                && player.ClosestInRangeIsland != player.HomeIsland
+                && player.ClosestInRangeIsland.HasGold
+                && !player.ship.IsFull;
+
             GamePadState gamePadState = player.GamePadState;
 
             // dig icon display
@@ -76,15 +77,8 @@ namespace _2HourGame.View
             {
                 Color drawColor = gamePadState.IsButtonUp(Buttons.A) ? Color.White : Color.DarkGray;
 
-                spriteBatch.Draw(aButtonTexture, player.ship.Position + aButtonOffset, null, drawColor, 0, ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTextureCentre(aButtonTextureName, aButtonScale), aButtonScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.xboxControllerButtonA));
-                spriteBatch.Draw(digTexture, player.ship.Position + digOffset, null, Color.White, 0, ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTextureCentre(digTextureName, digScale), digScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.dig));
-            }
-
-            // gold pickup progress
-            if (player.ClosestInRangeIsland != null
-                && player.ClosestInRangeIsland != player.HomeIsland)
-            {
-                GoldPickupProgressView.Draw(gameTime);
+                spriteBatch.Draw(aButtonTexture, player.ship.Position + aButtonOffset, null, drawColor, 0, aButtonTexture.Center(aButtonScale), aButtonScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.xboxControllerButtonA));
+                spriteBatch.Draw(digTexture, player.ship.Position + digOffset, null, Color.White, 0, digTexture.Center(digScale), digScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.dig));
             }
 
             // repair icon display
@@ -94,8 +88,8 @@ namespace _2HourGame.View
             {
                 Color drawColor = gamePadState.IsButtonUp(Buttons.B) ? Color.White : Color.DarkGray;
 
-                spriteBatch.Draw(bButtonTexture, player.ship.Position + bButtonOffset, null, drawColor, 0, ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTextureCentre(bButtonTextureName, bButtonScale), aButtonScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.xboxControllerButtonB));
-                spriteBatch.Draw(repairTexture, player.ship.Position + repairOffset, null, Color.White, 0, ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTextureCentre(repairTextureName, repairScale), repairScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.repair));
+                spriteBatch.Draw(bButtonTexture, player.ship.Position + bButtonOffset, null, drawColor, 0, bButtonTexture.Center(bButtonScale), aButtonScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.xboxControllerButtonB));
+                spriteBatch.Draw(repairTexture, player.ship.Position + repairOffset, null, Color.White, 0, repairTexture.Center(repairScale), repairScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.repair));
             }
             base.Draw(gameTime);
         }

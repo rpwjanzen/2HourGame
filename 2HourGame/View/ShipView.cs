@@ -41,40 +41,41 @@ namespace _2HourGame.View
 
             ship.ShipSank += this.ShipSankEventHandler;
             healthBarView = new HealthBarView(base.Game, spriteBatch, ship);
+            Game.Components.Add(healthBarView);
+
             LeftCannonView = new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.LeftCannon);
             RightCannonView = new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.RightCannon);
         }
 
+        public override void Initialize()
+        {
+            LeftCannonView.Initialize();
+            RightCannonView.Initialize();
+
+            base.Initialize();
+        }
+
         protected override void LoadContent()
         {            
-            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipGunwale");
-            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture("shipRigging");
-
-            healthBarView.LoadContent();
+            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["shipGunwale"];
+            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["shipRigging"];
 
             base.LoadContent();
         }
 
         public override void Draw(GameTime gameTime)
         {
+            healthBarView.Enabled = ship.IsAlive;
             if (ship.IsAlive)
-            {                
+            {
                 base.SpriteBatch.Draw(gunwale, GameObject.Position, null, shipOutlineColor, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
                 base.SpriteBatch.Draw(rigging, GameObject.Position, null, Color.White, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
 
                 LeftCannonView.Draw(gameTime);
                 RightCannonView.Draw(gameTime);
-                healthBarView.Draw(gameTime);
 
                 base.Draw(gameTime);
             }
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            healthBarView.Update(gameTime);
-
-            base.Update(gameTime);
         }
 
         private void ShipSankEventHandler(object sender, EventArgs e)

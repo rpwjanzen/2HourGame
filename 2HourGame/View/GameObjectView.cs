@@ -22,6 +22,7 @@ namespace _2HourGame.View
         protected Vector2 Scale { get; set; }
         protected Vector2 Origin { get; set; }
         protected IGameObject GameObject { get; set; }
+
         /// <summary>
         /// Stores offset to adjust drawing for objects where the collision area is not based on the texture size.
         /// </summary>
@@ -52,14 +53,19 @@ namespace _2HourGame.View
             this.ZIndex = zIndex;
             this.GameObject = gameObject;
 
-            this.Texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager))).getTexture(contentName);
+            gameObject.GameObjectRemoved += GameObjectRemoved;
+        }
+
+        protected override void LoadContent()
+        {
+            this.Texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[contentName];
             this.Origin = GetTextureCenter(this.Texture);
-            var scaleX = gameObject.Width / Texture.Width;
-            var scaleY = gameObject.Height / Texture.Height;
+            var scaleX = GameObject.Width / Texture.Width;
+            var scaleY = GameObject.Height / Texture.Height;
 
             this.Scale = new Vector2(scaleX, scaleY);
 
-            gameObject.GameObjectRemoved += GameObjectRemoved;
+            base.LoadContent();
         }
 
         public override void Draw(GameTime gameTime)

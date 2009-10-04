@@ -29,7 +29,7 @@ namespace _2HourGame.View
             ProgressBar.EmptyColor = Color.Gray;
         }
 
-        public new void LoadContent()
+        protected override void LoadContent()
         {
             ProgressBar.LoadContent((ITextureManager)Game.Services.GetService(typeof(ITextureManager)));
             base.LoadContent();

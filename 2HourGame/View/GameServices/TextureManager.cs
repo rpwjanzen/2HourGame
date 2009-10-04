@@ -7,83 +7,62 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame.View.GameServices
 {
-    class TextureManager : ITextureManager
+    class TextureManager : GameComponent, ITextureManager
     {
-        Dictionary<string, Texture2D> textures;
+        Dictionary<string, Texture2D> loadedTextures;
+        bool initialized;
 
-        Game game;
+        public Texture2D this[string index] {
+            get { return loadedTextures[index]; }
+        }
 
-        public TextureManager(Game game) 
+        public TextureManager(Game game) : base(game)
         {
-            this.game = game;
-            textures = new Dictionary<string, Texture2D>();
+            initialized = false;
+            loadedTextures = new Dictionary<string, Texture2D>();
             game.Services.AddService(typeof(ITextureManager), this);
-
-            LoadContent();
         }
 
-        public void LoadContent()
+        public override void Initialize()
         {
-            addTexture("boatHitByCannonAnimation");
-            addTexture("boundingCircle");
-            addTexture("cannonAnimation");
-            addTexture("cannonBall");
-            addTexture("cannonSmokeAnimation");
-            addTexture("ControllerImages\\xboxControllerButtonA");
-            addTexture("ControllerImages\\xboxControllerButtonB");
-            addTexture("dig");
-            addTexture("repair");
-            addTexture("floatingCrate");
-            addTexture("gold");
-            addTexture("goldGetAnimation");
-            addTexture("goldLoseAnimation");
-            addTexture("healthBar");
-            addTexture("house");
-            addTexture("island");
-            addTexture("shipGunwale");
-            addTexture("shipHull");
-            addTexture("shipRigging");
-            addTexture("shipSinking");
-            addTexture("splashAnimation");
-            addTexture("tower");
-        }
-
-        private void addTexture(string textureName) 
-        {
-            textures.Add(textureName, game.Content.Load<Texture2D>(@"Content\" + textureName));
-        }
-
-        public Texture2D getTexture(string textureName) 
-        {
-            Texture2D texture;
-            if (textures.TryGetValue(textureName, out texture))
-                return texture;
-            else 
+            if (Game.GraphicsDevice != null)
             {
-                addTexture(textureName);
-                textures.TryGetValue(textureName, out texture);
-                return texture;
+                this.LoadTextures();
+                initialized = true;
             }
+            base.Initialize();
         }
 
-        public Vector2 getTextureCentre(string textureName, float scale)
+        private void LoadTextures()
         {
-            AnimatedTextureInfo animTextInfo = ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(textureName);
-            Texture2D texture = getTexture(textureName);
-            if (animTextInfo == null)
-                return new Vector2(texture.Width / 2, texture.Height / 2) * scale;
-            else 
-                return animTextInfo.WindowCenter * scale;
+            LoadTexture("boatHitByCannonAnimation");
+            LoadTexture("boundingCircle");
+            LoadTexture("cannonAnimation");
+            LoadTexture("cannonBall");
+            LoadTexture("cannonSmokeAnimation");
+            LoadTexture("ControllerImages\\xboxControllerButtonA");
+            LoadTexture("ControllerImages\\xboxControllerButtonB");
+            LoadTexture("dig");
+            LoadTexture("repair");
+            LoadTexture("floatingCrate");
+            LoadTexture("gold");
+            LoadTexture("goldGetAnimation");
+            LoadTexture("goldLoseAnimation");
+            LoadTexture("healthBar");
+            LoadTexture("house");
+            LoadTexture("island");
+            LoadTexture("shipGunwale");
+            LoadTexture("shipHull");
+            LoadTexture("shipRigging");
+            LoadTexture("shipSinking");
+            LoadTexture("splashAnimation");
+            LoadTexture("tower");
+            LoadTexture("progressBar");
         }
 
-        public Vector2 getTextureCentre(string textureName, Vector2 scale)
+        private void LoadTexture(string textureName) 
         {
-            AnimatedTextureInfo animTextInfo = ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).getAnimatedTextureInfo(textureName);
-            Texture2D texture = getTexture(textureName);
-            if (animTextInfo == null)
-                return new Vector2(texture.Width / 2, texture.Height / 2) * scale;
-            else
-                return animTextInfo.WindowCenter * scale;
+            loadedTextures.Add(textureName, Game.Content.Load<Texture2D>(@"Content\" + textureName));
         }
     }
 }

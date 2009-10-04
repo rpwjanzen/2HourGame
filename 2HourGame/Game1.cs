@@ -42,6 +42,7 @@ namespace _2HourGame {
 
             EffectManager effectManager = new EffectManager(this, spriteBatch);
             TextureManager textureManager = new TextureManager(this);
+            this.Components.Add(textureManager);
             CollisionCategoryManager collisionCategoryManager = new CollisionCategoryManager(this); 
 
 			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch);
