@@ -45,7 +45,8 @@ namespace _2HourGame {
 
             TextureManager textureManager = new TextureManager(this);
             this.Components.Add(textureManager);
-            CollisionCategoryManager collisionCategoryManager = new CollisionCategoryManager(this); 
+            CollisionCategoryManager collisionCategoryManager = new CollisionCategoryManager(this);
+            CollisionGroupManager collisionGroupManager = new CollisionGroupManager(this);
 
 			CannonBallManager cannonBallManager = new CannonBallManager(this, spriteBatch);
             this.Components.Add(cannonBallManager);

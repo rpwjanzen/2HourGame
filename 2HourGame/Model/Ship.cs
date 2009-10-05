@@ -12,6 +12,7 @@ using FarseerGames.FarseerPhysics.Factories;
 
 using _2HourGame.View;
 using _2HourGame.View.GameServices;
+using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
@@ -63,16 +64,12 @@ namespace _2HourGame.Model
         
         Vector2 FiringVelocity { get; set; }
         Vector2 spawnPoint;
-        TimeSpan timeOfDeath;
-        double respawnTimeSeconds = 10;
-        bool respawnTimeIsOver(GameTime now) 
-        {
-            return now.TotalGameTime.TotalSeconds - timeOfDeath.TotalSeconds > respawnTimeSeconds;
-        }
+        Timer respawnTimer = new Timer(10);
+
         private bool IsCannonVisible { get { return IsAlive; } }
 
         public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, float rotation)
-            : base(game, position, 34, 60, rotation)
+            : base(game, position, 34, 60, rotation, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
         {
             this.GoldCapacity = 3;
             this.Gold = 0;
@@ -105,7 +102,7 @@ namespace _2HourGame.Model
         {
             base.Update(gameTime);
 
-            if (!IsAlive && respawnTimeIsOver(gameTime))
+            if (!IsAlive && respawnTimer.TimerHasElapsed(gameTime))
             {
                 IsAlive = true;
                 RaiseShipSpawnedEvent(gameTime);
@@ -213,7 +210,7 @@ namespace _2HourGame.Model
 
         void ShipSankEventHandler(object sender, ShipSankEventArgs e)
         {
-            this.timeOfDeath = e.SinkTime.TotalGameTime;
+            this.respawnTimer.resetTimer(e.SinkTime.TotalGameTime);
             hideShip();
         }
 

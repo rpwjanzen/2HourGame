@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using FarseerGames.FarseerPhysics;
 using _2HourGame.View;
+using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
@@ -14,7 +15,7 @@ namespace _2HourGame.Model
         float range;
 
         // XXX: sometimes ship cannot lock on properly (moves lefe<->right continuously)
-        const float maxCannonRotationDegrees = 1f;
+        const float maxCannonRotationDegrees = 0.5f;
         const float toleranceInDegrees = 5.0f;
 
         // code so that we dont switch targets too often
@@ -23,12 +24,12 @@ namespace _2HourGame.Model
 
         public Cannon Cannon { get; private set; }
 
-        public Tower(Game game, Vector2 position, List<IGameObject> targets, CannonBallManager cannonBallManager) 
-            : base(game, position, 40, 100)
+        public Tower(Game game, Vector2 position, List<IGameObject> targets, CannonBallManager cannonBallManager)
+            : base(game, position, 40, 100, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
         {
             this.targets = targets;
             minTargetFocusTimer = new Timer(10f);
-            range = 200;
+            range = 300;
             Cannon = new Cannon(game, this, cannonBallManager, new Vector2(0, -35), 0.0f);
             base.Body.IsStatic = true;
         }

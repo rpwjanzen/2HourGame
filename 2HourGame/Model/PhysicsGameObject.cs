@@ -47,6 +47,17 @@ namespace _2HourGame.Model
         /// The GameObject's Geom
         /// </summary>
         Geom Geometry { get; set; }
+        
+        /// <summary>
+        /// Give public access to see the CollisionGroup.
+        /// </summary>
+        public int CollisionGroup
+        { 
+            get
+            {
+                return Geometry.CollisionGroup;
+            }
+        }
 
         /// <summary>
         /// The GameObject's Body
@@ -62,14 +73,20 @@ namespace _2HourGame.Model
 
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
-        public override Vector2 Velocity { get { return Body.LinearVelocity; } }
+        public Vector2 Velocity { get { return Body.LinearVelocity; } }
 
         public event EventHandler<CollisionEventArgs> OnCollision;
 
         public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height)
-            : this(game, initialPosition, width, height, 0.0f) { }
+            : this(game, initialPosition, width, height, 0) { }
+
+        public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height, int collisionGroup)
+            : this(game, initialPosition, width, height, 0.0f, collisionGroup) { }
 
         public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height, float initialRotation)
+            : this(game, initialPosition, width, height, initialRotation, 0) { }
+
+        public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height, float initialRotation, int collisionGroup)
             : base(game, initialPosition, width, height)
         {
             this.physicsSimulatorService = (IPhysicsSimulatorService)Game.Services.GetService(typeof(IPhysicsSimulatorService));
@@ -83,11 +100,21 @@ namespace _2HourGame.Model
 
             this.Geometry = GeomFactory.Instance.CreateEllipseGeom(this.Body, base.HalfWidth, base.HalfHeight, 12);
             this.Geometry.Tag = this;
+            this.Geometry.CollisionGroup = collisionGroup;
             this.Geometry.CollisionCategories = ((CollisionCategoryManager)Game.Services.GetService(typeof(CollisionCategoryManager))).getCollisionCategory(this.GetType());
             this.Geometry.CollidesWith = ((CollisionCategoryManager)Game.Services.GetService(typeof(CollisionCategoryManager))).getCollidesWith(this.GetType());
             PhysicsSimulator.Add(Geometry);
 
             this.Geometry.OnCollision += RaiseCollisionEvent;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            //XXX - Massive Hack to prevent AngularVelocity from reaching NaN
+            if (Body.AngularVelocity > 5000)
+                Body.AngularVelocity = 5000;
+
+            base.Update(gameTime);
         }
 
         public void RemoveFromPhysicsSimulator() {

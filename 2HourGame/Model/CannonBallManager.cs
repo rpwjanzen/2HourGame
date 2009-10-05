@@ -43,8 +43,8 @@ namespace _2HourGame.Model
             base.Update(gameTime);
         }
 
-        public CannonBall CreateCannonBall(Vector2 position, Vector2 firingForce) {
-            var cannonBall = new CannonBall(this.Game, position);
+        public CannonBall CreateCannonBall(Vector2 position, Vector2 firingForce, int collisionGroup) {
+            var cannonBall = new CannonBall(this.Game, position, collisionGroup);
             var cannonBallView = new GameObjectView(base.Game, "cannonBall", Color.White, spriteBatch, cannonBall, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannonBall));
             base.Game.Components.Add(cannonBall);
             base.Game.Components.Add(cannonBallView);

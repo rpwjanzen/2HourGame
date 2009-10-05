@@ -34,7 +34,7 @@ namespace _2HourGame.Model
         const float SmokeOffset = 13.0f;
         Timer firingTimer;
 
-        private IGameObject attachedToObject;
+        private PhysicsGameObject attachedToObject;
         Vector2 positionalOffset;
         float rotationalOffset;
 
@@ -72,7 +72,7 @@ namespace _2HourGame.Model
             }
         }
 
-        public Cannon(Game game, IGameObject parentObject, CannonBallManager cannonBallManager, Vector2 positionalOffset, float rotationalOffset)
+        public Cannon(Game game, PhysicsGameObject parentObject, CannonBallManager cannonBallManager, Vector2 positionalOffset, float rotationalOffset)
             : base(game)
         {
             this.game = game;
@@ -113,7 +113,7 @@ namespace _2HourGame.Model
             var smokePosition = firingVector * SmokeOffset + this.Position;
 
             ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.CannonSmoke, smokePosition);
-            var cannonBall = this.cannonBallManager.CreateCannonBall(cannonBallPostion, thrust);
+            var cannonBall = this.cannonBallManager.CreateCannonBall(cannonBallPostion, thrust, attachedToObject.CollisionGroup);
 
             return thrust;
         }
