@@ -96,7 +96,6 @@
     <Compile Include="Model\GameServices\CollisionCategoryManager.cs" />
     <Compile Include="Model\GameComponentCollectionExtensions.cs" />
     <Compile Include="Model\GameServices\ICollisionCategoryManager.cs" />
-    <Compile Include="Model\ICannonMountable.cs" />
     <Compile Include="Model\ICollidable.cs" />
     <Compile Include="Model\IGameObject.cs" />
     <Compile Include="Model\IHealth.cs" />

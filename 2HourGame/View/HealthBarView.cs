@@ -46,7 +46,7 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            if (ship.IsDamaged)
+            if (ship.IsDamaged && ship.IsAlive)
             {
                 progressBar.Draw(spriteBatch);
             }

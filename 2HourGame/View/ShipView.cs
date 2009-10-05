@@ -19,8 +19,8 @@ namespace _2HourGame.View
         HealthBarView healthBarView;
         IShip ship;
 
-        CannonView<IShip> LeftCannonView;
-        CannonView<IShip> RightCannonView;
+        CannonView LeftCannonView;
+        CannonView RightCannonView;
 
         IEffectManager effectManager;
 
@@ -44,8 +44,8 @@ namespace _2HourGame.View
             healthBarView = new HealthBarView(base.Game, spriteBatch, ship);
             Game.Components.Add(healthBarView);
 
-            LeftCannonView = new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.LeftCannon);
-            RightCannonView = new CannonView<IShip>(Game, Color.White, SpriteBatch, ship.RightCannon);
+            LeftCannonView = new CannonView(Game, Color.White, SpriteBatch, ship.LeftCannon);
+            RightCannonView = new CannonView(Game, Color.White, SpriteBatch, ship.RightCannon);
         }
 
         public override void Initialize()

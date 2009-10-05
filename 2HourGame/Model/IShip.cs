@@ -7,7 +7,7 @@ using _2HourGame.View;
 
 namespace _2HourGame.Model
 {
-    interface IShip: IGameObject, ICannonMountable, IHealth
+    interface IShip: IGameObject, IHealth
     {
         /// <summary>
         /// The amount of gold the ship is currently carrying
@@ -37,12 +37,12 @@ namespace _2HourGame.Model
         /// <summary>
         /// The ships left cannon
         /// </summary>
-        Cannon<IShip> LeftCannon { get; }
+        Cannon LeftCannon { get; }
 
         /// <summary>
         /// The ships right cannon
         /// </summary>
-        Cannon<IShip> RightCannon { get; }
+        Cannon RightCannon { get; }
 
         /// <summary>
         /// Occurs when the ship sinks
@@ -62,11 +62,16 @@ namespace _2HourGame.Model
         void Accelerate(float force);
 
         /// <summary>
-        /// Fires the specified ship's cannon
+        /// Fires the cannons on the LEFT side of the ship.
         /// </summary>
         /// <param name="now">The current GameTime</param>
-        /// <param name="cannonType">The type of cannon to fire</param>
-        void FireCannon(GameTime now, CannonType cannonType);
+        void FireLeftCannons(GameTime now);
+
+        /// <summary>
+        /// Fires the cannons on the RIGHT side of the ship.
+        /// </summary>
+        /// <param name="now">The current GameTime</param>
+        void FireRightCannons(GameTime now);
 
         /// <summary>
         /// Unloads all of the ships gold to the given Island

@@ -10,12 +10,10 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.View
 {
-    public enum CannonType { LeftCannon, RightCannon, FrontCannon }
-
-    class CannonView<T> : DrawableGameComponent where T : IGameObject, ICannonMountable
+    class CannonView : DrawableGameComponent
     {
         private const string cannonTextureName = "cannonAnimation";
-        private Cannon<T> cannon;
+        private Cannon cannon;
 
         bool firstDraw;
         TimeSpan animationStartTime;
@@ -25,7 +23,7 @@ namespace _2HourGame.View
         Color color;
         Texture2D texture;
 
-        public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon<T> cannon)
+        public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon cannon)
             : base(game)
         {
             this.firstDraw = true;

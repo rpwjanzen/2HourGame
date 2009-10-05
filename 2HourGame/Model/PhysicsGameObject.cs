@@ -62,6 +62,7 @@ namespace _2HourGame.Model
 
         public override Vector2 Position { get { return Geometry.Position; } }
         public override float Rotation { get { return this.Geometry.Rotation; } }
+        public override Vector2 Velocity { get { return Body.LinearVelocity; } }
 
         public event EventHandler<CollisionEventArgs> OnCollision;
 

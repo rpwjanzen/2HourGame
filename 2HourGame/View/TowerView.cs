@@ -11,13 +11,13 @@ namespace _2HourGame.View
     class TowerView : GameObjectView
     {
         Tower tower;
-        CannonView<Tower> towerCannonView;
+        CannonView towerCannonView;
 
         public TowerView(Game game, Color color, SpriteBatch spriteBatch, Tower tower)
             : base(game, "tower", color, spriteBatch, tower, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.tower))
         {
             this.tower = tower;
-            this.towerCannonView = new CannonView<Tower>(game, color, spriteBatch, tower.Cannon);
+            this.towerCannonView = new CannonView(game, color, spriteBatch, tower.Cannon);
         }
 
         public override void Initialize()
@@ -29,10 +29,7 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            if (tower.IsCannonVisible)
-            {
-                towerCannonView.Draw(gameTime);
-            }
+            towerCannonView.Draw(gameTime);
 
             base.Draw(gameTime);
         }

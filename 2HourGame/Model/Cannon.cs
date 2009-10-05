@@ -20,8 +20,7 @@ namespace _2HourGame.Model
     /// <summary>
     /// A cannon that is mounted to another object. It's position is fixed relative to the attached to object.
     /// </summary>
-    /// <typeparam name="T">The object the cannon is attached to</typeparam>
-    class Cannon<T> : GameComponent where T : IGameObject, ICannonMountable
+    class Cannon : GameComponent
     {
         Game game;
 
@@ -35,7 +34,7 @@ namespace _2HourGame.Model
         const float SmokeOffset = 13.0f;
         Timer firingTimer;
 
-        private T attachedToObject;
+        private IGameObject attachedToObject;
         Vector2 positionalOffset;
         float rotationalOffset;
 
@@ -73,7 +72,7 @@ namespace _2HourGame.Model
             }
         }
 
-        public Cannon(Game game, T parentObject, CannonBallManager cannonBallManager, Vector2 positionalOffset, float rotationalOffset)
+        public Cannon(Game game, IGameObject parentObject, CannonBallManager cannonBallManager, Vector2 positionalOffset, float rotationalOffset)
             : base(game)
         {
             this.game = game;
@@ -86,13 +85,13 @@ namespace _2HourGame.Model
         }
 
         /// <summary>
-        /// 
+        /// Fire the cannon if the timer has elapsed and its ready to fire again.
         /// </summary>
         /// <param name="now"></param>
         /// <returns>Vector2.Zero if the cannon was not fired, the firingvector otherwise.</returns>
         public Vector2 attemptFireCannon(GameTime now) 
         {
-            if(firingTimer.TimerHasElapsed(now) && attachedToObject.IsCannonVisible)
+            if(firingTimer.TimerHasElapsed(now))
             {
                 firingTimer.resetTimer(now.TotalGameTime);
                 RaiseCannonFiredEvent(now);

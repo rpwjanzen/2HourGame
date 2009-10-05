@@ -54,9 +54,14 @@ namespace _2HourGame.Model
         }
 
         #region Controller Actions
-        public void FireCannon(GameTime gameTime, CannonType cannonType)
+        public void FireLeftCannons(GameTime gameTime)
         {
-            ship.FireCannon(gameTime, cannonType);
+            ship.FireLeftCannons(gameTime);
+        }
+
+        public void FireRightCannons(GameTime gameTime)
+        {
+            ship.FireRightCannons(gameTime);
         }
 
         public void AttemptPickupGold()

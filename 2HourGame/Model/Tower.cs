@@ -8,11 +8,8 @@ using _2HourGame.View;
 
 namespace _2HourGame.Model
 {
-    class Tower : PhysicsGameObject, ICannonMountable
+    class Tower : PhysicsGameObject
     {
-        // to satisfy ICannonMountable
-        public Vector2 Velocity { get; private set; }
-
         List<IGameObject> targets;
         float range;
 
@@ -24,16 +21,15 @@ namespace _2HourGame.Model
         IGameObject currentTarget = null;
         Timer minTargetFocusTimer;
 
-        public Cannon<Tower> Cannon { get; private set; }
+        public Cannon Cannon { get; private set; }
 
         public Tower(Game game, Vector2 position, List<IGameObject> targets, CannonBallManager cannonBallManager) 
             : base(game, position, 40, 100)
         {
-            this.Velocity = Vector2.Zero;
             this.targets = targets;
             minTargetFocusTimer = new Timer(10f);
             range = 200;
-            Cannon = new Cannon<Tower>(game, this, cannonBallManager, new Vector2(0, -35), 0.0f);
+            Cannon = new Cannon(game, this, cannonBallManager, new Vector2(0, -35), 0.0f);
             base.Body.IsStatic = true;
         }
 
@@ -117,14 +113,5 @@ namespace _2HourGame.Model
         {
             return Vector2.Distance(first.Position, second.Position);
         }
-
-        #region ICannonMountable Members
-
-        public bool IsCannonVisible
-        {
-            get { return true; }
-        }
-
-        #endregion
     }
 }

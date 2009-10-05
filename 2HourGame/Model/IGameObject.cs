@@ -23,5 +23,10 @@ namespace _2HourGame.Model
         /// The GameObject's height
         /// </summary>
         float Height { get; }
+
+        /// <summary>
+        /// The game objects linearVelocity.
+        /// </summary>
+        Vector2 Velocity { get; }
     }
 }

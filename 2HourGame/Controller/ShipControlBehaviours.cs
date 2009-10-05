@@ -31,11 +31,11 @@ namespace _2HourGame.Controller
         {
             if (gs.IsButtonDown(actionKeys[Action.FireLeftCannon]))
             {
-                player.FireCannon(gameTime, CannonType.LeftCannon);
+                player.FireLeftCannons(gameTime);
             }
             if (gs.IsButtonDown(actionKeys[Action.FireRightCannon]))
             {
-                player.FireCannon(gameTime, CannonType.RightCannon);
+                player.FireRightCannons(gameTime);
             }
         }
 

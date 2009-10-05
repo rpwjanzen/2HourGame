@@ -56,14 +56,10 @@ namespace _2HourGame.Model
             get { return this.Gold >= this.GoldCapacity; }
         }
 
-        public Cannon<IShip> LeftCannon { get; private set; }
-        public Cannon<IShip> RightCannon { get; private set; }
+        public Cannon LeftCannon { get; private set; }
+        public Cannon RightCannon { get; private set; }
 
         CannonBallManager cannonBallManager;
-
-        public Vector2 Velocity {
-            get { return base.Body.LinearVelocity; }
-        }
         
         Vector2 FiringVelocity { get; set; }
         Vector2 spawnPoint;
@@ -73,7 +69,7 @@ namespace _2HourGame.Model
         {
             return now.TotalGameTime.TotalSeconds - timeOfDeath.TotalSeconds > respawnTimeSeconds;
         }
-        public bool IsCannonVisible { get { return IsAlive; } }
+        private bool IsCannonVisible { get { return IsAlive; } }
 
         public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, float rotation)
             : base(game, position, 34, 60, rotation)
@@ -93,11 +89,11 @@ namespace _2HourGame.Model
 
             var leftCannonOffset = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y) * ((this.Width / 2.0f) + CannonBuffer);
             var leftCannonRotation = MathHelper.ToRadians(-90);
-            LeftCannon = new Cannon<IShip>(game, this, cannonBallManager, leftCannonOffset, leftCannonRotation);
+            LeftCannon = new Cannon(game, this, cannonBallManager, leftCannonOffset, leftCannonRotation);
 
             var rightCannonOffset = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y) * ((this.Width / 2.0f) + CannonBuffer);
             var rightCannonRotation = MathHelper.ToRadians(90);
-            RightCannon = new Cannon<IShip>(game, this, cannonBallManager, rightCannonOffset, rightCannonRotation);
+            RightCannon = new Cannon(game, this, cannonBallManager, rightCannonOffset, rightCannonRotation);
 
             ShipSank += ShipSankEventHandler;
             ShipSpawned += ShipSpawnedEventHandler;
@@ -156,16 +152,23 @@ namespace _2HourGame.Model
             this.Gold = 0;
         }
 
-        public void FireCannon(GameTime now, CannonType cannonType) 
+        public void FireLeftCannons(GameTime now) 
         {
-            Cannon<IShip> cannon;
-            if (cannonType == CannonType.LeftCannon)
-                cannon = LeftCannon;
-            else
-                cannon = RightCannon;
+            FireCannon(now, LeftCannon);
+        }
 
-            Vector2 thrust = cannon.attemptFireCannon(now);
-            base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y) / 8);
+        public void FireRightCannons(GameTime now) 
+        {
+            FireCannon(now, RightCannon);
+        }
+
+        private void FireCannon(GameTime now, Cannon cannonToFire) 
+        {
+            if (IsCannonVisible)
+            {
+                Vector2 thrust = cannonToFire.attemptFireCannon(now);
+                base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y) / 8);
+            }
         }
 
         /// <summary>

@@ -13,6 +13,7 @@ namespace _2HourGame.Model
     {
         public virtual Vector2 Position { get; set; }
         public virtual float Rotation { get; set; } // in radians
+        public virtual Vector2 Velocity { get { return Vector2.Zero; } }
 
         public float HalfWidth
         {
