@@ -8,47 +8,43 @@ namespace _2HourGame.Model
 {
     static class AIHelpers
     {
-        public enum RotationDirection { None, Left, Right }
+        //public enum RotationDirection { None, Left, Right }
 
-        public static RotationDirection GetRotationToPointInRadians(Vector2 targetPosition, Vector2 myPosition, float initialFacingRadians, float toleranceInRadians)
+        /// <summary>
+        /// The ammount to rotate in order to face the target n radians.
+        /// </summary>
+        public static float GetRotationToPointInDegrees(Vector2 targetPosition, Vector2 myPosition, float initialFacingRadians)
         {
             var delta = myPosition - targetPosition;
-            // my rotation should match this angle (-180.0f - 180.0f)
+            
+            // my rotation should match this angle (-180.0f to 180.0f)
             var desiredRotationInDegrees = MathHelper.ToDegrees((float)Math.Atan2(delta.Y, delta.X));
-
-            // something is wrong in here, so we need to -90 to get it to aim properly
-            desiredRotationInDegrees -= 90.0f;
-            if (desiredRotationInDegrees > 180.0f)
-                desiredRotationInDegrees -= 360.0f;
-            else if (desiredRotationInDegrees < -180.0f)
-                desiredRotationInDegrees += 360.0f;
+            // rotation from Atan2 is in a different coordinate plane that is rotated by 90 degrees so
+            desiredRotationInDegrees -= 90;
+            // but now our desired rotation could be < -180 so
+            if (desiredRotationInDegrees < -180)
+                desiredRotationInDegrees += 360;
 
             var myRotationInDegrees = MathHelper.ToDegrees(initialFacingRadians);
-            // body rotations are 0 - 360.0f
-            myRotationInDegrees -= 180.0f;
 
+            // angle difference range is from -360 to 360
             var angleDifference = (myRotationInDegrees - desiredRotationInDegrees);
 
-            var toleranceInDegrees = MathHelper.ToDegrees(toleranceInRadians);
-            if (angleDifference > (180.0f - toleranceInDegrees))
-            {
-                return RotationDirection.Left;
-            }
-            else if (angleDifference > (0 + toleranceInDegrees))
-            {
-                return RotationDirection.Right;
-            }
-            else if (angleDifference > (-180.0f - -toleranceInDegrees))
-            {
-                return RotationDirection.Left;
-            }
-            else if (angleDifference < (-180.0f + -toleranceInDegrees))
-            {
-                return RotationDirection.Right;
-            }
-            else {
-                return RotationDirection.None;
-            }
+            // we push angle difference into the range -180 to 180
+            if (angleDifference < -180)
+                angleDifference += 360;
+            else if (angleDifference > 180)
+                angleDifference -= 360;
+
+            // so if you wanted to face the object you would change your angle by the negative of the angle difference.
+            return -angleDifference;
+
+            //if (angleDifference < 180)
+            //    return RotationDirection.Left;
+            //else if (angleDifference >= 180)
+            //    return RotationDirection.Right;
+            //else
+            //    return RotationDirection.None;
         }
     }
 }

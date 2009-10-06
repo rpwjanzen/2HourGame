@@ -59,7 +59,23 @@ namespace _2HourGame.Model
             }
         }
 
-        public float LocalRotation { get; set; }
+        /// <summary>
+        /// Local rotation is restricted to being between 180 and -180.
+        /// </summary>
+        private float localRotation;
+        public float LocalRotation {
+            get { return localRotation; }
+            set 
+            {
+                localRotation = value;
+
+                while (localRotation > Math.PI)
+                    localRotation -= 2f * (float)Math.PI;
+                while (localRotation < -Math.PI)
+                    localRotation += 2f * (float)Math.PI;
+            } 
+        }
+
         public float Rotation
         {
             get

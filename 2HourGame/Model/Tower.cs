@@ -16,7 +16,7 @@ namespace _2HourGame.Model
 
         // XXX: sometimes ship cannot lock on properly (moves lefe<->right continuously)
         const float maxCannonRotationDegrees = 0.5f;
-        const float toleranceInDegrees = 5.0f;
+        const float toleranceInDegrees = 9.0f;
 
         // code so that we dont switch targets too often
         IGameObject currentTarget = null;
@@ -48,28 +48,46 @@ namespace _2HourGame.Model
             if (currentTarget != null && ship != null && ship.IsAlive) 
             {
                 // steer towards the target and potentially fire!
-                var direction = AIHelpers.GetRotationToPointInRadians(currentTarget.Position, Cannon.Position, Cannon.Rotation, MathHelper.ToRadians(toleranceInDegrees));
-                if(direction == AIHelpers.RotationDirection.Left) {
-                    RotateCannonLeft();
-                }else if(direction == AIHelpers.RotationDirection.Right) {
-                    RotateCannonRight();
-                } else if(direction == AIHelpers.RotationDirection.None) {
-                    Cannon.attemptFireCannon(gameTime);
+                // get the change to make to point directly at the target.
+                var differenceToTarget = AIHelpers.GetRotationToPointInDegrees(currentTarget.Position, Cannon.Position, Cannon.Rotation);
+
+                float angleChangeInDegrees = differenceToTarget;
+
+                // we need to cap the angle to change by the max rotation
+                if (Math.Abs(differenceToTarget) > maxCannonRotationDegrees) 
+                {
+                    angleChangeInDegrees = maxCannonRotationDegrees;
+
+                    if (differenceToTarget < 0)
+                        angleChangeInDegrees *= -1;
                 }
+
+                Cannon.LocalRotation += MathHelper.ToRadians(angleChangeInDegrees);
+
+                if(Math.Abs(differenceToTarget) <= toleranceInDegrees)
+                    Cannon.attemptFireCannon(gameTime);
+
+                //if(direction == AIHelpers.RotationDirection.Left) {
+                //    RotateCannonLeft();
+                //}else if(direction == AIHelpers.RotationDirection.Right) {
+                //    RotateCannonRight();
+                //} else if(direction == AIHelpers.RotationDirection.None) {
+                //    Cannon.attemptFireCannon(gameTime);
+                //}
             }
 
             base.Update(gameTime);
         }
 
-        void RotateCannonLeft()
-        {
-            Cannon.LocalRotation -= MathHelper.ToRadians(maxCannonRotationDegrees);
-        }
+        //private void RotateCannonLeft()
+        //{
+        //    Cannon.LocalRotation -= MathHelper.ToRadians(maxCannonRotationDegrees);
+        //}
 
-        void RotateCannonRight()
-        {
-            Cannon.LocalRotation += MathHelper.ToRadians(maxCannonRotationDegrees);
-        }
+        //private void RotateCannonRight()
+        //{
+        //    Cannon.LocalRotation += MathHelper.ToRadians(maxCannonRotationDegrees);
+        //}
 
         private List<IGameObject> getInRangeTargets(List<IGameObject> allTargets) 
         {
