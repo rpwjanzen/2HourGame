@@ -93,6 +93,7 @@
     <Compile Include="Factories\ShipActionViewFactory.cs" />
     <Compile Include="Model\AIHelpers.cs" />
     <Compile Include="Model\Cannon.cs" />
+    <Compile Include="Model\DamageablePhysicsGameObject.cs" />
     <Compile Include="Model\GameServices\CollisionCategoryManager.cs" />
     <Compile Include="Model\GameComponentCollectionExtensions.cs" />
     <Compile Include="Model\GameServices\CollisionGroupManager.cs" />

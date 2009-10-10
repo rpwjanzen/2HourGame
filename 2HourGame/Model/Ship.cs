@@ -38,18 +38,6 @@ namespace _2HourGame.Model
         public event EventHandler<ShipSankEventArgs> ShipSank;
         public event EventHandler<ShipSpawnedEventArgs> ShipSpawned;
 
-        readonly double maxHealth = 5;
-        double Health { get; set; }
-        public bool IsDamaged {
-            get { return Health < maxHealth; }
-        }
-        public double HealthPercentage
-        {
-            get { return Health / maxHealth; }
-        }
-        const double healthRepairAmount = 0.10;
-        public bool IsAlive { get; private set; }
-
         public int GoldCapacity { get; private set; }
         public int Gold { get; private set; }
 
@@ -63,8 +51,6 @@ namespace _2HourGame.Model
         CannonBallManager cannonBallManager;
         
         Vector2 FiringVelocity { get; set; }
-        Vector2 spawnPoint;
-        Timer respawnTimer = new Timer(10);
 
         private bool IsCannonVisible { get { return IsAlive; } }
 
@@ -74,9 +60,6 @@ namespace _2HourGame.Model
             this.GoldCapacity = 3;
             this.Gold = 0;
             this.FiringVelocity = Vector2.UnitY;
-            this.Health = 5;
-            this.IsAlive = true;
-            this.spawnPoint = position;
 
             this.OnCollision += ShipCollision;
             this.Body.RotationalDragCoefficient = 2500.0f;

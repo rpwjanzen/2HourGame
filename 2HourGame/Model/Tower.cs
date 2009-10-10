@@ -79,16 +79,6 @@ namespace _2HourGame.Model
             base.Update(gameTime);
         }
 
-        //private void RotateCannonLeft()
-        //{
-        //    Cannon.LocalRotation -= MathHelper.ToRadians(maxCannonRotationDegrees);
-        //}
-
-        //private void RotateCannonRight()
-        //{
-        //    Cannon.LocalRotation += MathHelper.ToRadians(maxCannonRotationDegrees);
-        //}
-
         private List<IGameObject> getInRangeTargets(List<IGameObject> allTargets) 
         {
             List<IGameObject> inRangeTargets = new List<IGameObject>();
