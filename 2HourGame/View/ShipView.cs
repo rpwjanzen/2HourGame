@@ -40,7 +40,7 @@ namespace _2HourGame.View
             this.shipOutlineColor = shipOutlineColor;
             this.ship = ship;
 
-            ship.ShipSank += this.ShipSankEventHandler;
+            ship.ObjectDestroyed += this.ShipSankEventHandler;
             healthBarView = new HealthBarView(base.Game, spriteBatch, ship);
             Game.Components.Add(healthBarView);
 

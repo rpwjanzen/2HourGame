@@ -9,7 +9,7 @@ using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
-    class Tower : PhysicsGameObject
+    class Tower : DamageablePhysicsGameObject
     {
         List<IGameObject> targets;
         float range;
@@ -25,7 +25,7 @@ namespace _2HourGame.Model
         public Cannon Cannon { get; private set; }
 
         public Tower(Game game, Vector2 position, List<IGameObject> targets, CannonBallManager cannonBallManager)
-            : base(game, position, 40, 100, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
+            : base(game, position, 40, 100, 0, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
         {
             this.targets = targets;
             minTargetFocusTimer = new Timer(10f);
@@ -36,6 +36,14 @@ namespace _2HourGame.Model
 
         public override void Update(GameTime gameTime)
         {
+            if (this.IsAlive)
+                doCannonBehaviour(gameTime);
+
+            base.Update(gameTime);
+        }
+
+        private void doCannonBehaviour(GameTime gameTime) 
+        {
             if (currentTarget == null || targetIsOutOfRange(currentTarget))// || minTargetFocusTimer.TimerHasElapsed(gameTime))
             {
                 currentTarget = getClosestToSelf(getInRangeTargets(targets));
@@ -45,7 +53,7 @@ namespace _2HourGame.Model
             // XXX: Dirty hack!
             var ship = currentTarget as Ship;
 
-            if (currentTarget != null && ship != null && ship.IsAlive) 
+            if (currentTarget != null && ship != null && ship.IsAlive)
             {
                 // steer towards the target and potentially fire!
                 // get the change to make to point directly at the target.
@@ -54,7 +62,7 @@ namespace _2HourGame.Model
                 float angleChangeInDegrees = differenceToTarget;
 
                 // we need to cap the angle to change by the max rotation
-                if (Math.Abs(differenceToTarget) > maxCannonRotationDegrees) 
+                if (Math.Abs(differenceToTarget) > maxCannonRotationDegrees)
                 {
                     angleChangeInDegrees = maxCannonRotationDegrees;
 
@@ -64,19 +72,9 @@ namespace _2HourGame.Model
 
                 Cannon.LocalRotation += MathHelper.ToRadians(angleChangeInDegrees);
 
-                if(Math.Abs(differenceToTarget) <= toleranceInDegrees)
+                if (Math.Abs(differenceToTarget) <= toleranceInDegrees)
                     Cannon.attemptFireCannon(gameTime);
-
-                //if(direction == AIHelpers.RotationDirection.Left) {
-                //    RotateCannonLeft();
-                //}else if(direction == AIHelpers.RotationDirection.Right) {
-                //    RotateCannonRight();
-                //} else if(direction == AIHelpers.RotationDirection.None) {
-                //    Cannon.attemptFireCannon(gameTime);
-                //}
             }
-
-            base.Update(gameTime);
         }
 
         private List<IGameObject> getInRangeTargets(List<IGameObject> allTargets) 

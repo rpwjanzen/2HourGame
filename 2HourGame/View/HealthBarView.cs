@@ -13,14 +13,14 @@ namespace _2HourGame.View
     class HealthBarView : DrawableGameComponent
     {
         SpriteBatch spriteBatch;
-        IShip ship;
+        IDamageableGameObject damageableGameObject;
         Vector2 offset;
         ProgressBar progressBar;
 
-        public HealthBarView(Game game, SpriteBatch spriteBatch, IShip ship)
+        public HealthBarView(Game game, SpriteBatch spriteBatch, IDamageableGameObject damageableGameObject)
             :base(game)
         {
-            this.ship = ship;
+            this.damageableGameObject = damageableGameObject;
             this.spriteBatch = spriteBatch;
             offset = new Vector2(0, 35);
 
@@ -38,15 +38,15 @@ namespace _2HourGame.View
 
         public override void Update(GameTime gameTime)
         {
-            progressBar.Progress = (float)ship.HealthPercentage;
-            progressBar.Position = ship.Position + offset;
+            progressBar.Progress = (float)damageableGameObject.HealthPercentage;
+            progressBar.Position = damageableGameObject.Position + offset;
 
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if (ship.IsDamaged && ship.IsAlive)
+            if (damageableGameObject.IsDamaged && damageableGameObject.IsAlive)
             {
                 progressBar.Draw(spriteBatch);
             }

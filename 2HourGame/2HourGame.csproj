@@ -101,7 +101,7 @@
     <Compile Include="Model\GameServices\ICollisionGroupManager.cs" />
     <Compile Include="Model\ICollidable.cs" />
     <Compile Include="Model\IGameObject.cs" />
-    <Compile Include="Model\IHealth.cs" />
+    <Compile Include="Model\IDamageableGameObject.cs" />
     <Compile Include="Model\IOrigin.cs" />
     <Compile Include="Model\IPhysicsSimulatorService.cs" />
     <Compile Include="Model\IPositionable.cs" />

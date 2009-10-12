@@ -7,7 +7,7 @@ using _2HourGame.View;
 
 namespace _2HourGame.Model
 {
-    interface IShip: IGameObject, IHealth
+    interface IShip: IGameObject, IDamageableGameObject
     {
         /// <summary>
         /// The amount of gold the ship is currently carrying
@@ -28,11 +28,6 @@ namespace _2HourGame.Model
         /// The linear velocity of the ship
         /// </summary>
         float Speed { get; }
-        
-        /// <summary>
-        /// True, if the ship is alive
-        /// </summary>
-        bool IsAlive { get; }
 
         /// <summary>
         /// The ships left cannon
@@ -43,11 +38,6 @@ namespace _2HourGame.Model
         /// The ships right cannon
         /// </summary>
         Cannon RightCannon { get; }
-
-        /// <summary>
-        /// Occurs when the ship sinks
-        /// </summary>
-        event EventHandler<ShipSankEventArgs> ShipSank;
 
         /// <summary>
         /// Rotates the ship with the given force
@@ -84,10 +74,5 @@ namespace _2HourGame.Model
         /// </summary>
         /// <param name="island"></param>
         void LoadGoldFromIsland(Island island);
-
-        /// <summary>
-        /// Repairs the ship
-        /// </summary>
-        void Repair();
     }
 }
