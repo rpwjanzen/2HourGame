@@ -5,7 +5,7 @@ using System.Text;
 
 namespace _2HourGame.Model
 {
-    interface IDamageableGameObject
+    interface IDamageableGameObject : IGameObject
     {
         /// <summary>
         /// Is fired when the object is destroyed.
