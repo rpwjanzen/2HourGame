@@ -18,7 +18,9 @@ namespace _2HourGame.Model
 {
     class Ship : DamageablePhysicsGameObject, IShip
     {
-        const float CannonBuffer = -8.0f;
+        // Offset to move the cannons so they look good on the ship.
+        readonly Vector2 leftCannonOffset = new Vector2(8, 4);
+        readonly Vector2 rightCannonOffset = new Vector2(-8, 4);
 
         public int GoldCapacity { get; private set; }
         public int Gold { get; private set; }
@@ -45,13 +47,13 @@ namespace _2HourGame.Model
 
             var rotationMatrix = Matrix.Identity;
 
-            var leftCannonOffset = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y) * ((this.Width / 2.0f) + CannonBuffer);
+            var leftCannonPosition = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y) * ((this.Width / 2.0f)) + leftCannonOffset;
             var leftCannonRotation = MathHelper.ToRadians(-90);
-            LeftCannon = new Cannon(game, this, cannonBallManager, leftCannonOffset, leftCannonRotation);
+            LeftCannon = new Cannon(game, this, cannonBallManager, leftCannonPosition, leftCannonRotation);
 
-            var rightCannonOffset = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y) * ((this.Width / 2.0f) + CannonBuffer);
+            var rightCannonPosition = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y) * ((this.Width / 2.0f)) + rightCannonOffset;
             var rightCannonRotation = MathHelper.ToRadians(90);
-            RightCannon = new Cannon(game, this, cannonBallManager, rightCannonOffset, rightCannonRotation);
+            RightCannon = new Cannon(game, this, cannonBallManager, rightCannonPosition, rightCannonRotation);
 
             base.Rotation = rotation;
 
