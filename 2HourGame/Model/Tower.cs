@@ -25,7 +25,7 @@ namespace _2HourGame.Model
         public Cannon Cannon { get; private set; }
 
         public Tower(Game game, Vector2 position, List<IGameObject> targets, CannonBallManager cannonBallManager)
-            : base(game, position, 40, 100, 0, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
+            : base(game, position, cannonBallManager, 40, 100, 0, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
         {
             this.targets = targets;
             minTargetFocusTimer = new Timer(10f);

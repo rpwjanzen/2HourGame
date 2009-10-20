@@ -29,23 +29,19 @@ namespace _2HourGame.Model
 
         public Cannon LeftCannon { get; private set; }
         public Cannon RightCannon { get; private set; }
-
-        CannonBallManager cannonBallManager;
         
         Vector2 FiringVelocity { get; set; }
 
         private bool IsCannonVisible { get { return IsAlive; } }
 
         public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, float rotation)
-            : base(game, position, 34, 60, rotation, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
+            : base(game, position, cannonBallManager, 10, 34, 60, rotation, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
         {
             this.GoldCapacity = 3;
             this.Gold = 0;
             this.FiringVelocity = Vector2.UnitY;
 
-            this.OnCollision += ShipCollision;
             this.Body.RotationalDragCoefficient = 2500.0f;
-            this.cannonBallManager = cannonBallManager;
 
             var rotationMatrix = Matrix.Identity;
 
@@ -60,6 +56,7 @@ namespace _2HourGame.Model
             base.Rotation = rotation;
 
             ObjectDestroyed += ShipSankEventHandler;
+            ObjectDamaged += ShipDamagedEventHandler;
         }
 
         public override void Update(GameTime gameTime)
@@ -120,35 +117,17 @@ namespace _2HourGame.Model
             }
         }
 
-        /// <summary>
-        /// Handles ship getting hit by a cannonball
-        /// </summary>
-        private void ShipCollision(object sender, CollisionEventArgs e)
-        {
-            var cannonBall = e.Other as CannonBall;
-            if (cannonBall != null)
-            {
-                this.cannonBallManager.RemoveCannonBall(cannonBall);
-                hitByCannonBall(cannonBall, e.CollisionTime);
-            }
+        private void AddGold() {
+            this.Gold++;
         }
 
-        /// <summary>
-        /// Ships status reaction to being hit by a cannon ball.
-        /// </summary>
-        private void hitByCannonBall(CannonBall cannonBall, GameTime gameTime) 
+        private void ShipDamagedEventHandler(object sender, ObjectDamagedEventArgs e) 
         {
             if (Gold > 0)
             {
                 Gold--;
-                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.BoatHitByCannon, cannonBall.Position);
+                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.BoatHitByCannon, e.DamagingObject.Position);
             }
-
-            takeDamage(gameTime, (cannonBall.Speed != 0 ? cannonBall.Speed : 120) / 75);
-        }
-
-        private void AddGold() {
-            this.Gold++;
         }
 
         private void ShipSankEventHandler(object sender, ObjectDestroyedEventArgs e)

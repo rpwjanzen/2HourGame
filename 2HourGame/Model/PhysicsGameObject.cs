@@ -106,6 +106,8 @@ namespace _2HourGame.Model
             PhysicsSimulator.Add(Geometry);
 
             this.Geometry.OnCollision += RaiseCollisionEvent;
+
+            base.GameObjectRemoved += RemoveFromPhysicsSimulator;
         }
 
         public override void Update(GameTime gameTime)
@@ -115,6 +117,11 @@ namespace _2HourGame.Model
                 Body.AngularVelocity = 5000;
 
             base.Update(gameTime);
+        }
+
+        public void RemoveFromPhysicsSimulator(object sender, EventArgs e) 
+        {
+            RemoveFromPhysicsSimulator();
         }
 
         public void RemoveFromPhysicsSimulator() {

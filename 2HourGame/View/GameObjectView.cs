@@ -70,9 +70,20 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Draw(Texture, GameObject.Position + (textureOriginOffset * this.Scale), null, Color, GameObject.Rotation, this.Origin, this.Scale, SpriteEffects.None, ZIndex);
+            if (GameObject is DamageablePhysicsGameObject)
+            {
+                if (((DamageablePhysicsGameObject)GameObject).IsAlive)
+                    DoDraw();
+            }
+            else
+                DoDraw();
 
             base.Draw(gameTime);
+        }
+
+        private void DoDraw() 
+        {
+            SpriteBatch.Draw(Texture, GameObject.Position + (textureOriginOffset * this.Scale), null, Color, GameObject.Rotation, this.Origin, this.Scale, SpriteEffects.None, ZIndex);
         }
 
         private void GameObjectRemoved(object sender, EventArgs e)

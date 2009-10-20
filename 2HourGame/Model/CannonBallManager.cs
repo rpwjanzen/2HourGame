@@ -66,7 +66,7 @@ namespace _2HourGame.Model
 
         public void RemoveCannonBall(CannonBall cannonBall) 
         {
-            cannonBall.RemoveFromPhysicsSimulator();
+            //cannonBall.RemoveFromPhysicsSimulator();
             base.Game.Components.Remove(cannonBall);
             cannonBalls.Remove(cannonBall);
         }

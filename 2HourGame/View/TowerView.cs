@@ -29,7 +29,8 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            towerCannonView.Draw(gameTime);
+            if (tower.IsAlive)
+                towerCannonView.Draw(gameTime);
 
             base.Draw(gameTime);
         }
