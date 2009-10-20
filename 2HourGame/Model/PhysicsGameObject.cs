@@ -112,7 +112,7 @@ namespace _2HourGame.Model
 
         public override void Update(GameTime gameTime)
         {
-            //XXX - Massive Hack to prevent AngularVelocity from reaching NaN
+            //XXX - Hack to prevent AngularVelocity from reaching NaN
             if (Body.AngularVelocity > 5000)
                 Body.AngularVelocity = 5000;
 

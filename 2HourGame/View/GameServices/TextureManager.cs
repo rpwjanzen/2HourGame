@@ -27,6 +27,9 @@ namespace _2HourGame.View.GameServices
             base.Initialize();
         }
 
+        /// <summary>
+        /// If this list is incomplete the texture will automatically be loaded when it is requested, but the ones in the list are loaded when the game starts up.
+        /// </summary>
         private void LoadTextures()
         {
             LoadTexture("boatHitByCannonAnimation");
@@ -37,7 +40,6 @@ namespace _2HourGame.View.GameServices
             LoadTexture("ControllerImages\\xboxControllerButtonA");
             LoadTexture("ControllerImages\\xboxControllerButtonB");
             LoadTexture("dig");
-            LoadTexture("repair");
             LoadTexture("floatingCrate");
             LoadTexture("gold");
             LoadTexture("goldGetAnimation");
@@ -45,13 +47,15 @@ namespace _2HourGame.View.GameServices
             LoadTexture("healthBar");
             LoadTexture("house");
             LoadTexture("island");
+            LoadTexture("progressBar");
+            LoadTexture("repair");
             LoadTexture("shipGunwale");
             LoadTexture("shipHull");
             LoadTexture("shipRigging");
+            LoadTexture("shipRiggingSingleMast");
             LoadTexture("shipSinking");
             LoadTexture("splashAnimation");
             LoadTexture("tower");
-            LoadTexture("progressBar");
         }
 
         private void LoadTexture(string textureName) 

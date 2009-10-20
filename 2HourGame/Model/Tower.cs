@@ -14,7 +14,6 @@ namespace _2HourGame.Model
         List<IGameObject> targets;
         float range;
 
-        // XXX: sometimes ship cannot lock on properly (moves lefe<->right continuously)
         const float maxCannonRotationDegrees = 0.5f;
         const float toleranceInDegrees = 9.0f;
 
@@ -25,7 +24,7 @@ namespace _2HourGame.Model
         public Cannon Cannon { get; private set; }
 
         public Tower(Game game, Vector2 position, List<IGameObject> targets, CannonBallManager cannonBallManager)
-            : base(game, position, cannonBallManager, 40, 100, 0, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
+            : base(game, position, cannonBallManager, 40, 100, 0)
         {
             this.targets = targets;
             minTargetFocusTimer = new Timer(10f);

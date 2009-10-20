@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using _2HourGame.View.GameServices;
 using System.Diagnostics;
+using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
@@ -61,17 +62,36 @@ namespace _2HourGame.Model
 
         CannonBallManager cannonBallManager;
 
-        public DamageablePhysicsGameObject(Game game, Vector2 initialPosition, CannonBallManager cannonBallManager, int respawnTime,
-            float width, float height, float rotation, int collisionGroup)
-            : this(game, initialPosition, cannonBallManager, width, height, rotation, collisionGroup)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="initialPosition"></param>
+        /// <param name="cannonBallManager"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rotation"></param>
+        /// <param name="respawnTime">Time in seconds before a destroyed object will respawn.</param>
+        public DamageablePhysicsGameObject(Game game, Vector2 initialPosition, CannonBallManager cannonBallManager,
+            float width, float height, float rotation, int respawnTime)
+            : this(game, initialPosition, cannonBallManager, width, height, rotation)
         {
             respawnTimer = new Timer(respawnTime);
             respawnOnDeath = true;
         }
 
+        /// <summary>
+        /// If you do not pass in a respawn time then this object will delete itself when it is destroyed.
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="initialPosition"></param>
+        /// <param name="cannonBallManager"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rotation"></param>
         public DamageablePhysicsGameObject(Game game, Vector2 initialPosition, CannonBallManager cannonBallManager,
-            float width, float height, float rotation, int collisionGroup)
-            : base(game, initialPosition, width, height, rotation, collisionGroup)
+            float width, float height, float rotation)
+            : base(game, initialPosition, width, height, rotation, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
         {
             this.Health = 5;
             this.IsAlive = true;

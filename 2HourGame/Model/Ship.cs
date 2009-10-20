@@ -22,8 +22,8 @@ namespace _2HourGame.Model
         readonly Vector2 leftCannonOffset = new Vector2(8, 4);
         readonly Vector2 rightCannonOffset = new Vector2(-8, 4);
 
-        public int GoldCapacity { get; private set; }
-        public int Gold { get; private set; }
+        public int GoldCapacity { get; protected set; }
+        public int Gold { get; protected set; }
 
         public bool IsFull {
             get { return this.Gold >= this.GoldCapacity; }
@@ -37,7 +37,7 @@ namespace _2HourGame.Model
         private bool IsCannonVisible { get { return IsAlive; } }
 
         public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, float rotation)
-            : base(game, position, cannonBallManager, 10, 34, 60, rotation, ((CollisionGroupManager)game.Services.GetService(typeof(CollisionGroupManager))).getNextFreeCollisionGroup())
+            : base(game, position, cannonBallManager, 34, 60, rotation, 10)
         {
             this.GoldCapacity = 3;
             this.Gold = 0;
