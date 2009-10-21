@@ -9,7 +9,7 @@ namespace _2HourGame.Model
     class Timer
     {
         float timerDuration;
-        TimeSpan timerStartTime;
+        public TimeSpan timerStartTime { get; private set; }
 
         public Timer(float timerDuration) 
         {

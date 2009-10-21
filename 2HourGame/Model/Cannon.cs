@@ -33,6 +33,13 @@ namespace _2HourGame.Model
 
         const float SmokeOffset = 13.0f;
         Timer firingTimer;
+        public TimeSpan lastTimeFired
+        {
+            get
+            {
+                return firingTimer.timerStartTime;
+            }
+        }
 
         private PhysicsGameObject attachedToObject;
         Vector2 positionalOffset;

@@ -30,14 +30,14 @@ namespace _2HourGame.Model
         float Speed { get; }
 
         /// <summary>
-        /// The ships left cannon
+        /// The ships left cannons
         /// </summary>
-        Cannon LeftCannon { get; }
+        List<Cannon> LeftCannons { get; }
 
         /// <summary>
-        /// The ships right cannon
+        /// The ships right cannons
         /// </summary>
-        Cannon RightCannon { get; }
+        List<Cannon> RightCannons { get; }
 
         /// <summary>
         /// Rotates the ship with the given force

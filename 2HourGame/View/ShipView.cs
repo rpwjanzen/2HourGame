@@ -44,8 +44,8 @@ namespace _2HourGame.View
             healthBarView = new HealthBarView(base.Game, spriteBatch, ship);
             Game.Components.Add(healthBarView);
 
-            LeftCannonView = new CannonView(Game, Color.White, SpriteBatch, ship.LeftCannon);
-            RightCannonView = new CannonView(Game, Color.White, SpriteBatch, ship.RightCannon);
+            LeftCannonView = new CannonView(Game, Color.White, SpriteBatch, ship.LeftCannons.First());
+            RightCannonView = new CannonView(Game, Color.White, SpriteBatch, ship.RightCannons.First());
         }
 
         public override void Initialize()

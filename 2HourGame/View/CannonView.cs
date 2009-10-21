@@ -15,8 +15,6 @@ namespace _2HourGame.View
         private const string cannonTextureName = "cannonAnimation";
         private Cannon cannon;
 
-        bool firstDraw;
-        TimeSpan animationStartTime;
         AnimatedTextureInfo animatedTextureInfo;
         float zIndex;
         SpriteBatch spriteBatch;
@@ -26,11 +24,9 @@ namespace _2HourGame.View
         public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon cannon)
             : base(game)
         {
-            this.firstDraw = true;
             this.color = color;
             this.spriteBatch = spriteBatch;
             this.cannon = cannon;
-            cannon.CannonFired += HandleCannonFiredEvent;
         }
 
         protected override void LoadContent()
@@ -45,14 +41,8 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            if (firstDraw)
-            {
-                firstDraw = false;
-                animationStartTime = gameTime.TotalGameTime;
-            }
-
             // get the frame to draw
-            int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - animationStartTime.TotalSeconds)
+            int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - cannon.lastTimeFired.TotalSeconds)
                 * this.animatedTextureInfo.FramesPerSecond));
 
             int frame;
@@ -76,16 +66,6 @@ namespace _2HourGame.View
                 SpriteEffects.None,
                 zIndex
             );
-        }
-
-        void HandleCannonFiredEvent(object sender, CannonFiredEventArgs e)
-        {
-            StartAnimation(e.FiredTime);
-        }
-
-        private void StartAnimation(GameTime gameTime)
-        {
-            animationStartTime = gameTime.TotalGameTime;
         }
     }
 }
