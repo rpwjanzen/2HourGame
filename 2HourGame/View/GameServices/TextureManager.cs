@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
+using System.Collections.Generic;
 
 namespace _2HourGame.View.GameServices
 {
-    class TextureManager : GameComponent, ITextureManager
+    class TextureManager
     {
         Dictionary<string, Texture2D> loadedTextures;
 
@@ -15,52 +13,49 @@ namespace _2HourGame.View.GameServices
             get { return loadedTextures[index]; }
         }
 
-        public TextureManager(Game game) : base(game)
+        public TextureManager()
         {
             loadedTextures = new Dictionary<string, Texture2D>();
-            game.Services.AddService(typeof(ITextureManager), this);
         }
 
-        public override void Initialize()
-        {
-            this.LoadTextures();
-            base.Initialize();
+        public void LoadContent(ContentManager content) {
+            LoadTextures(content);
         }
 
         /// <summary>
         /// If this list is incomplete the texture will automatically be loaded when it is requested, but the ones in the list are loaded when the game starts up.
         /// </summary>
-        private void LoadTextures()
+        private void LoadTextures(ContentManager content)
         {
-            LoadTexture("boatHitByCannonAnimation");
-            LoadTexture("boundingCircle");
-            LoadTexture("cannonAnimation");
-            LoadTexture("cannonBall");
-            LoadTexture("cannonSmokeAnimation");
-            LoadTexture("ControllerImages\\xboxControllerButtonA");
-            LoadTexture("ControllerImages\\xboxControllerButtonB");
-            LoadTexture("dig");
-            LoadTexture("floatingCrate");
-            LoadTexture("gold");
-            LoadTexture("goldGetAnimation");
-            LoadTexture("goldLoseAnimation");
-            LoadTexture("healthBar");
-            LoadTexture("house");
-            LoadTexture("island");
-            LoadTexture("progressBar");
-            LoadTexture("repair");
-            LoadTexture("shipGunwale");
-            LoadTexture("shipHull");
-            LoadTexture("shipRigging");
-            LoadTexture("shipRiggingSingleMast");
-            LoadTexture("shipSinking");
-            LoadTexture("splashAnimation");
-            LoadTexture("tower");
+            LoadTexture("boatHitByCannonAnimation", content);
+            LoadTexture("boundingCircle", content);
+            LoadTexture("cannonAnimation", content);
+            LoadTexture("cannonBall", content);
+            LoadTexture("cannonSmokeAnimation", content);
+            LoadTexture("ControllerImages\\xboxControllerButtonA", content);
+            LoadTexture("ControllerImages\\xboxControllerButtonB", content);
+            LoadTexture("dig", content);
+            LoadTexture("floatingCrate", content);
+            LoadTexture("gold", content);
+            LoadTexture("goldGetAnimation", content);
+            LoadTexture("goldLoseAnimation", content);
+            LoadTexture("healthBar", content);
+            LoadTexture("house", content);
+            LoadTexture("island", content);
+            LoadTexture("progressBar", content);
+            LoadTexture("repair", content);
+            LoadTexture("shipGunwale", content);
+            LoadTexture("shipHull", content);
+            LoadTexture("shipRigging", content);
+            LoadTexture("shipRiggingSingleMast", content);
+            LoadTexture("shipSinking", content);
+            LoadTexture("splashAnimation", content);
+            LoadTexture("tower", content);
         }
 
-        private void LoadTexture(string textureName) 
+        private void LoadTexture(string textureName, ContentManager content) 
         {
-            loadedTextures.Add(textureName, Game.Content.Load<Texture2D>(@"Content\" + textureName));
+            loadedTextures.Add(textureName, content.Load<Texture2D>(@"Content\" + textureName));
         }
     }
 }

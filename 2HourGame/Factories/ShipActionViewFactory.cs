@@ -7,12 +7,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 using _2HourGame.View;
 using _2HourGame.Model;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Factories
 {
     class ShipActionViewFactory : GameObjectFactory {
 
-        public ShipActionViewFactory(World world) : base(world) { }
+        public ShipActionViewFactory(World world, TextureManager tm, AnimationManager am) : base(world, tm, am) { }
 
         public IEnumerable<ShipActionsView> CreateShipActionsViews(IEnumerable<Player> players)
         {
@@ -24,7 +25,7 @@ namespace _2HourGame.Factories
 
         public ShipActionsView CreateShipActionsView(Player player)
         {
-            return new ShipActionsView(World, player);
+            return new ShipActionsView(World, player, TextureManager, AnimationManager);
         }
     }
 }

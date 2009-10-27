@@ -7,14 +7,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
+using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame.View
 {
-    class IslandsGoldView : DrawableGameComponent
+    class IslandGoldView : ActorView
     {
-        IEnumerable<Island> islands;
-
-        SpriteBatch spriteBatch;
+        Island island;
         Texture2D texture;
 
         Vector2 goldIslandOffset;
@@ -23,38 +22,35 @@ namespace _2HourGame.View
 
         float scale;
 
-        public IslandsGoldView(Game game, IEnumerable<Island> islands, SpriteBatch spriteBatch)
-            : base(game)
+        public IslandGoldView(World world, Island island, TextureManager tm, AnimationManager am)
+            : base(island, world, tm, am)
         {
-            this.islands = islands;
-            this.spriteBatch = spriteBatch;
+            this.island = island;
             scale = 0.3f;
             goldIslandOffset = new Vector2(17, 17);
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(ContentManager content)
         {
-            texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))["gold"];
+            texture = TextureManager["gold"];
             origin = new Vector2(texture.Width / 2, texture.Height / 2);
-            base.LoadContent();
+
+            base.LoadContent(content);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            foreach (Island island in islands) 
+            for (int i = 0; i < island.Gold && i < 10; i++) 
             {
-                for (int i = 0; i < island.Gold && i < 10; i++) 
-                {
-                    spriteBatch.Draw(texture, island.Position + goldIslandOffset + goldLocation(i), null, Color.White, 0, origin, scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.islandGoldView));
-                }
+                spriteBatch.Draw(texture, island.Position + goldIslandOffset + goldLocation(i), null, Color.White, 0, origin, scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.islandGoldView));
             }
             
-            base.Draw(gameTime);
+            base.Draw(gameTime, spriteBatch);
         }
 
-        private Vector2 goldLocation(int goldPeiceNumber) 
+        private Vector2 goldLocation(int goldPieceNumber) 
         {
-            switch (goldPeiceNumber)
+            switch (goldPieceNumber)
             {
                 case 0:
                     return new Vector2(0, -6);

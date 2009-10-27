@@ -29,6 +29,8 @@ namespace _2HourGame.Model
 
             Width = width;
             Height = height;
+            this.Health = 0;
+            this.MaxHealth = 0;
         }
 
         public override void Spawn() {

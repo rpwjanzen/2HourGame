@@ -15,6 +15,10 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
+    class DamagedEventArgs : EventArgs {
+        public Vector2 DamagePosition { get; set; }
+    }
+
     class Ship : PhysicsGameObject
     {
         public int GoldCapacity { get; protected set; }
@@ -32,6 +36,9 @@ namespace _2HourGame.Model
         // Offset to move the cannons so they look good on the ship.
         readonly Vector2 leftCannonOffset = new Vector2(8, 4);
         readonly Vector2 rightCannonOffset = new Vector2(-8, 4);
+
+        public event EventHandler GoldLoaded;
+        public event EventHandler<DamagedEventArgs> Damaged;
 
         public Ship(PhysicsWorld world, Vector2 position, float rotation)
             : base(world, position, 34, 60, rotation)
@@ -83,7 +90,9 @@ namespace _2HourGame.Model
             {
                 island.RemoveGold();
                 this.AddGold();
-                ((IAnimationManager)base.Game.Services.GetService(typeof(IAnimationManager))).PlayAnimation(Animation.GetGold, this.Position);
+                if (GoldLoaded != null) {
+                    GoldLoaded(this, EventArgs.Empty);
+                }                
             }
         }
 
@@ -127,7 +136,11 @@ namespace _2HourGame.Model
             if (Gold > 0)
             {
                 Gold--;
-                ((IAnimationManager)base.Game.Services.GetService(typeof(IAnimationManager))).PlayAnimation(Animation.BoatHitByCannon, damagePoint.Position);
+                if (Damaged != null) {
+                    var ea = new DamagedEventArgs();
+                    ea.DamagePosition = damagePoint.Position;
+                    Damaged(this, ea);
+                }
             }
 
             Health -= 1;
@@ -138,8 +151,10 @@ namespace _2HourGame.Model
 
         private void FireCannon(GameTime now, Cannon cannonToFire) {
             if (IsAlive) {
-                Vector2 thrust = cannonToFire.AttemptFireCannon(now);
-                base.Body.ApplyImpulse(thrust / 8);
+                Vector2? kickback = cannonToFire.AttemptFireCannon(now);
+                if (kickback.HasValue) {
+                    base.Body.ApplyImpulse(kickback.Value / 8);
+                }
             }
         }
 

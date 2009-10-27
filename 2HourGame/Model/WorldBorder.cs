@@ -9,10 +9,8 @@ namespace _2HourGame.Model
 {
     class WorldBorder {
         const int buffer = 100;
-        Game game;
 
-        public WorldBorder(Game game, Rectangle innerBorder, PhysicsSimulator physicsSimulator) {
-            this.game = game;
+        public WorldBorder(Rectangle innerBorder, PhysicsSimulator physicsSimulator) {
 
             var outerBorder = new Rectangle(innerBorder.X, innerBorder.X, innerBorder.Width, innerBorder.Height);
             outerBorder.Inflate(buffer, buffer);

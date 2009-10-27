@@ -17,8 +17,8 @@ namespace _2HourGame.View
         Vector2 offset;
         ProgressBar progressBar;
 
-        public HealthBarView(World world, GameObject gameObject)
-            :base(gameObject, world)
+        public HealthBarView(World world, GameObject gameObject, TextureManager textureManager, AnimationManager am)
+            :base(gameObject, world, textureManager, am)
         {
             this.gameObject = gameObject;
             offset = new Vector2(0, 35);
@@ -30,7 +30,7 @@ namespace _2HourGame.View
 
         public override void LoadContent(ContentManager content)
         {
-            progressBar.LoadContent((ITextureManager)Game.Services.GetService(typeof(ITextureManager)));
+            progressBar.LoadContent(TextureManager);
 
             base.LoadContent(content);
         }

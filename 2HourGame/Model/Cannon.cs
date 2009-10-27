@@ -8,6 +8,10 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
+    class FiredEventArgs : EventArgs {
+        public Vector2 SmokePosition { get; set; }
+    }
+
     /// <summary>
     /// A cannon that is mounted to another object. It's position is fixed relative to the attached to object.
     /// </summary>
@@ -65,6 +69,9 @@ namespace _2HourGame.Model
         Vector2 positionalOffset;
         float rotationalOffset;
 
+
+        public event EventHandler<FiredEventArgs> Fired;
+
         public Cannon(PhysicsWorld world, PhysicsGameObject owner, Vector2 positionalOffset, float rotationalOffset)
             : base(world, Vector2.Zero, 0, 0, 0.0f)
         {
@@ -103,7 +110,11 @@ namespace _2HourGame.Model
             var cannonBallPostion = firingVector * CannonBallOffset + this.Position;
             var smokePosition = firingVector * SmokeOffset + this.Position;
 
-            ((IAnimationManager)game.Services.GetService(typeof(IAnimationManager))).PlayAnimation(Animation.CannonSmoke, smokePosition);
+            if (Fired != null) {
+                var ea = new FiredEventArgs();
+                ea.SmokePosition = smokePosition;
+                Fired(this, ea);
+            }
 
             var cannonBall = new CannonBall(PhysicsWorld, cannonBallPostion, owner);
             cannonBall.Fire(thrust);

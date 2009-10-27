@@ -47,7 +47,7 @@ namespace _2HourGame.View
             Scale = Vector2.One;
         }
 
-        public void LoadContent(ITextureManager textureManager)
+        public void LoadContent(TextureManager textureManager)
         {
             Texture = textureManager["progressBar"];
             Origin = Texture.Center(Scale);

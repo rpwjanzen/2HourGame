@@ -23,26 +23,33 @@ namespace _2HourGame.View
         CannonView LeftCannonView;
         CannonView RightCannonView;
 
-        IAnimationManager effectManager;
-
-        public ShipView(World world, Color shipOutlineColor, string contentName, Color color, Ship ship)
-            : base(world, contentName, color, ship, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull)) 
+        public ShipView(World world, Color shipOutlineColor, string contentName, Color color, Ship ship, TextureManager tm, AnimationManager am)
+            : base(world, contentName, color, ship, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull), tm, am) 
         {
             this.shipOutlineColor = shipOutlineColor;
             this.ship = ship;
             
             ship.Died += new EventHandler(ship_Died);
-            
-            healthBarView = new HealthBarView(world, ship);
-            LeftCannonView = new CannonView(world, ship.LeftCannons.First(), Color.White);
-            RightCannonView = new CannonView(world, ship.RightCannons.First(), Color.White);
+            ship.GoldLoaded += new EventHandler(ship_GoldLoaded);
+            ship.Damaged += new EventHandler<DamagedEventArgs>(ship_Damaged);
+
+            healthBarView = new HealthBarView(world, ship, tm, am);
+            LeftCannonView = new CannonView(world, ship.LeftCannons.First(), Color.White, tm, am);
+            RightCannonView = new CannonView(world, ship.RightCannons.First(), Color.White, tm, am);
+        }
+
+        void ship_Damaged(object sender, DamagedEventArgs e) {
+            AnimationManager.PlayAnimation(Animation.BoatHitByCannon, e.DamagePosition);
+        }
+
+        void ship_GoldLoaded(object sender, EventArgs e) {
+            AnimationManager.PlayAnimation(Animation.GetGold, ship.Position);
         }
 
         public override void LoadContent(ContentManager content)
         {            
-            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["shipGunwale"];
-            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["shipRigging"];
-            effectManager = (IAnimationManager)base.Game.Services.GetService(typeof(IAnimationManager));
+            gunwale = TextureManager["shipGunwale"];
+            rigging = TextureManager["shipRigging"];
 
             base.LoadContent(content);
         }
@@ -59,8 +66,8 @@ namespace _2HourGame.View
         }
 
         void ship_Died(object sender, EventArgs e) {
-            effectManager.PlayAnimation(Animation.ShipSinking, ship.Position);
-            effectManager.PlayAnimation(Animation.FloatingCrate, ship.Position);
+            AnimationManager.PlayAnimation(Animation.ShipSinking, ship.Position);
+            AnimationManager.PlayAnimation(Animation.FloatingCrate, ship.Position);
         }
     }
 }

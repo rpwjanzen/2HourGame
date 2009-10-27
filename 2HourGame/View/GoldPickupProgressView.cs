@@ -17,8 +17,8 @@ namespace _2HourGame.View
         Player Player { get; set; }
         ProgressBar ProgressBar { get; set; }
 
-        public GoldPickupProgressView(Player player, World world)
-            : base(player.Ship, world)
+        public GoldPickupProgressView(Player player, World world, TextureManager textureManager, AnimationManager am)
+            : base(player.Ship, world, textureManager, am)
         {
             Player = player;            
             Offset = new Vector2(0, -55);
@@ -30,7 +30,7 @@ namespace _2HourGame.View
 
         public override void LoadContent(ContentManager content)
         {
-            ProgressBar.LoadContent((ITextureManager)Game.Services.GetService(typeof(ITextureManager)));
+            ProgressBar.LoadContent(TextureManager);
             base.LoadContent(content);
         }
 

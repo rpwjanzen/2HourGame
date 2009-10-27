@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.View
 {
@@ -10,11 +11,11 @@ namespace _2HourGame.View
         Tower tower;
         CannonView cannonView;
 
-        public TowerView(World world, Color color, Tower tower)
-            : base(world, "tower", color, tower, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.tower))
+        public TowerView(World world, Color color, Tower tower, TextureManager textureManager, AnimationManager am)
+            : base(world, "tower", color, tower, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.tower), textureManager, am)
         {
             this.tower = tower;
-            this.cannonView = new CannonView(world, tower.Cannon, color);
+            this.cannonView = new CannonView(world, tower.Cannon, color, textureManager, am);
         }
 
         public override void LoadContent(ContentManager content) {

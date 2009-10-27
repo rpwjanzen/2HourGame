@@ -29,8 +29,8 @@ namespace _2HourGame.Model
 
         string contentName;
 
-        public AnimationView(World world, string contentName, Color color, AnimatedTextureInfo animatedTextureInfo, GameObject gameObject, float zIndex)
-            : base(gameObject, world)
+        public AnimationView(World world, string contentName, Color color, AnimatedTextureInfo animatedTextureInfo, GameObject gameObject, float zIndex, TextureManager textureManager, AnimationManager am)
+            : base(gameObject, world, textureManager, am)
         {
             this.contentName = contentName;
             this.Color = color;
@@ -43,7 +43,7 @@ namespace _2HourGame.Model
 
         public override void LoadContent(ContentManager content)
         {
-            this.Texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))[contentName];
+            this.Texture = TextureManager[contentName];
             this.Scale = new Vector2(AnimatedTextureInfo.Scale, AnimatedTextureInfo.Scale);
             this.Origin = AnimatedTextureInfo.WindowCenter;   
 

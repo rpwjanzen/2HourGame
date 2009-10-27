@@ -6,12 +6,13 @@ using System.Linq;
 
 using _2HourGame.Model;
 using _2HourGame.View;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Factories
 {
     class IslandFactory : PhysicsGameObjectFactory {
 
-        public IslandFactory(PhysicsWorld world) : base(world) { }
+        public IslandFactory(PhysicsWorld world, TextureManager tm, AnimationManager am) : base(world, tm, am) { }
 
         public List<Island> CreatePlayerIslands(IEnumerable<Vector2> islandPositions) {
             return CreateIslands(islandPositions, new int[] { 0, 0, 0, 0 });
@@ -23,7 +24,7 @@ namespace _2HourGame.Factories
 
         public Island CreateIsland(Vector2 position, int goldAmount) {
             Island island = new Island(PhysicsWorld, position, goldAmount);
-            GameObjectView islandView = new GameObjectView(World, "island", Color.White, island, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.island));
+            GameObjectView islandView = new GameObjectView(World, "island", Color.White, island, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.island), TextureManager, AnimationManager);
             island.Spawn();
 
             return island;

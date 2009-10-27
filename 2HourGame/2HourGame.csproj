@@ -42,6 +42,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>false</XnaCompressContent>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -131,8 +132,6 @@
     <Compile Include="View\GoldPickupProgressView.cs" />
     <Compile Include="View\HealthBarView.cs" />
     <Compile Include="View\IslandsGoldView.cs" />
-    <Compile Include="View\GameServices\IAnimationManager.cs" />
-    <Compile Include="View\GameServices\ITextureManager.cs" />
     <Compile Include="Model\LinqExtensions.cs" />
     <Compile Include="Model\PhysicsGameObject.cs" />
     <Compile Include="Factories\PhysicsGameObjectFactory.cs" />

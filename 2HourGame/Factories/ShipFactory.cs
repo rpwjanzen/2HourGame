@@ -6,12 +6,13 @@ using System.Linq;
 
 using _2HourGame.Model;
 using _2HourGame.View;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Factories
 {
     class ShipFactory : PhysicsGameObjectFactory {
 
-        public ShipFactory(PhysicsWorld world) : base(world) {
+        public ShipFactory(PhysicsWorld world, TextureManager tm, AnimationManager am) : base(world, tm, am) {
         }
 
         public List<Ship> CreatePlayerShips(List<Color> colors, List<Vector2> locations, List<Island> islands, List<float> shipAngles) {
@@ -21,7 +22,7 @@ namespace _2HourGame.Factories
         public Ship CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
         {
             Ship ship = new Ship(PhysicsWorld, shipLocation, shipAngle);
-            ShipView shipView = new ShipView(World, color, "shipHull", Color.White, ship);
+            ShipView shipView = new ShipView(World, color, "shipHull", Color.White, ship, TextureManager, AnimationManager);
 
             ship.Spawn();
 

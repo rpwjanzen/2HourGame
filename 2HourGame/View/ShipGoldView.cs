@@ -32,8 +32,8 @@ namespace _2HourGame.View
         // where is this ships goldview
         GoldViewPosition DisplayCorner { get; set; }
 
-        public ShipGoldView(World world, Ship ship, GoldViewPosition position, float displayWidth)
-            : base(ship, world)
+        public ShipGoldView(World world, Ship ship, GoldViewPosition position, float displayWidth, TextureManager textureManager, AnimationManager am)
+            : base(ship, world, textureManager, am)
         {
             this.ship = ship;
             this.displayWidth = displayWidth;
@@ -43,7 +43,7 @@ namespace _2HourGame.View
 
         public override void LoadContent(ContentManager content)
         {
-            texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))["gold"];
+            texture = TextureManager["gold"];
             this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
             base.LoadContent(content);
         }

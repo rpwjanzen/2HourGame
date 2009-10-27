@@ -21,17 +21,22 @@ namespace _2HourGame.View
         Color color;
         Texture2D texture;
 
-        public CannonView(World world, Cannon cannon, Color color)
-            : base(cannon, world)
+        public CannonView(World world, Cannon cannon, Color color, TextureManager textureManager, AnimationManager am)
+            : base(cannon, world, textureManager, am)
         {
             this.color = color;
             this.cannon = cannon;
+            this.cannon.Fired += cannon_Fired;
+        }
+
+        void cannon_Fired(object sender, FiredEventArgs e) {
+            AnimationManager.PlayAnimation(Animation.CannonSmoke, e.SmokePosition);
         }
 
         public override void LoadContent(ContentManager content)
         {
-            this.animatedTextureInfo = ((IAnimationManager)Game.Services.GetService(typeof(IAnimationManager)))[Animation.CannonFired];
-            this.texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))[cannonTextureName];
+            this.animatedTextureInfo = AnimationManager[Animation.CannonFired];
+            this.texture = TextureManager[cannonTextureName];
 
             this.zIndex = ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon);
 

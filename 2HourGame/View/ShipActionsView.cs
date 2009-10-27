@@ -37,19 +37,19 @@ namespace _2HourGame.View
 
         GoldPickupProgressView goldPickupProgressView;
 
-        public ShipActionsView(World world, Player player) 
-            :base(player.Ship, world)
+        public ShipActionsView(World world, Player player, TextureManager textureManager, AnimationManager am) 
+            :base(player.Ship, world, textureManager, am)
         {
             this.player = player;
-            goldPickupProgressView = new GoldPickupProgressView(player, world);
+            goldPickupProgressView = new GoldPickupProgressView(player, world, textureManager, am);
         }
 
         public override void LoadContent(ContentManager content)
         {
-            aButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[aButtonTextureName];
-            bButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[bButtonTextureName];
-            digTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[digTextureName];
-            repairTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[repairTextureName];
+            aButtonTexture = TextureManager[aButtonTextureName];
+            bButtonTexture = TextureManager[bButtonTextureName];
+            digTexture = TextureManager[digTextureName];
+            repairTexture = TextureManager[repairTextureName];
 
             base.LoadContent(content);
         }

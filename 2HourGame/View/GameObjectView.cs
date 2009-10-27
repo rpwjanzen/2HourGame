@@ -19,8 +19,7 @@ namespace _2HourGame.View
         protected float ZIndex { get; set; }
         protected Vector2 Scale { get; set; }
         protected Vector2 Origin { get; set; }
-        protected GameObject GameObject { get; set; }
-        protected ITextureManager TextureManager { get; private set; }
+        protected GameObject GameObject { get; set; }        
 
         /// <summary>
         /// Stores offset to adjust drawing for objects where the collision area is not based on the texture size.
@@ -29,20 +28,18 @@ namespace _2HourGame.View
 
         string contentName;
 
-        public GameObjectView(World world, string contentName, Color color, GameObject gameObject, float zIndex)
-            : this(world, contentName, color, gameObject, zIndex, Vector2.Zero)
+        public GameObjectView(World world, string contentName, Color color, GameObject gameObject, float zIndex, TextureManager textureManager, AnimationManager am)
+            : this(world, contentName, color, gameObject, zIndex, Vector2.Zero, textureManager, am)
         { }
 
-        public GameObjectView(World world, string contentName, Color color, GameObject gameObject, float zIndex, Vector2 textureOriginOffset)
-            : base(gameObject, world)
+        public GameObjectView(World world, string contentName, Color color, GameObject gameObject, float zIndex, Vector2 textureOriginOffset, TextureManager textureManager, AnimationManager am)
+            : base(gameObject, world, textureManager, am)
         {
             this.textureOriginOffset = textureOriginOffset;
             this.Color = color;
             this.contentName = contentName;
             this.ZIndex = zIndex;
             this.GameObject = gameObject;
-            // TODO : Fix!
-            //this.TextureManager = textureManager;
 
             gameObject.Died += new EventHandler(gameObject_Died);
         }

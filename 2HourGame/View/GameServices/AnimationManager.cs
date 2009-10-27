@@ -13,9 +13,11 @@ namespace _2HourGame
 {
     public enum Animation { None, GetGold, Splash, CannonSmoke, CannonFired, LoseGold, BoatHitByCannon, ShipSinking, FloatingCrate };
 
-    class AnimationManager : IAnimationManager
+    class AnimationManager
     {
         World world;
+        TextureManager textureManager;
+
         Dictionary<Animation, AnimatedTextureInfo> textureInformation;
         Dictionary<AnimationView, GameObject> currentAnimations;
 
@@ -24,15 +26,14 @@ namespace _2HourGame
             get { return textureInformation[animation]; }
         }
 
-        public AnimationManager(World world, GameServiceContainer services)
+        public AnimationManager(World world, TextureManager tm)
         {
             this.world = world;
+            this.textureManager = tm;
 
             textureInformation = new Dictionary<Animation, AnimatedTextureInfo>();
             currentAnimations = new Dictionary<AnimationView, GameObject>();
             LoadTexturesInformation();
-
-            services.AddService(typeof(IAnimationManager), this);
         }
 
         private void LoadTexturesInformation()
@@ -85,7 +86,7 @@ namespace _2HourGame
         private void AddAnimationView(Vector2 position, AnimatedTextureInfo animTextInfo, Color color, float zIndex)
         {
             GameObject animationObject = new GameObject(world, position, animTextInfo.WindowSize.X, animTextInfo.WindowSize.Y);            
-            var animationView = new AnimationView(world, animTextInfo.ContentName, color, animTextInfo, animationObject, zIndex);
+            var animationView = new AnimationView(world, animTextInfo.ContentName, color, animTextInfo, animationObject, zIndex, textureManager, this);
             animationView.AnimationFinished += HandleAnimationFinished;
             animationObject.Spawn();
 
