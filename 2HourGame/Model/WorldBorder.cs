@@ -4,7 +4,6 @@ using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
 
 using Microsoft.Xna.Framework;
-using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
@@ -86,9 +85,6 @@ namespace _2HourGame.Model
             physicsSimulator.Add(borderBody);
 
             var borderGeometry = GeomFactory.Instance.CreateRectangleGeom(borderBody, borderWidth, borderHeight);
-            // prevent collisions with cannon balls
-            borderGeometry.CollisionCategories = ((CollisionCategoryManager)game.Services.GetService(typeof(CollisionCategoryManager))).getCollisionCategory(this.GetType());
-            borderGeometry.CollidesWith = ((CollisionCategoryManager)game.Services.GetService(typeof(CollisionCategoryManager))).getCollidesWith(this.GetType());
             physicsSimulator.Add(borderGeometry);
         }
 

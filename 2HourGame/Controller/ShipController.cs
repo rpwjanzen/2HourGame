@@ -12,7 +12,7 @@ namespace _2HourGame.Controller
 {
     delegate void ControllerBehaviour(GamePadState gs, GamePadState previousGamePadState, Player player, GameTime gameTime);
 
-    class ShipController : GameComponent {
+    class ShipController {
 
         public event ControllerBehaviour ProcessControllerBehaviours;
 
@@ -22,8 +22,7 @@ namespace _2HourGame.Controller
 
         GamePadState previousGamePadState;
 
-        public ShipController(Game game, Player player)
-            : base(game) {
+        public ShipController(Player player) {
             this.player = player;
 
             ProcessControllerBehaviours += ShipControlBehaviours.FireCannons;
@@ -31,7 +30,7 @@ namespace _2HourGame.Controller
             ProcessControllerBehaviours += ShipControlBehaviours.RepairShip;
         }
 
-        public override void Update(GameTime gameTime) {
+        public virtual void Update(GameTime gameTime) {
 
             GamePadState gs = player.GamePadState;
 
@@ -39,16 +38,10 @@ namespace _2HourGame.Controller
             {
                 ProcessControllerBehaviours(gs, previousGamePadState, player, gameTime);
 
-                moveShipBehavior.MoveShip(gs, player.ship);
-            }
-            // Controller Not connected
-            else
-            {
+                moveShipBehavior.MoveShip(gs, player.Ship);
             }
 
             previousGamePadState = gs;
-
-            base.Update(gameTime);
         }
     }
 }

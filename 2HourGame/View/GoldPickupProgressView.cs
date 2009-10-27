@@ -6,21 +6,20 @@ using Microsoft.Xna.Framework;
 using _2HourGame.View.GameServices;
 using Microsoft.Xna.Framework.Graphics;
 using _2HourGame.Model;
+using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame.View
 {
-    class GoldPickupProgressView : DrawableGameComponent
+    class GoldPickupProgressView : ActorView
     {
-        SpriteBatch SpriteBatch { get; set; }
         Vector2 Offset { get; set; }
 
         Player Player { get; set; }
         ProgressBar ProgressBar { get; set; }
 
-        public GoldPickupProgressView(Game game, SpriteBatch spriteBatch, Player player)
-            : base(game)
+        public GoldPickupProgressView(Player player, World world)
+            : base(player.Ship, world)
         {
-            this.SpriteBatch = spriteBatch;
             Player = player;            
             Offset = new Vector2(0, -55);
 
@@ -29,28 +28,25 @@ namespace _2HourGame.View
             ProgressBar.EmptyColor = Color.Gray;
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(ContentManager content)
         {
             ProgressBar.LoadContent((ITextureManager)Game.Services.GetService(typeof(ITextureManager)));
-            base.LoadContent();
+            base.LoadContent(content);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            ProgressBar.Position = Player.ship.Position + Offset;
+            ProgressBar.Position = Player.Ship.Position + Offset;
             ProgressBar.Progress = ((float)Player.numGoldButtonPresses) / Player.numGoldButtonPressesRequired;
-            base.Update(gameTime);
-        }
 
-        public override void Draw(GameTime gameTime)
-        {
-            if (Player.ClosestInRangeIsland != null
+            if (Player.Ship.IsAlive
+                && Player.ClosestInRangeIsland != null
                 && Player.ClosestInRangeIsland != Player.HomeIsland
                 && Player.ClosestInRangeIsland.HasGold
                 && Player.ShipIsMovingSlowly
-                && !Player.ship.IsFull)
+                && !Player.Ship.IsFull)
             {
-                ProgressBar.Draw(SpriteBatch);
+                ProgressBar.Draw(spriteBatch);
             }
         }
     }

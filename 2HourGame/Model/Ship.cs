@@ -12,11 +12,10 @@ using FarseerGames.FarseerPhysics.Factories;
 
 using _2HourGame.View;
 using _2HourGame.View.GameServices;
-using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
-    class Ship : DamageablePhysicsGameObject, IShip
+    class Ship : PhysicsGameObject
     {
         public int GoldCapacity { get; protected set; }
         public int Gold { get; protected set; }
@@ -30,15 +29,12 @@ namespace _2HourGame.Model
         
         Vector2 FiringVelocity { get; set; }
 
-        private bool IsCannonVisible { get { return IsAlive; } }
-
-
         // Offset to move the cannons so they look good on the ship.
         readonly Vector2 leftCannonOffset = new Vector2(8, 4);
         readonly Vector2 rightCannonOffset = new Vector2(-8, 4);
 
-        public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, float rotation)
-            : base(game, position, cannonBallManager, 34, 60, rotation, 10)
+        public Ship(PhysicsWorld world, Vector2 position, float rotation)
+            : base(world, position, 34, 60, rotation)
         {
             // the direction to fire relative to the cannon
             this.FiringVelocity = Vector2.UnitY;
@@ -46,9 +42,6 @@ namespace _2HourGame.Model
             this.Body.RotationalDragCoefficient = 2500.0f;
 
             base.Rotation = rotation;
-
-            ObjectDestroyed += ShipSankEventHandler;
-            ObjectDamaged += ShipDamagedEventHandler;
 
             LeftCannons = new List<Cannon>();
             RightCannons = new List<Cannon>();
@@ -59,16 +52,11 @@ namespace _2HourGame.Model
 
             var leftCannonPosition = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y) * ((this.Width / 2.0f)) + leftCannonOffset;
             var leftCannonRotation = MathHelper.ToRadians(-90);
-            LeftCannons.Add(new Cannon(game, this, cannonBallManager, leftCannonPosition, leftCannonRotation));
+            LeftCannons.Add(new Cannon(PhysicsWorld, this, leftCannonPosition, leftCannonRotation));
 
             var rightCannonPosition = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y) * ((this.Width / 2.0f)) + rightCannonOffset;
             var rightCannonRotation = MathHelper.ToRadians(90);
-            RightCannons.Add(new Cannon(game, this, cannonBallManager, rightCannonPosition, rightCannonRotation));
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
+            RightCannons.Add(new Cannon(PhysicsWorld, this, rightCannonPosition, rightCannonRotation));
         }
 
         private void Thrust(float amount)
@@ -95,7 +83,7 @@ namespace _2HourGame.Model
             {
                 island.RemoveGold();
                 this.AddGold();
-                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.GetGold, this.Position);
+                ((IAnimationManager)base.Game.Services.GetService(typeof(IAnimationManager))).PlayAnimation(Animation.GetGold, this.Position);
             }
         }
 
@@ -117,31 +105,46 @@ namespace _2HourGame.Model
                 FireCannon(now, c);
         }
 
-        private void FireCannon(GameTime now, Cannon cannonToFire) 
+        public override void Die() {
+            this.Gold = 0;
+
+            base.Die();
+        }
+
+        public override bool Touch(Actor other, Contact contact) {
+            var cannonBall = other as CannonBall;
+            if (cannonBall != null && cannonBall.Owner != this) {
+                TakeDamage(contact);
+                World.GarbageActors.Add(cannonBall);
+                return true;
+            }
+
+            return base.Touch(other, contact);
+        }
+
+        private void TakeDamage(Contact damagePoint)
         {
-            if (IsCannonVisible)
+            if (Gold > 0)
             {
-                Vector2 thrust = cannonToFire.attemptFireCannon(now);
-                base.Body.ApplyImpulse(new Vector2(-thrust.X, -thrust.Y) / 8);
+                Gold--;
+                ((IAnimationManager)base.Game.Services.GetService(typeof(IAnimationManager))).PlayAnimation(Animation.BoatHitByCannon, damagePoint.Position);
+            }
+
+            Health -= 1;
+            if (Health == 0) {
+                Die();
+            }
+        }
+
+        private void FireCannon(GameTime now, Cannon cannonToFire) {
+            if (IsAlive) {
+                Vector2 thrust = cannonToFire.AttemptFireCannon(now);
+                base.Body.ApplyImpulse(thrust / 8);
             }
         }
 
         private void AddGold() {
             this.Gold++;
-        }
-
-        private void ShipDamagedEventHandler(object sender, ObjectDamagedEventArgs e) 
-        {
-            if (Gold > 0)
-            {
-                Gold--;
-                ((IEffectManager)base.Game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.BoatHitByCannon, e.DamagingObject.Position);
-            }
-        }
-
-        private void ShipSankEventHandler(object sender, ObjectDestroyedEventArgs e)
-        {
-            Gold = 0;
         }
     }
 }

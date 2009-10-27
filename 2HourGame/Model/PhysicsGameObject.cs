@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,135 +8,84 @@ using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
 
 using _2HourGame.View;
-using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
-    class CollisionEventArgs : EventArgs
-    {
-        public object Self { get; private set; }
-        public object Other { get; private set; }
-        public ContactList ContactList { get; private set; }
-        public GameTime CollisionTime { get; private set; }
-
-        public CollisionEventArgs(object self, object other, ContactList contactList, GameTime collisionTime)
-        {
-            this.Self = self;
-            this.Other = other;
-            this.ContactList = contactList;
-            this.CollisionTime = collisionTime;
-        }
-    }
     class PhysicsGameObject : GameObject
     {
+        protected PhysicsWorld PhysicsWorld { get; private set; }
 
-        IPhysicsSimulatorService physicsSimulatorService;
-
-        /// <summary>
-        /// The PhysicsSimulator that this object is part of
-        /// </summary>
-        PhysicsSimulator PhysicsSimulator
-        {
-            get { return physicsSimulatorService.PhysicsSimulator; }
-        }
-
-        /// <summary>
-        /// The GameObject's Geom
-        /// </summary>
-        Geom Geometry { get; set; }
-        
-        /// <summary>
-        /// Give public access to see the CollisionGroup.
-        /// </summary>
-        public int CollisionGroup
-        { 
-            get
-            {
-                return Geometry.CollisionGroup;
-            }
-        }
-
-        /// <summary>
-        /// The GameObject's Body
-        /// </summary>
+        protected Geom Geometry { get; private set; }
         protected Body Body { get; private set; }
 
-        /// <summary>
-        /// The GameObject's linear velocity
-        /// </summary>
-        public float Speed {
-            get { return this.Body.LinearVelocity.Length(); }
+        public override Vector2 Position {
+            get { return Body.Position; }
+            protected set { Body.Position = value; }
+        }
+        public override Vector2 Velocity {
+            get { return Body.LinearVelocity; }
+            protected set { Body.LinearVelocity = value; }
+        }
+        public override float Rotation {
+            get { return this.Body.Rotation; }
+            protected set { Body.Rotation = value; }
         }
 
-        public override Vector2 Position { get { return Geometry.Position; } }
-        public override float Rotation { get { return this.Geometry.Rotation; } }
-        public Vector2 Velocity { get { return Body.LinearVelocity; } }
+        public float Speed { get { return this.Body.LinearVelocity.Length(); } }
 
-        public event EventHandler<CollisionEventArgs> OnCollision;
+        public PhysicsGameObject(PhysicsWorld world, Vector2 initialPosition, float width, float height)
+            : this(world, initialPosition, width, height, 0.0f) { }
 
-        public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height)
-            : this(game, initialPosition, width, height, 0) { }
-
-        public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height, int collisionGroup)
-            : this(game, initialPosition, width, height, 0.0f, collisionGroup) { }
-
-        public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height, float initialRotation)
-            : this(game, initialPosition, width, height, initialRotation, 0) { }
-
-        public PhysicsGameObject(Game game, Vector2 initialPosition, float width, float height, float initialRotation, int collisionGroup)
-            : base(game, initialPosition, width, height)
+        public PhysicsGameObject(PhysicsWorld world, Vector2 initialPosition, float width, float height, float initialRotation)
+            : base(world, initialPosition, width, height)
         {
-            this.physicsSimulatorService = (IPhysicsSimulatorService)Game.Services.GetService(typeof(IPhysicsSimulatorService));
+            this.PhysicsWorld = world;
 
             this.Body = BodyFactory.Instance.CreateEllipseBody(base.HalfWidth, base.HalfHeight, 1.0f);
+            this.Body.Tag = this;
             this.Body.Position = base.Position;
             this.Body.Rotation = initialRotation;
             this.Body.LinearDragCoefficient = 0.95f;
             this.Body.RotationalDragCoefficient = 10.0f;
-            PhysicsSimulator.Add(this.Body);
 
             this.Geometry = GeomFactory.Instance.CreateEllipseGeom(this.Body, base.HalfWidth, base.HalfHeight, 12);
+            this.Geometry.CollisionResponseEnabled = false;
             this.Geometry.Tag = this;
-            this.Geometry.CollisionGroup = collisionGroup;
-            this.Geometry.CollisionCategories = ((CollisionCategoryManager)Game.Services.GetService(typeof(CollisionCategoryManager))).getCollisionCategory(this.GetType());
-            this.Geometry.CollidesWith = ((CollisionCategoryManager)Game.Services.GetService(typeof(CollisionCategoryManager))).getCollidesWith(this.GetType());
-            PhysicsSimulator.Add(Geometry);
-
-            this.Geometry.OnCollision += RaiseCollisionEvent;
-
-            base.GameObjectRemoved += RemoveFromPhysicsSimulator;
+            
+            this.Geometry.OnCollision += HandleCollisionEvent;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Spawn() {
+            PhysicsWorld.PhysicsSimulator.Add(Body);
+            PhysicsWorld.PhysicsSimulator.Add(Geometry);
+
+            base.Spawn();
+        }
+
+        public override void Die() {
+            PhysicsWorld.PhysicsSimulator.Remove(this.Body);
+            PhysicsWorld.PhysicsSimulator.Remove(this.Geometry);
+
+            base.Die();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns>True, if the collision should happen</returns>
+        public virtual bool Touch(Actor other, Contact contactPoint) {
+            return true;
+        }
+
+        bool HandleCollisionEvent(Geom geometry1, Geom geometry2, ContactList contactList)
         {
-            //XXX - Hack to prevent AngularVelocity from reaching NaN
-            if (Body.AngularVelocity > 5000)
-                Body.AngularVelocity = 5000;
-
-            base.Update(gameTime);
-        }
-
-        public void RemoveFromPhysicsSimulator(object sender, EventArgs e) 
-        {
-            RemoveFromPhysicsSimulator();
-        }
-
-        public void RemoveFromPhysicsSimulator() {
-            PhysicsSimulator.Remove(this.Body);
-            PhysicsSimulator.Remove(this.Geometry);
-        }
-
-        protected void AddToPhysicsSimulator() 
-        {
-            PhysicsSimulator.Add(this.Body);
-            PhysicsSimulator.Add(this.Geometry);
-        }
-
-        bool RaiseCollisionEvent(Geom geometry1, Geom geometry2, ContactList contactList)
-        {
-            if (OnCollision != null)
-            {
-                OnCollision(this, new CollisionEventArgs(geometry1.Tag, geometry2.Tag, contactList, physicsSimulatorService.CollisionTime));
+            var actor0 = geometry1.Tag as Actor;
+            var actor1 = geometry2.Tag as Actor;
+            if (actor0 == this && actor1 != null) {
+                return Touch(actor1, contactList[0]);
+            } else if (actor1 == this && actor0 != null) {
+                return Touch(actor0, contactList[0]);
             }
 
             return true;

@@ -16,11 +16,11 @@ namespace _2HourGame.Factories
             this.map = map;
         }
 
-        public IEnumerable<Player> CreatePlayers(IEnumerable<PlayerIndex> playerIndexes, IEnumerable<IShip> ships, IEnumerable<Island> homeIslands) {
+        public IEnumerable<Player> CreatePlayers(IEnumerable<PlayerIndex> playerIndexes, IEnumerable<Ship> ships, IEnumerable<Island> homeIslands) {
             return playerIndexes.Zip3(ships, homeIslands, (p, s, i) => CreatePlayer(p, s, i)).ToList();
         }
 
-        public Player CreatePlayer(PlayerIndex playerIndex, IShip ship, Island homeIsland)
+        public Player CreatePlayer(PlayerIndex playerIndex, Ship ship, Island homeIsland)
         {
             return new Player(playerIndex, ship, homeIsland, map);
         }

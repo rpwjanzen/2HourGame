@@ -5,31 +5,31 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using FarseerGames.FarseerPhysics;
 using _2HourGame.View;
-using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
-    class Tower : DamageablePhysicsGameObject
+    class Tower : PhysicsGameObject
     {
-        List<IGameObject> targets;
+        List<GameObject> targets;
         float range;
 
         const float maxCannonRotationDegrees = 0.5f;
         const float toleranceInDegrees = 9.0f;
 
         // code so that we dont switch targets too often
-        IGameObject currentTarget = null;
+        GameObject currentTarget = null;
         Timer minTargetFocusTimer;
 
         public Cannon Cannon { get; private set; }
 
-        public Tower(Game game, Vector2 position, List<IGameObject> targets, CannonBallManager cannonBallManager)
-            : base(game, position, cannonBallManager, 40, 100, 0)
+        public Tower(PhysicsWorld world, Vector2 position, List<GameObject> targets)
+            : base(world, position, 40, 100, 0)
         {
             this.targets = targets;
-            minTargetFocusTimer = new Timer(10f);
-            range = 300;
-            Cannon = new Cannon(game, this, cannonBallManager, new Vector2(0, -35), 0.0f);
+
+            this.minTargetFocusTimer = new Timer(10f);
+            this.range = 300;
+            Cannon = new Cannon(world, this, new Vector2(0, -35), 0.0f);
             base.Body.IsStatic = true;
         }
 
@@ -43,7 +43,7 @@ namespace _2HourGame.Model
 
         private void doCannonBehaviour(GameTime gameTime) 
         {
-            if (currentTarget == null || targetIsOutOfRange(currentTarget))// || minTargetFocusTimer.TimerHasElapsed(gameTime))
+            if (currentTarget == null || targetIsOutOfRange(currentTarget))
             {
                 currentTarget = getClosestToSelf(getInRangeTargets(targets));
                 minTargetFocusTimer.resetTimer(gameTime.TotalGameTime);
@@ -72,15 +72,15 @@ namespace _2HourGame.Model
                 Cannon.LocalRotation += MathHelper.ToRadians(angleChangeInDegrees);
 
                 if (Math.Abs(differenceToTarget) <= toleranceInDegrees)
-                    Cannon.attemptFireCannon(gameTime);
+                    Cannon.AttemptFireCannon(gameTime);
             }
         }
 
-        private List<IGameObject> getInRangeTargets(List<IGameObject> allTargets) 
+        private List<GameObject> getInRangeTargets(List<GameObject> allTargets) 
         {
-            List<IGameObject> inRangeTargets = new List<IGameObject>();
+            List<GameObject> inRangeTargets = new List<GameObject>();
 
-            foreach (IGameObject g in allTargets) 
+            foreach (GameObject g in allTargets) 
             {
                 if (getDistanceBetween(g, this) <= range)
                     inRangeTargets.Add(g);
@@ -89,14 +89,14 @@ namespace _2HourGame.Model
             return inRangeTargets;
         }
 
-        private IGameObject getClosestToSelf(List<IGameObject> inRangeTargets) 
+        private GameObject getClosestToSelf(List<GameObject> inRangeTargets) 
         {
-            IGameObject closest = null;
+            GameObject closest = null;
             float closestDistance = float.MaxValue;
 
             float distanceBetween;
 
-            foreach (IGameObject t in inRangeTargets) 
+            foreach (GameObject t in inRangeTargets) 
             {
                 distanceBetween = getDistanceBetween(t, this);
 
@@ -110,12 +110,12 @@ namespace _2HourGame.Model
             return closest;
         }
 
-        private bool targetIsOutOfRange(IGameObject target) 
+        private bool targetIsOutOfRange(GameObject target) 
         {
             return getDistanceBetween(this, target) > range;
         }
 
-        private float getDistanceBetween(IGameObject first, IGameObject second) 
+        private float getDistanceBetween(GameObject first, GameObject second) 
         {
             return Vector2.Distance(first.Position, second.Position);
         }

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
+using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame.View
 {
@@ -14,17 +15,16 @@ namespace _2HourGame.View
     /// Draws gold on the corner of the screen so that we know how much gold is on the ship.
     /// TODO: update when ship gold capacity changes.
     /// </summary>
-    class ShipGoldView : DrawableGameComponent
+    class ShipGoldView : ActorView
     {
         public enum GoldViewPosition { UpperLeft, UpperRight, LowerLeft, LowerRight }
-        SpriteBatch spriteBatch;
         Texture2D texture;
 
         float displayWidth;
 
         float scale;
 
-        IShip ship;
+        Ship ship;
 
         // where to display the gold
         List<Vector2> GoldPositions { get; set; }
@@ -32,24 +32,23 @@ namespace _2HourGame.View
         // where is this ships goldview
         GoldViewPosition DisplayCorner { get; set; }
 
-        public ShipGoldView(Game game, IShip ship, GoldViewPosition position , SpriteBatch spriteBatch, float displayWidth)
-            : base(game)
+        public ShipGoldView(World world, Ship ship, GoldViewPosition position, float displayWidth)
+            : base(ship, world)
         {
             this.ship = ship;
-            this.spriteBatch = spriteBatch;
             this.displayWidth = displayWidth;
             scale = 1f;
             this.DisplayCorner = position;
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(ContentManager content)
         {
             texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))["gold"];
             this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
-            base.LoadContent();
+            base.LoadContent(content);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (ship.Gold != GoldPositions.Count) {
                 this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
@@ -62,7 +61,7 @@ namespace _2HourGame.View
                 spriteBatch.Draw(texture, GoldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGoldView) + (0.001f * i));
             }
 
-            base.Draw(gameTime);
+            base.Draw(gameTime, spriteBatch);
         }
 
         private List<Vector2> CalculateGoldCoinPositions(float displayWidth, GoldViewPosition displayCorner)

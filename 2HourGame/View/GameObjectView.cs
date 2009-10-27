@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using _2HourGame.Model;
 using _2HourGame.View.GameServices;
+using System;
+using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame.View
 {
     /// <summary>
     /// 
     /// </summary>
-    class GameObjectView : DrawableGameComponent
+    class GameObjectView : ActorView
     {
         protected Color Color { get; set; }
         protected SpriteBatch SpriteBatch { get; set; }
@@ -21,7 +19,8 @@ namespace _2HourGame.View
         protected float ZIndex { get; set; }
         protected Vector2 Scale { get; set; }
         protected Vector2 Origin { get; set; }
-        protected IGameObject GameObject { get; set; }
+        protected GameObject GameObject { get; set; }
+        protected ITextureManager TextureManager { get; private set; }
 
         /// <summary>
         /// Stores offset to adjust drawing for objects where the collision area is not based on the texture size.
@@ -30,65 +29,45 @@ namespace _2HourGame.View
 
         string contentName;
 
-        /// <summary>
-        /// The view is automatically removed when it's GameObject is
-        /// </summary>
-        /// <param name="game"></param>
-        /// <param name="contentName"></param>
-        /// <param name="color"></param>
-        /// <param name="spriteBatch"></param>
-        /// <param name="gameObject">The GameObject that this view draws</param>
-        /// <param name="zIndex"></param>
-        public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, IGameObject gameObject, float zIndex)
-            : this(game, contentName, color, spriteBatch, gameObject, zIndex, Vector2.Zero)
+        public GameObjectView(World world, string contentName, Color color, GameObject gameObject, float zIndex)
+            : this(world, contentName, color, gameObject, zIndex, Vector2.Zero)
         { }
 
-        public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, IGameObject gameObject, float zIndex, Vector2 textureOriginOffset)
-            : base(game)
+        public GameObjectView(World world, string contentName, Color color, GameObject gameObject, float zIndex, Vector2 textureOriginOffset)
+            : base(gameObject, world)
         {
             this.textureOriginOffset = textureOriginOffset;
             this.Color = color;
             this.contentName = contentName;
-            this.SpriteBatch = spriteBatch;
             this.ZIndex = zIndex;
             this.GameObject = gameObject;
+            // TODO : Fix!
+            //this.TextureManager = textureManager;
 
-            gameObject.GameObjectRemoved += GameObjectRemoved;
+            gameObject.Died += new EventHandler(gameObject_Died);
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(ContentManager content)
         {
-            this.Texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[contentName];
+            this.Texture = TextureManager[contentName];
             this.Origin = GetTextureCenter(this.Texture);
             var scaleX = GameObject.Width / Texture.Width;
             var scaleY = GameObject.Height / Texture.Height;
 
             this.Scale = new Vector2(scaleX, scaleY);
 
-            base.LoadContent();
+            base.LoadContent(content);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (GameObject is DamageablePhysicsGameObject)
-            {
-                if (((DamageablePhysicsGameObject)GameObject).IsAlive)
-                    DoDraw();
-            }
-            else
-                DoDraw();
-
-            base.Draw(gameTime);
+            spriteBatch.Draw(Texture, GameObject.Position + (textureOriginOffset * this.Scale), null, Color, GameObject.Rotation, this.Origin, this.Scale, SpriteEffects.None, ZIndex);
+            
+            base.Draw(gameTime, spriteBatch);
         }
 
-        private void DoDraw() 
-        {
-            SpriteBatch.Draw(Texture, GameObject.Position + (textureOriginOffset * this.Scale), null, Color, GameObject.Rotation, this.Origin, this.Scale, SpriteEffects.None, ZIndex);
-        }
-
-        private void GameObjectRemoved(object sender, EventArgs e)
-        {
-            Game.Components.Remove(this);
+        void gameObject_Died(object sender, EventArgs e) {
+            World.GarbageActorViews.Add(this);
         }
 
         private static Vector2 GetTextureCenter(Texture2D texture)

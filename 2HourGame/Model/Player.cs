@@ -13,10 +13,10 @@ namespace _2HourGame.Model
     {
         PlayerIndex playerIndex;
 
-        public IShip ship { get; private set; }
+        public Ship Ship { get; private set; }
         public Island ClosestInRangeIsland
         {
-            get { return map.GetClosestInRangeIsland(ship, inRangeIslandMinimumRange); }
+            get { return map.GetClosestInRangeIsland(Ship, inRangeIslandMinimumRange); }
         }
         Island homeIsland;
         public Island HomeIsland
@@ -25,7 +25,7 @@ namespace _2HourGame.Model
         }
         public bool ShipIsMovingSlowly
         {
-            get { return ship.Speed <= maxShipSpeedForIslandInteraction; }
+            get { return Ship.Speed <= maxShipSpeedForIslandInteraction; }
         }
         public GamePadState GamePadState
         {
@@ -42,13 +42,13 @@ namespace _2HourGame.Model
 
         public int TotalGold
         {
-            get { return homeIsland.Gold + ship.Gold; }
+            get { return homeIsland.Gold + Ship.Gold; }
         }
 
-        public Player(PlayerIndex playerIndex, IShip ship, Island homeIsland, Map map)
+        public Player(PlayerIndex playerIndex, Ship ship, Island homeIsland, Map map)
         {
             this.playerIndex = playerIndex;
-            this.ship = ship;
+            this.Ship = ship;
             this.homeIsland = homeIsland;
             this.map = map;
         }
@@ -56,17 +56,17 @@ namespace _2HourGame.Model
         #region Controller Actions
         public void FireLeftCannons(GameTime gameTime)
         {
-            ship.FireLeftCannons(gameTime);
+            Ship.FireLeftCannons(gameTime);
         }
 
         public void FireRightCannons(GameTime gameTime)
         {
-            ship.FireRightCannons(gameTime);
+            Ship.FireRightCannons(gameTime);
         }
 
         public void AttemptPickupGold()
         {
-            if (!ship.IsAlive)
+            if (!Ship.IsAlive)
             {
                 return;
             }
@@ -84,13 +84,13 @@ namespace _2HourGame.Model
 
             if (ClosestInRangeIsland == homeIsland)
             {
-                ship.UnloadGoldToIsland(ClosestInRangeIsland);
+                Ship.UnloadGoldToIsland(ClosestInRangeIsland);
                 return;
             }
 
             if (numGoldButtonPresses >= numGoldButtonPressesRequired)
             {
-                ship.LoadGoldFromIsland(ClosestInRangeIsland);
+                Ship.LoadGoldFromIsland(ClosestInRangeIsland);
                 numGoldButtonPresses = 0;
             }
             else
@@ -101,7 +101,7 @@ namespace _2HourGame.Model
 
         public void AttemptRepair()
         {
-            if (!ship.IsAlive)
+            if (!Ship.IsAlive)
             {
                 return;
             }
@@ -118,7 +118,7 @@ namespace _2HourGame.Model
 
             if (ClosestInRangeIsland == homeIsland)
             {
-                ship.Repair();
+                Ship.Repair();
             }
         }
         #endregion

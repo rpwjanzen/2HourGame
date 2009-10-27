@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using _2HourGame.Model;
 
 namespace _2HourGame.Factories
 {
     class GameObjectFactory {
-        public Game Game { get; private set; }
+        public World World { get; private set; }
 
-        public GameObjectFactory(Game game) {
-            this.Game = game;
+        public GameObjectFactory(World world) {
+            this.World = world;
         }
     }
 }

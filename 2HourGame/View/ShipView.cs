@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using _2HourGame.Model;
 using _2HourGame.View.GameServices;
+using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame.View
 {
@@ -17,79 +18,49 @@ namespace _2HourGame.View
         private Texture2D rigging;
 
         HealthBarView healthBarView;
-        IShip ship;
+        Ship ship;
 
         CannonView LeftCannonView;
         CannonView RightCannonView;
 
-        IEffectManager effectManager;
+        IAnimationManager effectManager;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="game"></param>
-        /// <param name="shipColor">The color that the highlights on the ship should be drawn.</param>
-        /// <param name="contentName"></param>
-        /// <param name="scale"></param>
-        /// <param name="color"></param>
-        /// <param name="spriteBatch"></param>
-        /// <param name="gameObject">The game object that this is a view for.  Must be of type Ship.</param>
-        public ShipView(Game game, Color shipOutlineColor, string contentName, Color color, SpriteBatch spriteBatch, IShip ship)
-            : base(game, contentName, color, spriteBatch, ship, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull)) 
+        public ShipView(World world, Color shipOutlineColor, string contentName, Color color, Ship ship)
+            : base(world, contentName, color, ship, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull)) 
         {
             this.shipOutlineColor = shipOutlineColor;
             this.ship = ship;
-
-            ship.ObjectDestroyed += this.ShipSankEventHandler;
-            healthBarView = new HealthBarView(base.Game, spriteBatch, ship);
-            Game.Components.Add(healthBarView);
-
-            LeftCannonView = new CannonView(Game, Color.White, SpriteBatch, ship.LeftCannons.First());
-            RightCannonView = new CannonView(Game, Color.White, SpriteBatch, ship.RightCannons.First());
+            
+            ship.Died += new EventHandler(ship_Died);
+            
+            healthBarView = new HealthBarView(world, ship);
+            LeftCannonView = new CannonView(world, ship.LeftCannons.First(), Color.White);
+            RightCannonView = new CannonView(world, ship.RightCannons.First(), Color.White);
         }
 
-        public override void Initialize()
-        {
-            LeftCannonView.Initialize();
-            RightCannonView.Initialize();
-
-            effectManager = (IEffectManager)base.Game.Services.GetService(typeof(IEffectManager));
-
-            base.Initialize();
-        }
-
-        protected override void LoadContent()
+        public override void LoadContent(ContentManager content)
         {            
             gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["shipGunwale"];
             rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["shipRigging"];
+            effectManager = (IAnimationManager)base.Game.Services.GetService(typeof(IAnimationManager));
 
-            base.LoadContent();
+            base.LoadContent(content);
         }
 
-        public override void Draw(GameTime gameTime)
-        {
-            healthBarView.Enabled = ship.IsAlive;
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {            
             if (ship.IsAlive)
             {
-                base.SpriteBatch.Draw(gunwale, GameObject.Position, null, shipOutlineColor, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
-                base.SpriteBatch.Draw(rigging, GameObject.Position, null, Color.White, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
-
-                LeftCannonView.Draw(gameTime);
-                RightCannonView.Draw(gameTime);
-
-                base.Draw(gameTime);
+                spriteBatch.Draw(gunwale, GameObject.Position, null, shipOutlineColor, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
+                spriteBatch.Draw(rigging, GameObject.Position, null, Color.White, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
             }
+
+            base.Draw(gameTime, spriteBatch);
         }
 
-        private void ShipSankEventHandler(object sender, EventArgs e)
-        {
-            this.playShipSinkingAnimations();
-        }
-
-        private void playShipSinkingAnimations()
-        {
-            effectManager.PlayAnimation(Animation.ShipSinking, GameObject.Position);
-            effectManager.PlayAnimation(Animation.FloatingCrate, GameObject.Position);
+        void ship_Died(object sender, EventArgs e) {
+            effectManager.PlayAnimation(Animation.ShipSinking, ship.Position);
+            effectManager.PlayAnimation(Animation.FloatingCrate, ship.Position);
         }
     }
 }

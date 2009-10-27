@@ -8,33 +8,32 @@ using Microsoft.Xna.Framework.Graphics;
 using _2HourGame.View;
 using _2HourGame.Model;
 using _2HourGame.View.GameServices;
+using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame.Model
 {
-    class AnimationView : DrawableGameComponent
+    class AnimationView : ActorView
     {
-        protected AnimatedTextureInfo AnimatedTextureInfo;
-        protected TimeSpan AnimationStartTime;
-        protected bool FirstDraw;
-        protected IGameObject GameObject;
-        protected SpriteBatch SpriteBatch;
+        AnimatedTextureInfo AnimatedTextureInfo;
+        TimeSpan AnimationStartTime;
+        bool FirstDraw;
+        GameObject GameObject;
 
-        protected Vector2 Scale;
-        protected Texture2D Texture;
-        protected Color Color;
-        protected Vector2 Origin;
-        protected float ZIndex;
+        Vector2 Scale;
+        Texture2D Texture;
+        Color Color;
+        Vector2 Origin;
+        float ZIndex;
 
         public event EventHandler AnimationFinished;
 
         string contentName;
 
-        public AnimationView(Game game, string contentName, Color color, SpriteBatch spriteBatch, AnimatedTextureInfo animatedTextureInfo,
-            IGameObject gameObject, float zIndex) : base(game)
+        public AnimationView(World world, string contentName, Color color, AnimatedTextureInfo animatedTextureInfo, GameObject gameObject, float zIndex)
+            : base(gameObject, world)
         {
             this.contentName = contentName;
             this.Color = color;
-            this.SpriteBatch = spriteBatch;
             this.AnimatedTextureInfo = animatedTextureInfo;
             this.GameObject = gameObject;
             this.ZIndex = zIndex;
@@ -42,16 +41,16 @@ namespace _2HourGame.Model
             this.FirstDraw = this.AnimatedTextureInfo != null;
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(ContentManager content)
         {
             this.Texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))[contentName];
             this.Scale = new Vector2(AnimatedTextureInfo.Scale, AnimatedTextureInfo.Scale);
-            this.Origin = AnimatedTextureInfo.WindowCenter;            
+            this.Origin = AnimatedTextureInfo.WindowCenter;   
 
-            base.LoadContent();
+            base.LoadContent(content);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (FirstDraw)
             {
@@ -76,7 +75,7 @@ namespace _2HourGame.Model
 
                 Rectangle source = new Rectangle(dx, 0, width, height);
 
-                SpriteBatch.Draw(Texture, GameObject.Position + AnimatedTextureInfo.GetRotatedOffset(GameObject.Rotation), source, Color, GameObject.Rotation, Origin, Scale, SpriteEffects.None, ZIndex);
+                spriteBatch.Draw(Texture, GameObject.Position + AnimatedTextureInfo.GetRotatedOffset(GameObject.Rotation), source, Color, GameObject.Rotation, Origin, Scale, SpriteEffects.None, ZIndex);
             }
         }
 

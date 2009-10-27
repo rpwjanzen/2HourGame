@@ -8,9 +8,9 @@ using _2HourGame.Model;
 
 namespace _2HourGame.Factories
 {
-    class HouseFactory : DrawableGameObjectFactory {
+    class HouseFactory : GameObjectFactory {
 
-        public HouseFactory(Game game, SpriteBatch spriteBatch) : base(game, spriteBatch) { }
+        public HouseFactory(World world) : base(world) { }
 
         public List<GameObject> CreateHouses(List<Color> colors, List<Vector2> positions) {
             return colors.Zip(positions, (c, p) => CreateHouse(c, p)).ToList();
@@ -19,10 +19,10 @@ namespace _2HourGame.Factories
         public GameObject CreateHouse(Color houseColor, Vector2 houseLocation)
         {
             string contentName = "house";
-            GameObject house = new GameObject(base.Game, houseLocation, 50, 50);
-            GameObjectView houseView = new GameObjectView(base.Game, contentName, houseColor, SpriteBatch, house, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house));
-            base.Game.Components.Add(house);
-            base.Game.Components.Add(houseView);
+            GameObject house = new GameObject(World, houseLocation, 50, 50);
+            GameObjectView houseView = new GameObjectView(World, contentName, houseColor, house, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.house));
+            house.Spawn();
+
             return house;
         }
     }

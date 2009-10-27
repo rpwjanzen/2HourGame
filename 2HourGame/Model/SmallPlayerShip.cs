@@ -12,8 +12,8 @@ namespace _2HourGame.Model
         readonly Vector2 leftCannonOffset = new Vector2(8, 4);
         readonly Vector2 rightCannonOffset = new Vector2(-8, 4);
 
-        public SmallPlayerShip(Game game, Vector2 initialPosition, CannonBallManager cannonBallManager, float initialRotation)
-            : base(game, initialPosition, cannonBallManager, initialRotation) 
+        public SmallPlayerShip(PhysicsWorld world, Vector2 initialPosition, float initialRotation)
+            : base(world, initialPosition, initialRotation) 
         {
             this.GoldCapacity = 3;
             this.Gold = 0;
@@ -22,11 +22,11 @@ namespace _2HourGame.Model
 
             var leftCannonPosition = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y) * ((this.Width / 2.0f)) + leftCannonOffset;
             var leftCannonRotation = MathHelper.ToRadians(-90);
-            LeftCannons.Add(new Cannon(game, this, cannonBallManager, leftCannonPosition, leftCannonRotation));
+            LeftCannons.Add(new Cannon(PhysicsWorld, this, leftCannonPosition, leftCannonRotation));
 
             var rightCannonPosition = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y) * ((this.Width / 2.0f)) + rightCannonOffset;
             var rightCannonRotation = MathHelper.ToRadians(90);
-            RightCannons.Add(new Cannon(game, this, cannonBallManager, rightCannonPosition, rightCannonRotation));
+            RightCannons.Add(new Cannon(PhysicsWorld, this, rightCannonPosition, rightCannonRotation));
         }
     }
 }

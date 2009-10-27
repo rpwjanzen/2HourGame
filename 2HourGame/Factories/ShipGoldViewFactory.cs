@@ -6,16 +6,16 @@ using _2HourGame.Model;
 
 namespace _2HourGame.Factories
 {
-    class ShipGoldViewFactory : DrawableGameObjectFactory {
+    class ShipGoldViewFactory : GameObjectFactory {
 
         float DisplayWidth { get; set; }
 
-        public ShipGoldViewFactory(Game game, SpriteBatch spriteBatch, float displayWidth) : base(game, spriteBatch) {
+        public ShipGoldViewFactory(World world, float displayWidth) : base(world) {
             this.DisplayWidth = displayWidth;
         }
 
-        public ShipGoldView CreateShipGoldView(IShip ship, ShipGoldView.GoldViewPosition position) {
-            return new ShipGoldView(base.Game, ship, position, base.SpriteBatch, this.DisplayWidth);
+        public ShipGoldView CreateShipGoldView(Ship ship, ShipGoldView.GoldViewPosition position) {
+            return new ShipGoldView(this.World, ship, position, this.DisplayWidth);
         }
     }
 }

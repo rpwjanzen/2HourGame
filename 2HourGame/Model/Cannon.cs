@@ -8,60 +8,32 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
-    class CannonFiredEventArgs : EventArgs
-    {
-        public GameTime FiredTime { get; private set; }
-        public CannonFiredEventArgs(GameTime gameTime)
-        {
-            this.FiredTime = gameTime;
-        }
-    }
-
     /// <summary>
     /// A cannon that is mounted to another object. It's position is fixed relative to the attached to object.
     /// </summary>
-    class Cannon : GameComponent
+    class Cannon : PhysicsGameObject
     {
-        Game game;
-
         const float FiringSpeed = 65.0f;
-        
-        /// <summary>
-        /// Length of the cannon
-        /// </summary>
         const float CannonBallOffset = 15.0f;
-
         const float SmokeOffset = 13.0f;
+
         Timer firingTimer;
         public TimeSpan lastTimeFired
         {
-            get
-            {
-                return firingTimer.timerStartTime;
-            }
+            get { return firingTimer.timerStartTime; }
         }
 
-        private PhysicsGameObject attachedToObject;
-        Vector2 positionalOffset;
-        float rotationalOffset;
-
-        CannonBallManager cannonBallManager;
-
-        public event EventHandler<CannonFiredEventArgs> CannonFired;
-
-        public Vector2 Position
+        public override Vector2 Position
         {
-            get
-            {
-                return RotatedOffset + attachedToObject.Position;
-            }
+            get { return RotatedOffset + owner.Position; }
+            protected set { throw new InvalidOperationException(); }
         }
 
         Vector2 RotatedOffset
         {
             get
             {
-                var rotationMatrix = Matrix.CreateRotationZ(attachedToObject.Rotation);
+                var rotationMatrix = Matrix.CreateRotationZ(owner.Rotation);
                 return Vector2.Transform(positionalOffset, rotationMatrix);
             }
         }
@@ -83,24 +55,20 @@ namespace _2HourGame.Model
             } 
         }
 
-        public float Rotation
+        public override float Rotation
         {
-            get
-            {
-                return LocalRotation + rotationalOffset + attachedToObject.Rotation;
-            }
-            set
-            {
-                LocalRotation = value - rotationalOffset - attachedToObject.Rotation;
-            }
+            get { return LocalRotation + rotationalOffset + owner.Rotation; }
+            protected set { LocalRotation = value - rotationalOffset - owner.Rotation; }
         }
 
-        public Cannon(Game game, PhysicsGameObject parentObject, CannonBallManager cannonBallManager, Vector2 positionalOffset, float rotationalOffset)
-            : base(game)
+        GameObject owner;
+        Vector2 positionalOffset;
+        float rotationalOffset;
+
+        public Cannon(PhysicsWorld world, PhysicsGameObject owner, Vector2 positionalOffset, float rotationalOffset)
+            : base(world, Vector2.Zero, 0, 0, 0.0f)
         {
-            this.game = game;
-            this.attachedToObject = parentObject;
-            this.cannonBallManager = cannonBallManager;
+            this.owner = owner;
             this.positionalOffset = positionalOffset;
             this.rotationalOffset = rotationalOffset;
 
@@ -111,42 +79,37 @@ namespace _2HourGame.Model
         /// Fire the cannon if the timer has elapsed and its ready to fire again.
         /// </summary>
         /// <param name="now"></param>
-        /// <returns>Vector2.Zero if the cannon was not fired, the firingvector otherwise.</returns>
-        public Vector2 attemptFireCannon(GameTime now) 
+        /// <returns>The amount of thrust the cannon generates from firing.</returns>
+        public Vector2? AttemptFireCannon(GameTime now) 
         {
             if(firingTimer.TimerHasElapsed(now))
             {
                 firingTimer.resetTimer(now.TotalGameTime);
-                RaiseCannonFiredEvent(now);
-                return fireCannon();
+                return FireCannon();
             }
-            return Vector2.Zero;
+
+            return null;
         }
 
-        private Vector2 fireCannon() 
+        private Vector2 FireCannon() 
         {
-            //get the direction the cannon is facing vector
+            //get the direction the cannon is facing
             Vector2 firingVector = Vector2.Transform(-Vector2.UnitY, Matrix.CreateRotationZ(this.Rotation));
             var thrust = firingVector * FiringSpeed;
 
-            // take into account the ship's momentum
-            thrust += attachedToObject.Velocity;
+            // take into account the owner's velocity
+            thrust += owner.Velocity;
 
             var cannonBallPostion = firingVector * CannonBallOffset + this.Position;
             var smokePosition = firingVector * SmokeOffset + this.Position;
 
-            ((IEffectManager)game.Services.GetService(typeof(IEffectManager))).PlayAnimation(Animation.CannonSmoke, smokePosition);
-            var cannonBall = this.cannonBallManager.CreateCannonBall(cannonBallPostion, thrust, attachedToObject.CollisionGroup);
+            ((IAnimationManager)game.Services.GetService(typeof(IAnimationManager))).PlayAnimation(Animation.CannonSmoke, smokePosition);
 
-            return thrust;
-        }
+            var cannonBall = new CannonBall(PhysicsWorld, cannonBallPostion, owner);
+            cannonBall.Fire(thrust);
 
-        void RaiseCannonFiredEvent(GameTime gameTime)
-        {
-            if (CannonFired != null)
-            {
-                CannonFired(this, new CannonFiredEventArgs(gameTime));
-            }
+
+            return -thrust;
         }
     }
 }

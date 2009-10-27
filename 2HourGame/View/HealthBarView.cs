@@ -7,21 +7,20 @@ using Microsoft.Xna.Framework.Graphics;
 
 using _2HourGame.Model;
 using _2HourGame.View.GameServices;
+using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame.View
 {
-    class HealthBarView : DrawableGameComponent
+    class HealthBarView : ActorView
     {
-        SpriteBatch spriteBatch;
-        IDamageableGameObject damageableGameObject;
+        GameObject gameObject;
         Vector2 offset;
         ProgressBar progressBar;
 
-        public HealthBarView(Game game, SpriteBatch spriteBatch, IDamageableGameObject damageableGameObject)
-            :base(game)
+        public HealthBarView(World world, GameObject gameObject)
+            :base(gameObject, world)
         {
-            this.damageableGameObject = damageableGameObject;
-            this.spriteBatch = spriteBatch;
+            this.gameObject = gameObject;
             offset = new Vector2(0, 35);
 
             progressBar = new ProgressBar();
@@ -29,25 +28,20 @@ namespace _2HourGame.View
             progressBar.EmptyColor = Color.Red;
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(ContentManager content)
         {
             progressBar.LoadContent((ITextureManager)Game.Services.GetService(typeof(ITextureManager)));
 
-            base.LoadContent();
+            base.LoadContent(content);
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            progressBar.Progress = (float)damageableGameObject.HealthPercentage;
-            progressBar.Position = damageableGameObject.Position + offset;
 
-            base.Update(gameTime);
-        }
-
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (damageableGameObject.IsDamaged && damageableGameObject.IsAlive)
+            if (gameObject.IsDamaged && gameObject.IsAlive)
             {
+                progressBar.Progress = gameObject.HealthPercentage;
+                progressBar.Position = gameObject.Position + offset;
                 progressBar.Draw(spriteBatch);
             }
         }

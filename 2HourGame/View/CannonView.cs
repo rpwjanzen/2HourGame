@@ -7,39 +7,38 @@ using Microsoft.Xna.Framework.Graphics;
 
 using _2HourGame.Model;
 using _2HourGame.View.GameServices;
+using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame.View
 {
-    class CannonView : DrawableGameComponent
+    class CannonView : ActorView
     {
         private const string cannonTextureName = "cannonAnimation";
         private Cannon cannon;
 
         AnimatedTextureInfo animatedTextureInfo;
         float zIndex;
-        SpriteBatch spriteBatch;
         Color color;
         Texture2D texture;
 
-        public CannonView(Game game, Color color, SpriteBatch spriteBatch, Cannon cannon)
-            : base(game)
+        public CannonView(World world, Cannon cannon, Color color)
+            : base(cannon, world)
         {
             this.color = color;
-            this.spriteBatch = spriteBatch;
             this.cannon = cannon;
         }
 
-        protected override void LoadContent()
+        public override void LoadContent(ContentManager content)
         {
-            this.animatedTextureInfo = ((IEffectManager)Game.Services.GetService(typeof(IEffectManager)))[Animation.CannonFired];
+            this.animatedTextureInfo = ((IAnimationManager)Game.Services.GetService(typeof(IAnimationManager)))[Animation.CannonFired];
             this.texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))[cannonTextureName];
 
             this.zIndex = ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.cannon);
 
-            base.LoadContent();
+            base.LoadContent(content);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             // get the frame to draw
             int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - cannon.lastTimeFired.TotalSeconds)

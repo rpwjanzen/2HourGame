@@ -10,17 +10,13 @@ using _2HourGame.View;
 
 namespace _2HourGame.Model
 {
-    class CannonBall : PhysicsGameObject
+    class CannonBall : Projectile
     {
-       public CannonBall(Game game, Vector2 position, int collisionGroup)
-            : base(game, position, 5, 5, collisionGroup)
+       public CannonBall(PhysicsWorld world, Vector2 position, Actor owner)
+            : base(world, position, 5, 5, owner)
         {
             base.Body.LinearDragCoefficient = 0.20f;
             base.Body.Mass = 0.5f;
-        }
-
-        public void ApplyFiringForce(Vector2 firingForce) {
-            base.Body.ApplyImpulse(firingForce);
         }
     }
 }

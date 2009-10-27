@@ -8,8 +8,8 @@ using _2HourGame.Controller;
 namespace _2HourGame.Factories
 {
     class ShipControllerFactory : GameObjectFactory {
-        public ShipControllerFactory(Game game)
-            : base(game) {
+        public ShipControllerFactory(World world)
+            : base(world) {
         }
 
         public IEnumerable<ShipController> CreateShipControllers(IEnumerable<Player> players) {
@@ -20,7 +20,7 @@ namespace _2HourGame.Factories
         }
 
         public ShipController CreateShipController(Player player) {
-            return new ShipController(base.Game, player);
+            return new ShipController(player);
         }
     }
 }

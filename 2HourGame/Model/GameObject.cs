@@ -9,54 +9,36 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
-    class GameObject : GameComponent, IGameObject
+    class GameObject : Actor
     {
-        public virtual Vector2 Position { get; set; }
-        public virtual float Rotation { get; set; } // in radians
+        public float Width { get; protected set; }
+        public float Height { get; protected set; }
 
-        public float HalfWidth
-        {
-            get { return Width / 2.0f; }
-        }
+        public float HalfWidth { get { return Width / 2.0f; } }
+        public float HalfHeight { get { return Height / 2.0f; } }
 
-        public float HalfHeight
-        {
-            get { return Height / 2.0f; }
-        }
+        protected int MaxHealth;
+        protected int Health;
+        public bool IsDamaged { get { return Health < MaxHealth; } }
+        public float HealthPercentage { get { return (float)Health / (float)MaxHealth; } }
 
-        public float Width { get; private set; }
-        public float Height { get; private set; }
-
-        /// <summary>
-        /// Occurs when this game object is removed from the Game's components
-        /// </summary>
-        public event EventHandler GameObjectRemoved;
-
-        public GameObject(Game game, Vector2 position, float width, float height)
-            : base(game)
+        public GameObject(World world, Vector2 position, float width, float height)
+            : base(world)
         {
             this.Position = position;
 
             Width = width;
             Height = height;
-
-            Game.Components.ComponentRemoved += Components_ComponentRemoved;
         }
 
-        void Components_ComponentRemoved(object sender, GameComponentCollectionEventArgs e)
-        {
-            if (e.GameComponent == this)
-            {
-                RaiseGameObjectRemovedEvent();
-            }
+        public override void Spawn() {
+            this.Health = MaxHealth;
+            base.Spawn();
         }
 
-        void RaiseGameObjectRemovedEvent()
-        {
-            if (GameObjectRemoved != null)
-            {
-                GameObjectRemoved(this, EventArgs.Empty);
-            }
+        public override void Die() {
+            this.Health = 0;
+            base.Die();
         }
     }
 }

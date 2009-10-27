@@ -11,7 +11,7 @@ namespace _2HourGame.Factories
 {
     class IslandFactory : PhysicsGameObjectFactory {
 
-        public IslandFactory(Game game, SpriteBatch spriteBatch) : base(game, spriteBatch) { }
+        public IslandFactory(PhysicsWorld world) : base(world) { }
 
         public List<Island> CreatePlayerIslands(IEnumerable<Vector2> islandPositions) {
             return CreateIslands(islandPositions, new int[] { 0, 0, 0, 0 });
@@ -22,10 +22,10 @@ namespace _2HourGame.Factories
         }
 
         public Island CreateIsland(Vector2 position, int goldAmount) {
-            Island island = new Island(base.Game, position, goldAmount);
-            GameObjectView islandView = new GameObjectView(base.Game, "island", Color.White, SpriteBatch, island, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.island));
-            base.Game.Components.Add(island);
-            base.Game.Components.Add(islandView);
+            Island island = new Island(PhysicsWorld, position, goldAmount);
+            GameObjectView islandView = new GameObjectView(World, "island", Color.White, island, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.island));
+            island.Spawn();
+
             return island;
         }
     }

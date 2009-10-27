@@ -11,12 +11,8 @@ using _2HourGame.Model;
 namespace _2HourGame.Factories
 {
     class ShipActionViewFactory : GameObjectFactory {
-        SpriteBatch spriteBatch;
 
-        public ShipActionViewFactory(Game game, SpriteBatch spriteBatch)
-            : base(game) {
-                this.spriteBatch = spriteBatch;
-        }
+        public ShipActionViewFactory(World world) : base(world) { }
 
         public IEnumerable<ShipActionsView> CreateShipActionsViews(IEnumerable<Player> players)
         {
@@ -28,7 +24,7 @@ namespace _2HourGame.Factories
 
         public ShipActionsView CreateShipActionsView(Player player)
         {
-            return new ShipActionsView(base.Game, player, spriteBatch);
+            return new ShipActionsView(World, player);
         }
     }
 }
