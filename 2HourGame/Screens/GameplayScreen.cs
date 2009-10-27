@@ -71,6 +71,9 @@ namespace GameStateManagement
             gameFont = content.Load<SpriteFont>(@"Fonts/gamefont");
 
             CreateNewGame();
+            textureManager.LoadContent(content);
+
+            world.LoadContent(content);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -156,7 +159,7 @@ namespace GameStateManagement
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target, Color.CornflowerBlue, 0, 0);
 
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
             world.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
@@ -175,8 +178,8 @@ namespace GameStateManagement
             PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
             world = new PhysicsWorld(physicsSimulator);
 
-            textureManager = new TextureManager();
-            animationManager = new AnimationManager(world, textureManager);
+            textureManager = new TextureManager();            
+            animationManager = new AnimationManager(world, textureManager, content);
 
             var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
 
@@ -194,7 +197,6 @@ namespace GameStateManagement
                 new Vector2((width / 4) * 3 + 100, (height / 4) * 3 + 50)
             }.ToList();
 
-            // maybe it's being re-evaluated each time and we are getting a bunch of extra objects
             var islandBuildingOffset = new Vector2(20, 20);
             var islandBuildings = new HouseFactory(world, textureManager, animationManager).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
 
@@ -208,7 +210,7 @@ namespace GameStateManagement
             allIslands.AddRange(goldIslands);
             foreach (var island in allIslands) {
                 var islandGoldView = new IslandGoldView(world, island, textureManager, animationManager);
-                world.ActorViews.Add(islandGoldView);
+                world.NewActorViews.Add(islandGoldView);
             }
 
             var playerPositions = new[] {
@@ -236,7 +238,7 @@ namespace GameStateManagement
                 ShipGoldView.GoldViewPosition.LowerRight
             }, (s, p) => shipGoldViewFactory.CreateShipGoldView(s, p)).ToList();
             foreach (var v in playerGoldViews) {
-                world.ActorViews.Add(v);
+                world.NewActorViews.Add(v);
             }
 
             var tower = new TowerFactory(world, textureManager, animationManager).CreateTower(new Vector2(width / 2, height / 2), ships.Cast<GameObject>().ToList<GameObject>());
@@ -247,7 +249,7 @@ namespace GameStateManagement
 
             var shipActionViews = new ShipActionViewFactory(world, textureManager, animationManager).CreateShipActionsViews(players).ToList();
             foreach(var av in shipActionViews) {
-                world.ActorViews.Add(av);
+                world.NewActorViews.Add(av);
             }
 
             shipControllers = new ShipControllerFactory(world, textureManager, animationManager).CreateShipControllers(players).ToList();

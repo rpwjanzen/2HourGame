@@ -30,7 +30,7 @@ namespace _2HourGame.Model
         public override Vector2 Position
         {
             get { return RotatedOffset + owner.Position; }
-            protected set { throw new InvalidOperationException(); }
+            //protected set { throw new InvalidOperationException(); }
         }
 
         Vector2 RotatedOffset
@@ -73,7 +73,7 @@ namespace _2HourGame.Model
         public event EventHandler<FiredEventArgs> Fired;
 
         public Cannon(PhysicsWorld world, PhysicsGameObject owner, Vector2 positionalOffset, float rotationalOffset)
-            : base(world, Vector2.Zero, 0, 0, 0.0f)
+            : base(world, owner.Position, 12, 27, 0.0f)
         {
             this.owner = owner;
             this.positionalOffset = positionalOffset;
@@ -118,7 +118,6 @@ namespace _2HourGame.Model
 
             var cannonBall = new CannonBall(PhysicsWorld, cannonBallPostion, owner);
             cannonBall.Fire(thrust);
-
 
             return -thrust;
         }

@@ -20,7 +20,7 @@ namespace _2HourGame.Model
 
         public override Vector2 Position {
             get { return Body.Position; }
-            protected set { Body.Position = value; }
+            //protected set { Body.Position = value; }
         }
         public override Vector2 Velocity {
             get { return Body.LinearVelocity; }

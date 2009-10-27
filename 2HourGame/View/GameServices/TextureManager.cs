@@ -10,7 +10,7 @@ namespace _2HourGame.View.GameServices
         Dictionary<string, Texture2D> loadedTextures;
 
         public Texture2D this[string index] {
-            get { return loadedTextures[index]; }
+            get {return loadedTextures[index]; }
         }
 
         public TextureManager()
@@ -55,7 +55,7 @@ namespace _2HourGame.View.GameServices
 
         private void LoadTexture(string textureName, ContentManager content) 
         {
-            loadedTextures.Add(textureName, content.Load<Texture2D>(@"Content\" + textureName));
+            loadedTextures.Add(textureName, content.Load<Texture2D>(textureName));
         }
     }
 }

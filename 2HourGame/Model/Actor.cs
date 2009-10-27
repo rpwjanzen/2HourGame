@@ -25,7 +25,7 @@ namespace _2HourGame.Model {
 
         public virtual void Spawn() {
             this.IsAlive = true;
-            this.World.Actors.Add(this);
+            this.World.NewActors.Add(this);
             RaiseSpawnedEvent();
         }
 

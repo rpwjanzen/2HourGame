@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using _2HourGame.View;
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
+using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame
 {
@@ -17,6 +18,7 @@ namespace _2HourGame
     {
         World world;
         TextureManager textureManager;
+        ContentManager content;
 
         Dictionary<Animation, AnimatedTextureInfo> textureInformation;
         Dictionary<AnimationView, GameObject> currentAnimations;
@@ -26,10 +28,11 @@ namespace _2HourGame
             get { return textureInformation[animation]; }
         }
 
-        public AnimationManager(World world, TextureManager tm)
+        public AnimationManager(World world, TextureManager tm, ContentManager content)
         {
             this.world = world;
             this.textureManager = tm;
+            this.content = content;
 
             textureInformation = new Dictionary<Animation, AnimatedTextureInfo>();
             currentAnimations = new Dictionary<AnimationView, GameObject>();
@@ -87,6 +90,8 @@ namespace _2HourGame
         {
             GameObject animationObject = new GameObject(world, position, animTextInfo.WindowSize.X, animTextInfo.WindowSize.Y);            
             var animationView = new AnimationView(world, animTextInfo.ContentName, color, animTextInfo, animationObject, zIndex, textureManager, this);
+            animationView.LoadContent(content);
+
             animationView.AnimationFinished += HandleAnimationFinished;
             animationObject.Spawn();
 

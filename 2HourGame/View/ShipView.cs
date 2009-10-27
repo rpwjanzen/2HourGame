@@ -51,6 +51,10 @@ namespace _2HourGame.View
             gunwale = TextureManager["shipGunwale"];
             rigging = TextureManager["shipRigging"];
 
+            healthBarView.LoadContent(content);
+            LeftCannonView.LoadContent(content);
+            RightCannonView.LoadContent(content);
+
             base.LoadContent(content);
         }
 
@@ -60,6 +64,10 @@ namespace _2HourGame.View
             {
                 spriteBatch.Draw(gunwale, GameObject.Position, null, shipOutlineColor, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGunwale));
                 spriteBatch.Draw(rigging, GameObject.Position, null, Color.White, GameObject.Rotation, base.Origin, base.Scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipRigging));
+
+                healthBarView.Draw(gameTime, spriteBatch);
+                LeftCannonView.Draw(gameTime, spriteBatch);
+                RightCannonView.Draw(gameTime, spriteBatch);
             }
 
             base.Draw(gameTime, spriteBatch);

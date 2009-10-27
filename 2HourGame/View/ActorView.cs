@@ -24,7 +24,7 @@ namespace _2HourGame.View {
         }
 
         void Actor_Spawned(object sender, System.EventArgs e) {
-            World.ActorViews.Add(this);
+            World.NewActorViews.Add(this);
         }
 
         void Actor_Died(object sender, System.EventArgs e) {
