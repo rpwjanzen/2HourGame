@@ -17,6 +17,7 @@ using _2HourGame.View;
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
 using _2HourGame.Model.GameServices;
+using GameStateManagement;
 
 namespace _2HourGame {
     /// <summary>
@@ -30,6 +31,12 @@ namespace _2HourGame {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
+
+            var screenManager = new ScreenManager(this);
+            Components.Add(screenManager);
+
+            screenManager.AddScreen(new BackgroundScreen(), null);
+            screenManager.AddScreen(new MainMenuScreen(), null);
         }
 
         protected override void Initialize() {
