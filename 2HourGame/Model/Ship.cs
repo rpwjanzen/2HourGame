@@ -53,7 +53,7 @@ namespace _2HourGame.Model
             LeftCannons = new List<Cannon>();
             RightCannons = new List<Cannon>();
 
-
+            GoldCapacity = 3;
 
             var rotationMatrix = Matrix.Identity;
 

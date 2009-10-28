@@ -51,7 +51,7 @@ namespace _2HourGame.View
 
         public override void Draw(GameTime gameTime)
         {
-            if (ship.Gold != GoldPositions.Count) {
+            if (ship.GoldCapacity != GoldPositions.Count) {
                 this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
             }
 
