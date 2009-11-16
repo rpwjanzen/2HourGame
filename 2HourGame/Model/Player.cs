@@ -118,9 +118,7 @@ namespace _2HourGame.Model
 
             if (ClosestInRangeIsland == homeIsland)
             {
-                // TODO : fix this!
-                throw new ArgumentException();
-                //Ship.Repair();
+                Ship.Repair();
             }
         }
         #endregion

@@ -21,7 +21,7 @@ namespace _2HourGame.Factories
 
         public Ship CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
         {
-            Ship ship = new Ship(PhysicsWorld, shipLocation, shipAngle);
+            Ship ship = new Ship(PhysicsWorld, shipLocation, shipAngle, TextureManager, AnimationManager);
             ShipView shipView = new ShipView(World, color, "shipHull", Color.White, ship, TextureManager, AnimationManager);
 
             ship.Spawn();

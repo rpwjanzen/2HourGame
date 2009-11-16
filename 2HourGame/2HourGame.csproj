@@ -95,13 +95,12 @@
     <Compile Include="Factories\ShipActionViewFactory.cs" />
     <Compile Include="Model\AIHelpers.cs" />
     <Compile Include="Model\Cannon.cs" />
+    <Compile Include="View\CannonBallView.cs" />
     <Compile Include="Model\GameComponentCollectionExtensions.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\PhysicsWorld.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Projectile.cs" />
-    <Compile Include="Model\SmallMerchantShip.cs" />
-    <Compile Include="Model\SmallPlayerShip.cs" />
     <Compile Include="Model\Timer.cs" />
     <Compile Include="Model\Tower.cs" />
     <Compile Include="Model\World.cs" />

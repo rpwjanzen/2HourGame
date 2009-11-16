@@ -44,11 +44,8 @@ namespace _2HourGame.Model {
         }
 
         public virtual void Update(GameTime gameTime) {
-            foreach (var a in Actors) {
-                var t = a as Tower;
-                if (t != null) {
-                    a.Update(gameTime);
-                }
+            foreach (var a in actors) {
+                a.Update(gameTime);
             }
 
             foreach (var na in NewActors) {
@@ -63,7 +60,7 @@ namespace _2HourGame.Model {
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
-            foreach (var av in ActorViews) {
+            foreach (var av in actorViews) {
                 av.Draw(gameTime, spriteBatch);
             }
 

@@ -49,7 +49,6 @@ namespace _2HourGame.Model
             this.Body.RotationalDragCoefficient = 10.0f;
 
             this.Geometry = GeomFactory.Instance.CreateEllipseGeom(this.Body, base.HalfWidth, base.HalfHeight, 12);
-            this.Geometry.CollisionResponseEnabled = false;
             this.Geometry.Tag = this;
             
             this.Geometry.OnCollision += HandleCollisionEvent;

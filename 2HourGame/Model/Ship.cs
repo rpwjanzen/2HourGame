@@ -40,7 +40,9 @@ namespace _2HourGame.Model
         public event EventHandler GoldLoaded;
         public event EventHandler<DamagedEventArgs> Damaged;
 
-        public Ship(PhysicsWorld world, Vector2 position, float rotation)
+        int repairAmount = 1;
+
+        public Ship(PhysicsWorld world, Vector2 position, float rotation, TextureManager tm, AnimationManager am)
             : base(world, position, 34, 60, rotation)
         {
             // the direction to fire relative to the cannon
@@ -53,17 +55,18 @@ namespace _2HourGame.Model
             LeftCannons = new List<Cannon>();
             RightCannons = new List<Cannon>();
 
-
-
             var rotationMatrix = Matrix.Identity;
 
             var leftCannonPosition = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y) * ((this.Width / 2.0f)) + leftCannonOffset;
             var leftCannonRotation = MathHelper.ToRadians(-90);
-            LeftCannons.Add(new Cannon(PhysicsWorld, this, leftCannonPosition, leftCannonRotation));
+            LeftCannons.Add(new Cannon(PhysicsWorld, this, leftCannonPosition, leftCannonRotation, tm, am));
 
             var rightCannonPosition = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y) * ((this.Width / 2.0f)) + rightCannonOffset;
             var rightCannonRotation = MathHelper.ToRadians(90);
-            RightCannons.Add(new Cannon(PhysicsWorld, this, rightCannonPosition, rightCannonRotation));
+            RightCannons.Add(new Cannon(PhysicsWorld, this, rightCannonPosition, rightCannonRotation, tm, am));
+
+            this.MaxHealth = 50;
+            this.Health = 50;
         }
 
         private void Thrust(float amount)
@@ -123,15 +126,21 @@ namespace _2HourGame.Model
         public override bool Touch(Actor other, Contact contact) {
             var cannonBall = other as CannonBall;
             if (cannonBall != null && cannonBall.Owner != this) {
-                TakeDamage(contact);
-                World.GarbageActors.Add(cannonBall);
+                var damage = (int)(cannonBall.Speed / 12f);
+                TakeDamage(contact, damage);
+                cannonBall.Die();
                 return true;
             }
 
             return base.Touch(other, contact);
         }
 
-        private void TakeDamage(Contact damagePoint)
+        public void Repair() {
+            Health += repairAmount;
+            Health = Math.Min(Health, MaxHealth);
+        }
+
+        private void TakeDamage(Contact damagePoint, int amount)
         {
             if (Gold > 0)
             {
@@ -143,8 +152,8 @@ namespace _2HourGame.Model
                 }
             }
 
-            Health -= 1;
-            if (Health == 0) {
+            Health -= amount;
+            if (Health <= 0) {
                 Die();
             }
         }

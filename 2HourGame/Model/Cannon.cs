@@ -72,12 +72,18 @@ namespace _2HourGame.Model
 
         public event EventHandler<FiredEventArgs> Fired;
 
-        public Cannon(PhysicsWorld world, PhysicsGameObject owner, Vector2 positionalOffset, float rotationalOffset)
+        TextureManager textureManager;
+        AnimationManager animationManager;
+
+        public Cannon(PhysicsWorld world, PhysicsGameObject owner, Vector2 positionalOffset, float rotationalOffset, TextureManager tm, AnimationManager am)
             : base(world, owner.Position, 12, 27, 0.0f)
         {
             this.owner = owner;
             this.positionalOffset = positionalOffset;
             this.rotationalOffset = rotationalOffset;
+            
+            this.textureManager = tm;
+            this.animationManager = am;
 
             firingTimer = new Timer(3f);
         }
@@ -117,6 +123,8 @@ namespace _2HourGame.Model
             }
 
             var cannonBall = new CannonBall(PhysicsWorld, cannonBallPostion, owner);
+            var cannonBallView = new CannonBallView(cannonBall, PhysicsWorld, textureManager, animationManager);
+            cannonBall.Spawn();
             cannonBall.Fire(thrust);
 
             return -thrust;

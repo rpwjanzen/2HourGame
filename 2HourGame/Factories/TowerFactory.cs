@@ -18,7 +18,7 @@ namespace _2HourGame.Factories
 
         public Tower CreateTower(Vector2 position, List<GameObject> targets) 
         {
-            Tower tower = new Tower(PhysicsWorld, position, targets);
+            Tower tower = new Tower(PhysicsWorld, position, targets, TextureManager, AnimationManager);
             TowerView towerView = new TowerView(World, Color.White, tower, TextureManager, AnimationManager);
             tower.Spawn();            
 

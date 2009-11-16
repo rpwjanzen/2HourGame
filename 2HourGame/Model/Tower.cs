@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using FarseerGames.FarseerPhysics;
 using _2HourGame.View;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Model
 {
@@ -22,15 +23,23 @@ namespace _2HourGame.Model
 
         public Cannon Cannon { get; private set; }
 
-        public Tower(PhysicsWorld world, Vector2 position, List<GameObject> targets)
+        public Tower(PhysicsWorld world, Vector2 position, List<GameObject> targets, TextureManager tm, AnimationManager am)
             : base(world, position, 40, 100, 0)
         {
             this.targets = targets;
 
             this.minTargetFocusTimer = new Timer(10f);
             this.range = 300;
-            Cannon = new Cannon(world, this, new Vector2(0, -35), 0.0f);
+            Cannon = new Cannon(world, this, new Vector2(0, -35), 0.0f, tm, am);
             base.Body.IsStatic = true;
+        }
+
+        public override bool Touch(Actor other, FarseerGames.FarseerPhysics.Collisions.Contact contactPoint) {
+            var cannonBall = other as CannonBall;
+            if (cannonBall != null) {
+                cannonBall.Die();
+            }
+            return base.Touch(other, contactPoint);
         }
 
         public override void Update(GameTime gameTime)

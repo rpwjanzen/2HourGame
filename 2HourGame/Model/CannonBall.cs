@@ -18,5 +18,12 @@ namespace _2HourGame.Model
             base.Body.LinearDragCoefficient = 0.20f;
             base.Body.Mass = 0.5f;
         }
+
+       public override void Update(GameTime gameTime) {
+           if (IsAlive && Speed < 1f) {
+               Die();
+           }
+           base.Update(gameTime);
+       }
     }
 }
