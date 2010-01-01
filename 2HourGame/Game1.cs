@@ -17,6 +17,7 @@ using _2HourGame.View;
 using _2HourGame.View.GameServices;
 using _2HourGame.Model;
 using _2HourGame.Model.GameServices;
+using _2HourGame.Controller;
 
 namespace _2HourGame {
     /// <summary>
@@ -121,6 +122,9 @@ namespace _2HourGame {
 
             var shipControllers = new ShipControllerFactory(this).CreateShipControllers(players).ToList();
             this.Components.AddRange(shipControllers);
+
+            var keyboardController = new KeyboardShipController(this, players.First());
+            this.Components.Add(keyboardController);
 
             base.Initialize();
         }

@@ -1,0 +1,28 @@
+2HourGame Readme (Alpha)
+
+XNA Game Studio 3.1 + Visual Studio Express 2008 are required.
+
+
+Players control ships with XBox 360 controllers.
+Get as much gold from central island to your own.
+
+Only player one can use keyboard.
+
+Default Keys
+
+Keyboard
+Fire Left Cannons:	Space
+Fire Right Cannons:	Space
+Repair:			F
+Load/Unload Gold:	F
+Turn: Arrow Left or Arror Right
+Forwared: Arrow Up
+
+
+Game Pad
+Fire Left Cannons: Left Trigger
+Fire Right Cannons: Right Trigger
+Repair:	(Check button icon)
+Load/Unload Gold: (Check button icon)
+Steering: Right Analog Stick
+Forward: Right Analog Stick

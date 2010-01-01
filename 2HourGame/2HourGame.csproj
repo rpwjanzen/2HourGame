@@ -86,6 +86,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\KeyboardShipController.cs" />
     <Compile Include="Factories\TowerFactory.cs" />
     <Compile Include="Model\AIController.cs" />
     <Compile Include="Controller\ShipControlBehaviours.cs" />
