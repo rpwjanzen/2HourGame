@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    class SmallMerchantShip : Ship
+    class Cutter : Ship
     {
-        public SmallMerchantShip(Game game, Vector2 initialPosition, CannonBallManager cannonBallManager, float initialRotation)
+        public Cutter(Game game, Vector2 initialPosition, CannonBallManager cannonBallManager, float initialRotation)
             : base(game, initialPosition, cannonBallManager, initialRotation) 
         {
             this.GoldCapacity = 5;

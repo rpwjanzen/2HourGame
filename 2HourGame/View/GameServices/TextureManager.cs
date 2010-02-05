@@ -32,7 +32,7 @@ namespace _2HourGame.View.GameServices
         /// </summary>
         private void LoadTextures()
         {
-            LoadTexture("boatHitByCannonAnimation");
+            LoadTexture("ShipImages\\boatHitByCannonAnimation");
             LoadTexture("boundingCircle");
             LoadTexture("cannonAnimation");
             LoadTexture("cannonBall");
@@ -49,11 +49,11 @@ namespace _2HourGame.View.GameServices
             LoadTexture("island");
             LoadTexture("progressBar");
             LoadTexture("repair");
-            LoadTexture("shipGunwale");
-            LoadTexture("shipHull");
-            LoadTexture("shipRigging");
-            LoadTexture("shipRiggingSingleMast");
-            LoadTexture("shipSinking");
+            LoadTexture("ShipImages\\shipGunwale");
+            LoadTexture("ShipImages\\shipHull");
+            LoadTexture("ShipImages\\shipRigging");
+            LoadTexture("ShipImages\\shipRiggingSingleMast");
+            LoadTexture("ShipImages\\shipSinking");
             LoadTexture("splashAnimation");
             LoadTexture("tower");
         }

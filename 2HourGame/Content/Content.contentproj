@@ -97,21 +97,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="shipHull.png">
+    <Compile Include="ShipImages\shipHull.png">
       <Name>shipHull</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="shipGunwale.png">
+    <Compile Include="ShipImages\shipGunwale.png">
       <Name>shipGunwale</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="shipRigging.png">
+    <Compile Include="ShipImages\shipRigging.png">
       <Name>shipRigging</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -132,14 +132,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="boatHitByCannonAnimation.png">
+    <Compile Include="ShipImages\boatHitByCannonAnimation.png">
       <Name>boatHitByCannonAnimation</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="shipSinking.png">
+    <Compile Include="ShipImages\shipSinking.png">
       <Name>shipSinking</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -202,11 +202,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="shipRiggingSingleMast.png">
+    <Compile Include="ShipImages\shipRiggingSingleMast.png">
       <Name>shipRiggingSingleMast</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ShipImages\Cutter\" />
+    <Folder Include="ShipImages\Sloop\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

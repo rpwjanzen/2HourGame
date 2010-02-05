@@ -59,9 +59,9 @@ namespace _2HourGame.View
         }
 
         protected override void LoadContent()
-        {            
-            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["shipGunwale"];
-            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["shipRigging"];
+        {
+            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["ShipImages\\shipGunwale"];
+            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["ShipImages\\shipRigging"];
 
             base.LoadContent();
         }

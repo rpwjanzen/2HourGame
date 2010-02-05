@@ -16,7 +16,7 @@ using _2HourGame.Model.GameServices;
 
 namespace _2HourGame.Model
 {
-    class Ship : DamageablePhysicsGameObject, IShip
+    abstract class Ship : DamageablePhysicsGameObject, IShip
     {
         public int GoldCapacity { get; protected set; }
         public int Gold { get; protected set; }
@@ -34,8 +34,8 @@ namespace _2HourGame.Model
 
 
         // Offset to move the cannons so they look good on the ship.
-        readonly Vector2 leftCannonOffset = new Vector2(8, 4);
-        readonly Vector2 rightCannonOffset = new Vector2(-8, 4);
+        //readonly Vector2 leftCannonOffset = new Vector2(8, 4);
+        //readonly Vector2 rightCannonOffset = new Vector2(-8, 4);
 
         public Ship(Game game, Vector2 position, CannonBallManager cannonBallManager, float rotation)
             : base(game, position, cannonBallManager, 34, 60, rotation, 10)
@@ -57,13 +57,13 @@ namespace _2HourGame.Model
 
             var rotationMatrix = Matrix.Identity;
 
-            var leftCannonPosition = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y) * ((this.Width / 2.0f)) + leftCannonOffset;
-            var leftCannonRotation = MathHelper.ToRadians(-90);
-            LeftCannons.Add(new Cannon(game, this, cannonBallManager, leftCannonPosition, leftCannonRotation));
+            //var leftCannonPosition = new Vector2(rotationMatrix.Left.X, rotationMatrix.Left.Y) * ((this.Width / 2.0f)) + leftCannonOffset;
+            //var leftCannonRotation = MathHelper.ToRadians(-90);
+            //LeftCannons.Add(new Cannon(game, this, cannonBallManager, leftCannonPosition, leftCannonRotation));
 
-            var rightCannonPosition = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y) * ((this.Width / 2.0f)) + rightCannonOffset;
-            var rightCannonRotation = MathHelper.ToRadians(90);
-            RightCannons.Add(new Cannon(game, this, cannonBallManager, rightCannonPosition, rightCannonRotation));
+            //var rightCannonPosition = new Vector2(rotationMatrix.Right.X, rotationMatrix.Right.Y) * ((this.Width / 2.0f)) + rightCannonOffset;
+            //var rightCannonRotation = MathHelper.ToRadians(90);
+            //RightCannons.Add(new Cannon(game, this, cannonBallManager, rightCannonPosition, rightCannonRotation));
         }
 
         public override void Update(GameTime gameTime)

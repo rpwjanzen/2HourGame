@@ -47,7 +47,7 @@ namespace _2HourGame
             textureInformation[Animation.CannonSmoke] = new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, 1, new Vector2(0, 0), "cannonSmokeAnimation");
             textureInformation[Animation.CannonFired] = new AnimatedTextureInfo(new Vector2(12, 27), 8, 4, 0.6f, 1, new Vector2(4, 0), "cannonAnimation");
             textureInformation[Animation.LoseGold] = new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, 1, new Vector2(0, 20), "goldLoseAnimation");
-            textureInformation[Animation.BoatHitByCannon] = new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, 1, new Vector2(0, 0), "boatHitByCannonAnimation");
+            textureInformation[Animation.BoatHitByCannon] = new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, 1, new Vector2(0, 0), "ShipImages\\boatHitByCannonAnimation");
             textureInformation[Animation.ShipSinking] = new AnimatedTextureInfo(new Vector2(100, 100), 1, 0.3, 0.3f, 1, new Vector2(0, 0), "shipSinking");
             textureInformation[Animation.FloatingCrate] = new AnimatedTextureInfo(new Vector2(20, 20), 6, 3, 0.7f, 3, new Vector2(5, 5), "floatingCrate");
         }

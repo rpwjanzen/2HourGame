@@ -6,13 +6,13 @@ using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    class SmallPlayerShip : Ship
+    class Sloop : Ship
     {
         // Offset to move the cannons so they look good on the ship.
         readonly Vector2 leftCannonOffset = new Vector2(8, 4);
         readonly Vector2 rightCannonOffset = new Vector2(-8, 4);
 
-        public SmallPlayerShip(Game game, Vector2 initialPosition, CannonBallManager cannonBallManager, float initialRotation)
+        public Sloop(Game game, Vector2 initialPosition, CannonBallManager cannonBallManager, float initialRotation)
             : base(game, initialPosition, cannonBallManager, initialRotation) 
         {
             this.GoldCapacity = 3;
