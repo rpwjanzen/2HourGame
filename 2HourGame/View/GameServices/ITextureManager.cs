@@ -9,6 +9,6 @@ namespace _2HourGame.View.GameServices
 {
     interface ITextureManager
     {
-        Texture2D this[string index] { get; }
+        Texture2D this[Content index] { get; }
     }
 }

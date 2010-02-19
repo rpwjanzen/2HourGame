@@ -28,7 +28,7 @@ namespace _2HourGame.View
         /// </summary>
         private Vector2 textureOriginOffset;
 
-        string contentName;
+        Content content;
 
         /// <summary>
         /// The view is automatically removed when it's GameObject is
@@ -39,16 +39,16 @@ namespace _2HourGame.View
         /// <param name="spriteBatch"></param>
         /// <param name="gameObject">The GameObject that this view draws</param>
         /// <param name="zIndex"></param>
-        public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, IGameObject gameObject, float zIndex)
-            : this(game, contentName, color, spriteBatch, gameObject, zIndex, Vector2.Zero)
+        public GameObjectView(Game game, Content content, Color color, SpriteBatch spriteBatch, IGameObject gameObject, float zIndex)
+            : this(game, content, color, spriteBatch, gameObject, zIndex, Vector2.Zero)
         { }
 
-        public GameObjectView(Game game, string contentName, Color color, SpriteBatch spriteBatch, IGameObject gameObject, float zIndex, Vector2 textureOriginOffset)
+        public GameObjectView(Game game, Content content, Color color, SpriteBatch spriteBatch, IGameObject gameObject, float zIndex, Vector2 textureOriginOffset)
             : base(game)
         {
             this.textureOriginOffset = textureOriginOffset;
             this.Color = color;
-            this.contentName = contentName;
+            this.content = content;
             this.SpriteBatch = spriteBatch;
             this.ZIndex = zIndex;
             this.GameObject = gameObject;
@@ -58,7 +58,7 @@ namespace _2HourGame.View
 
         protected override void LoadContent()
         {
-            this.Texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[contentName];
+            this.Texture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[content];
             this.Origin = GetTextureCenter(this.Texture);
             var scaleX = GameObject.Width / Texture.Width;
             var scaleY = GameObject.Height / Texture.Height;

@@ -42,14 +42,14 @@ namespace _2HourGame
 
         private void LoadTexturesInformation()
         {
-            textureInformation[Animation.GetGold] = new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, 1, new Vector2(0, -50), "goldGetAnimation");
-            textureInformation[Animation.Splash] = new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, 1, new Vector2(0, -7), "splashAnimation");
-            textureInformation[Animation.CannonSmoke] = new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, 1, new Vector2(0, 0), "cannonSmokeAnimation");
-            textureInformation[Animation.CannonFired] = new AnimatedTextureInfo(new Vector2(12, 27), 8, 4, 0.6f, 1, new Vector2(4, 0), "cannonAnimation");
-            textureInformation[Animation.LoseGold] = new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, 1, new Vector2(0, 20), "goldLoseAnimation");
-            textureInformation[Animation.BoatHitByCannon] = new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, 1, new Vector2(0, 0), "ShipImages\\boatHitByCannonAnimation");
-            textureInformation[Animation.ShipSinking] = new AnimatedTextureInfo(new Vector2(100, 100), 1, 0.3, 0.3f, 1, new Vector2(0, 0), "shipSinking");
-            textureInformation[Animation.FloatingCrate] = new AnimatedTextureInfo(new Vector2(20, 20), 6, 3, 0.7f, 3, new Vector2(5, 5), "floatingCrate");
+            textureInformation[Animation.GetGold] = new AnimatedTextureInfo(new Vector2(30, 100), 9, 9, 0.3f, 1, new Vector2(0, -50), Content.GoldGetAnimation);
+            textureInformation[Animation.Splash] = new AnimatedTextureInfo(new Vector2(30, 30), 10, 10, 1f, 1, new Vector2(0, -7), Content.SplashAnimation);
+            textureInformation[Animation.CannonSmoke] = new AnimatedTextureInfo(new Vector2(50, 50), 6, 2, 0.25f, 1, new Vector2(0, 0), Content.CannonSmokeAnimation);
+            textureInformation[Animation.CannonFired] = new AnimatedTextureInfo(new Vector2(12, 27), 8, 4, 0.6f, 1, new Vector2(4, 0), Content.CannonAnimation);
+            textureInformation[Animation.LoseGold] = new AnimatedTextureInfo(new Vector2(80, 100), 10, 20, 0.3f, 1, new Vector2(0, 20), Content.GoldLoseAnimation);
+            textureInformation[Animation.BoatHitByCannon] = new AnimatedTextureInfo(new Vector2(80, 100), 10, 40, 0.3f, 1, new Vector2(0, 0), Content.BoatHitByCannonAnimation);
+            textureInformation[Animation.ShipSinking] = new AnimatedTextureInfo(new Vector2(100, 100), 1, 0.3, 0.3f, 1, new Vector2(0, 0), Content.ShipSinking);
+            textureInformation[Animation.FloatingCrate] = new AnimatedTextureInfo(new Vector2(20, 20), 6, 3, 0.7f, 3, new Vector2(5, 5), Content.FloatingCrate);
         }
 
         public void PlayAnimation(Animation animation, Vector2 position)
@@ -92,7 +92,7 @@ namespace _2HourGame
             GameObject animationObject = new GameObject(Game, position, animTextInfo.WindowSize.X, animTextInfo.WindowSize.Y);
             Game.Components.Add(animationObject);
 
-            var animationView = new AnimationView(Game, animTextInfo.ContentName, color, spriteBatch, animTextInfo, animationObject, zIndex);
+            var animationView = new AnimationView(Game, animTextInfo.Content, color, spriteBatch, animTextInfo, animationObject, zIndex);
             animationView.AnimationFinished += HandleAnimationFinished;
             Game.Components.Add(animationView);
 

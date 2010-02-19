@@ -5,6 +5,7 @@ using System.Text;
 using _2HourGame.Model;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.View
 {
@@ -14,7 +15,7 @@ namespace _2HourGame.View
         CannonView towerCannonView;
 
         public TowerView(Game game, Color color, SpriteBatch spriteBatch, Tower tower)
-            : base(game, "tower", color, spriteBatch, tower, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.tower))
+            : base(game, Content.Tower, color, spriteBatch, tower, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.tower))
         {
             this.tower = tower;
             this.towerCannonView = new CannonView(game, color, spriteBatch, tower.Cannon);

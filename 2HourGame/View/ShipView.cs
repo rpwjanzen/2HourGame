@@ -34,8 +34,8 @@ namespace _2HourGame.View
         /// <param name="color"></param>
         /// <param name="spriteBatch"></param>
         /// <param name="gameObject">The game object that this is a view for.  Must be of type Ship.</param>
-        public ShipView(Game game, Color shipOutlineColor, string contentName, Color color, SpriteBatch spriteBatch, IShip ship)
-            : base(game, contentName, color, spriteBatch, ship, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull)) 
+        public ShipView(Game game, Color shipOutlineColor, Content content, Color color, SpriteBatch spriteBatch, IShip ship)
+            : base(game, content, color, spriteBatch, ship, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipHull)) 
         {
             this.shipOutlineColor = shipOutlineColor;
             this.ship = ship;
@@ -60,8 +60,8 @@ namespace _2HourGame.View
 
         protected override void LoadContent()
         {
-            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["ShipImages\\shipGunwale"];
-            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))["ShipImages\\shipRigging"];
+            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[Content.SloopGunwale];
+            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[Content.SloopRigging];
 
             base.LoadContent();
         }

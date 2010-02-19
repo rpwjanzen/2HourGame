@@ -49,7 +49,7 @@ namespace _2HourGame.View
 
         public void LoadContent(ITextureManager textureManager)
         {
-            Texture = textureManager["progressBar"];
+            Texture = textureManager[Content.ProgressBar];
             Origin = Texture.Center(Scale);
             ZIndex = ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.healthBar);
         }

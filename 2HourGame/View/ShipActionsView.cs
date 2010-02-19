@@ -15,22 +15,18 @@ namespace _2HourGame.View
         Player player;
 
         Texture2D aButtonTexture;
-        string aButtonTextureName = "ControllerImages\\xboxControllerButtonA";
         float aButtonScale = 0.2f;
         Vector2 aButtonOffset = new Vector2(-18, -30);
             
         Texture2D bButtonTexture;
-        string bButtonTextureName = "ControllerImages\\xboxControllerButtonB";
         float bButtonScale = 0.2f;
         Vector2 bButtonOffset = new Vector2(10, -30);
 
         Texture2D digTexture;
-        string digTextureName = "dig";
         float digScale = 0.35f;
         Vector2 digOffset = new Vector2(-5, -35);
 
         Texture2D repairTexture;
-        string repairTextureName = "repair";
         float repairScale = 0.35f;
         Vector2 repairOffset = new Vector2(25, -30);
 
@@ -50,10 +46,10 @@ namespace _2HourGame.View
 
         protected override void LoadContent()
         {
-            aButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[aButtonTextureName];
-            bButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[bButtonTextureName];
-            digTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[digTextureName];
-            repairTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[repairTextureName];
+            aButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[Content.XboxControllerButtonA];
+            bButtonTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[Content.XboxControllerButtonB];
+            digTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[Content.Dig];
+            repairTexture = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[Content.Repair];
 
             base.LoadContent();
         }

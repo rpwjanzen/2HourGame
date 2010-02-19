@@ -6,6 +6,7 @@ using System.Linq;
 
 using _2HourGame.Model;
 using _2HourGame.View;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Factories
 {
@@ -23,7 +24,7 @@ namespace _2HourGame.Factories
 
         public Island CreateIsland(Vector2 position, int goldAmount) {
             Island island = new Island(base.Game, position, goldAmount);
-            GameObjectView islandView = new GameObjectView(base.Game, "island", Color.White, SpriteBatch, island, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.island));
+            GameObjectView islandView = new GameObjectView(base.Game, Content.Island, Color.White, SpriteBatch, island, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.island));
             base.Game.Components.Add(island);
             base.Game.Components.Add(islandView);
             return island;

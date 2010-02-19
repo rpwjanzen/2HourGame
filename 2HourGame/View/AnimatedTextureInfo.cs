@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.View
 {
@@ -32,7 +33,7 @@ namespace _2HourGame.View
         /// <summary>
         /// The name of the image the animation is in
         /// </summary>
-        public string ContentName { get; private set; }
+        public Content Content { get; private set; }
 
         /// <summary>
         /// The point in the center of the window
@@ -49,7 +50,7 @@ namespace _2HourGame.View
         /// </summary>
         private Vector2 offset;
 
-        public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, int numAnimationIterations, Vector2 offset, string contentName)
+        public AnimatedTextureInfo(Vector2 imageSize, int totalFrames, double framesPerSecond, float scale, int numAnimationIterations, Vector2 offset, Content content)
         {
             this.WindowSize = imageSize;
             this.TotalFrames = totalFrames;
@@ -57,7 +58,7 @@ namespace _2HourGame.View
             this.Scale = scale;
             this.NumAnimationIterations = numAnimationIterations;
             this.offset = offset;
-            this.ContentName = contentName;
+            this.Content = content;
         }
         /// <summary>
         /// Calculates the animation draw position offset rotated by the given amount of radians

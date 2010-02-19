@@ -6,6 +6,7 @@ using System.Linq;
 
 using _2HourGame.Model;
 using _2HourGame.View;
+using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Factories
 {
@@ -25,7 +26,7 @@ namespace _2HourGame.Factories
         {
             //IShip ship = new Ship(base.Game, shipLocation, CannonBallManager, shipAngle);
             IShip ship = new Sloop(base.Game, shipLocation, CannonBallManager, shipAngle);
-            ShipView shipView = new ShipView(base.Game, color, "ShipImages\\shipHull", Color.White, SpriteBatch, ship);
+            ShipView shipView = new ShipView(base.Game, color, Content.SloopHull, Color.White, SpriteBatch, ship);
             base.Game.Components.Add(ship);
             base.Game.Components.Add(shipView);
             return ship;

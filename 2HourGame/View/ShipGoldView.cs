@@ -44,7 +44,7 @@ namespace _2HourGame.View
 
         protected override void LoadContent()
         {
-            texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))["gold"];
+            texture = ((ITextureManager)Game.Services.GetService(typeof(ITextureManager)))[Content.Gold];
             this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
             base.LoadContent();
         }
