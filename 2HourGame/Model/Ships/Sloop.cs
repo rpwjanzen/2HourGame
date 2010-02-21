@@ -15,8 +15,8 @@ namespace _2HourGame.Model
         public Sloop(Game game, Vector2 initialPosition, CannonBallManager cannonBallManager, float initialRotation)
             : base(game, initialPosition, cannonBallManager, initialRotation) 
         {
-            this.GoldCapacity = 3;
-            this.Gold = 0;
+            //this.GoldCapacity = 3;
+            //this.Gold = 0;
 
             var rotationMatrix = Matrix.Identity;
 

@@ -151,7 +151,9 @@
     <Compile Include="Controller\ShipController.cs" />
     <Compile Include="View\GameServices\TextureManager.cs" />
     <Compile Include="Model\WorldBorder.cs" />
-    <Compile Include="View\ShipView.cs" />
+    <Compile Include="View\ShipViews\CutterView.cs" />
+    <Compile Include="View\ShipViews\ShipView.cs" />
+    <Compile Include="View\ShipViews\SloopView.cs" />
     <Compile Include="View\TextureExtensions.cs" />
     <Compile Include="View\TowerView.cs" />
     <Compile Include="View\ZIndexManager.cs" />

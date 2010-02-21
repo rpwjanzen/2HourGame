@@ -10,11 +10,11 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.View
 {
-    class ShipView : GameObjectView
+    abstract class ShipView : GameObjectView
     {
         Color shipOutlineColor;
-        private Texture2D gunwale;
-        private Texture2D rigging;
+        protected Texture2D gunwale;
+        protected Texture2D rigging;
 
         HealthBarView healthBarView;
         IShip ship;
@@ -60,8 +60,7 @@ namespace _2HourGame.View
 
         protected override void LoadContent()
         {
-            gunwale = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[Content.SloopGunwale];
-            rigging = ((ITextureManager)base.Game.Services.GetService(typeof(ITextureManager)))[Content.SloopRigging];
+            loadTextures();
 
             base.LoadContent();
         }
@@ -91,5 +90,10 @@ namespace _2HourGame.View
             effectManager.PlayAnimation(Animation.ShipSinking, GameObject.Position);
             effectManager.PlayAnimation(Animation.FloatingCrate, GameObject.Position);
         }
+
+        /// <summary>
+        /// Each Ship View should set the rigging an gunwhale textures for their ship.
+        /// </summary>
+        protected abstract void loadTextures();
     }
 }

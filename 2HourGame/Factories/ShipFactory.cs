@@ -19,14 +19,22 @@ namespace _2HourGame.Factories
         }
 
         public List<IShip> CreatePlayerShips(List<Color> colors, List<Vector2> locations, List<Island> islands, List<float> shipAngles) {
-            return colors.Zip4(locations, islands, shipAngles, (c, l, i, a) => CreatePlayerShip(c, l, i, a)).ToList();
+            return colors.Zip4(locations, islands, shipAngles, (c, l, i, a) => ((IShip)CreateSloop(c, l, i, a))).ToList();
         }
 
-        public IShip CreatePlayerShip(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
+        public Sloop CreateSloop(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
         {
-            //IShip ship = new Ship(base.Game, shipLocation, CannonBallManager, shipAngle);
-            IShip ship = new Sloop(base.Game, shipLocation, CannonBallManager, shipAngle);
-            ShipView shipView = new ShipView(base.Game, color, Content.SloopHull, Color.White, SpriteBatch, ship);
+            Sloop ship = new Sloop(base.Game, shipLocation, CannonBallManager, shipAngle);
+            SloopView shipView = new SloopView(base.Game, color, Color.White, SpriteBatch, ship);
+            base.Game.Components.Add(ship);
+            base.Game.Components.Add(shipView);
+            return ship;
+        }
+
+        public Cutter CreateCutter(Color color, Vector2 shipLocation, Island playerIsland, float shipAngle)
+        {
+            Cutter ship = new Cutter(base.Game, shipLocation, CannonBallManager, shipAngle);
+            CutterView shipView = new CutterView(base.Game, color, Color.White, SpriteBatch, ship);
             base.Game.Components.Add(ship);
             base.Game.Components.Add(shipView);
             return ship;
