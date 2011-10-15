@@ -1,47 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using _2HourGame.Model;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-using _2HourGame.View;
-using _2HourGame.Model;
-
 namespace _2HourGame.Controller
 {
-    delegate void ControllerBehaviour(GamePadState gs, GamePadState previousGamePadState, Player player, GameTime gameTime);
+    /// <summary>
+    /// Defines some behavior that will happen based on the current game state, previous game state, player and the current game time.
+    /// </summary>
+    internal delegate void ControllerBehaviour(GamePadState gamePadState, GamePadState previousGamePadState, Player player, GameTime gameTime);
 
-    class ShipController {
+    internal sealed class ShipController {
 
-        public event ControllerBehaviour ProcessControllerBehaviours;
+        private readonly ShipRelativeMoveBehavior _moveShipBehavior = new ShipRelativeMoveBehavior();
+        private event ControllerBehaviour ProcessControllerBehaviours;
 
-        Player player;
+        private readonly Player _player;
+        public Player Player { get { return _player;  } }
 
-        ShipRelativeMoveBehavior moveShipBehavior = new ShipRelativeMoveBehavior();
-
-        GamePadState previousGamePadState;
-
-        public ShipController(Player player) {
-            this.player = player;
+        public ShipController(Player player)
+        {
+            _player = player;
 
             ProcessControllerBehaviours += ShipControlBehaviours.FireCannons;
             ProcessControllerBehaviours += ShipControlBehaviours.PickupGold;
             ProcessControllerBehaviours += ShipControlBehaviours.RepairShip;
         }
 
-        public virtual void Update(GameTime gameTime) {
-
-            GamePadState gs = player.GamePadState;
-
-            if (gs.IsConnected)
+        public void Update(GameTime gameTime, GamePadState gamePadState, GamePadState previousGamePadState)
+        {
+            if (gamePadState.IsConnected)
             {
-                ProcessControllerBehaviours(gs, previousGamePadState, player, gameTime);
-
-                moveShipBehavior.MoveShip(gs, player.Ship);
+                ProcessControllerBehaviours(gamePadState, previousGamePadState, _player, gameTime);
+                _moveShipBehavior.MoveShip(gamePadState, _player.Ship);
             }
-
-            previousGamePadState = gs;
         }
     }
 }

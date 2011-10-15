@@ -11,7 +11,7 @@ namespace _2HourGame.Model
 {
     class Player
     {
-        PlayerIndex playerIndex;
+        PlayerIndex _playerIndex;
 
         public Ship Ship { get; private set; }
         public Island ClosestInRangeIsland
@@ -29,8 +29,10 @@ namespace _2HourGame.Model
         }
         public GamePadState GamePadState
         {
-            get { return GamePad.GetState(playerIndex); }
+            get { return GamePad.GetState(_playerIndex); }
         }
+
+        public PlayerIndex PlayerIndex { get { return _playerIndex;  } }
         Map map;
 
         // persistant state stuff for picking up gold
@@ -47,7 +49,7 @@ namespace _2HourGame.Model
 
         public Player(PlayerIndex playerIndex, Ship ship, Island homeIsland, Map map)
         {
-            this.playerIndex = playerIndex;
+            this._playerIndex = playerIndex;
             this.Ship = ship;
             this.homeIsland = homeIsland;
             this.map = map;

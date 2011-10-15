@@ -33,23 +33,22 @@ namespace GameStateManagement
     /// placeholder to get the idea across: you'll probably want to
     /// put some more interesting gameplay in here!
     /// </summary>
-    class GameplayScreen : GameScreen
+    internal class GameplayScreen : GameScreen
     {
         #region Fields
 
-        ContentManager content;
-        SpriteFont gameFont;
-        PhysicsWorld world;
-        AnimationManager animationManager;
-        TextureManager textureManager;
-        List<ShipController> shipControllers;
+        private ContentManager _content;
+        private SpriteFont _gameFont;
+        private PhysicsWorld _world;
+        private AnimationManager _animationManager;
+        private TextureManager _textureManager;
+        private List<ShipController> _shipControllers;
         // XXX : What a hack!
-        GameTime updateTime;
+        private GameTime _updateTime;
 
         #endregion
 
         #region Initialization
-
 
         /// <summary>
         /// Constructor.
@@ -65,15 +64,15 @@ namespace GameStateManagement
         /// </summary>
         public override void LoadContent()
         {
-            if (content == null)
-                content = new ContentManager(ScreenManager.Game.Services, "Content");
+            if (_content == null)
+                _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            gameFont = content.Load<SpriteFont>(@"Fonts/gamefont");
+            _gameFont = _content.Load<SpriteFont>(@"Fonts/gamefont");
 
             CreateNewGame();
-            textureManager.LoadContent(content);
+            _textureManager.LoadContent(_content);
 
-            world.LoadContent(content);
+            _world.LoadContent(_content);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
@@ -81,38 +80,33 @@ namespace GameStateManagement
             ScreenManager.Game.ResetElapsedTime();
         }
 
-
         /// <summary>
         /// Unload graphics content used by the game.
         /// </summary>
         public override void UnloadContent()
         {
-            content.Unload();
+            _content.Unload();
         }
-
 
         #endregion
 
         #region Update and Draw
-
 
         /// <summary>
         /// Updates the state of the game. This method checks the GameScreen.IsActive
         /// property, so the game will stop updating when the pause menu is active,
         /// or if you tab away to a different application.
         /// </summary>
-        public override void Update(GameTime gameTime, bool otherScreenHasFocus,
-                                                       bool coveredByOtherScreen)
+        public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
             if (IsActive)
             {
-                world.Update(gameTime);
-                updateTime = gameTime;
+                _world.Update(gameTime);
+                _updateTime = gameTime;
             }
         }
-
 
         /// <summary>
         /// Lets the game respond to player input. Unlike the Update method,
@@ -124,31 +118,33 @@ namespace GameStateManagement
                 throw new ArgumentNullException("input");
 
             // Look up inputs for the active player profile.
-            int playerIndex = (int)ControllingPlayer.Value;
+            int controllingPlayerIndex = (int)ControllingPlayer.Value;
 
-            KeyboardState keyboardState = input.CurrentKeyboardStates[playerIndex];
-            GamePadState gamePadState = input.CurrentGamePadStates[playerIndex];
+            KeyboardState keyboardState = input.CurrentKeyboardStates[controllingPlayerIndex];
+            GamePadState gamePadState = input.CurrentGamePadStates[controllingPlayerIndex];
 
             // The game pauses either if the user presses the pause button, or if
             // they unplug the active gamepad. This requires us to keep track of
             // whether a gamepad was ever plugged in, because we don't want to pause
             // on PC if they are playing with a keyboard and have no gamepad at all!
-            bool gamePadDisconnected = !gamePadState.IsConnected &&
-                                       input.GamePadWasConnected[playerIndex];
+            bool gamePadJustDisconnected = !gamePadState.IsConnected && input.GamePadWasConnected[controllingPlayerIndex];
 
-            if (input.IsPauseGame(ControllingPlayer) || gamePadDisconnected)
+            if (input.IsPauseGame(ControllingPlayer) || gamePadJustDisconnected)
             {
                 ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);
             }
             else
             {
-                foreach (var sc in shipControllers) {
-                    // XXX : What a hack!
-                    sc.Update(updateTime);
+                foreach (var shipController in _shipControllers)
+                {
+                    int playerIndex = (int)shipController.Player.PlayerIndex;
+                    GamePadState previousGamePadState = input.LastGamePadStates[playerIndex];
+                    GamePadState currentGamePadState = input.CurrentGamePadStates[playerIndex];
+
+                    shipController.Update(_updateTime, currentGamePadState, previousGamePadState);
                 }
             }
         }
-
 
         /// <summary>
         /// Draws the gameplay screen.
@@ -160,7 +156,7 @@ namespace GameStateManagement
 
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            world.Draw(gameTime, spriteBatch);
+            _world.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
             // If the game is transitioning on or off, fade it out to black.
@@ -168,18 +164,18 @@ namespace GameStateManagement
                 ScreenManager.FadeBackBufferToBlack(255 - TransitionAlpha);
         }
 
-
         #endregion
 
-        void CreateNewGame() {
+        private void CreateNewGame()
+        {
             float width = ScreenManager.GraphicsDevice.Viewport.Width;
             float height = ScreenManager.GraphicsDevice.Viewport.Height;
 
             PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
-            world = new PhysicsWorld(physicsSimulator);
+            _world = new PhysicsWorld(physicsSimulator);
 
-            textureManager = new TextureManager();            
-            animationManager = new AnimationManager(world, textureManager, content);
+            _textureManager = new TextureManager();            
+            _animationManager = new AnimationManager(_world, _textureManager, _content);
 
             var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
 
@@ -198,9 +194,9 @@ namespace GameStateManagement
             }.ToList();
 
             var islandBuildingOffset = new Vector2(20, 20);
-            var islandBuildings = new HouseFactory(world, textureManager, animationManager).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
+            var islandBuildings = new HouseFactory(_world, _textureManager, _animationManager).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
 
-            var islandFactory = new IslandFactory(world, textureManager, animationManager);
+            var islandFactory = new IslandFactory(_world, _textureManager, _animationManager);
             var playerIslands = islandFactory.CreatePlayerIslands(islandPositions);
 
             var goldIslands = new List<Island>();
@@ -209,8 +205,8 @@ namespace GameStateManagement
             var allIslands = new List<Island>(playerIslands.ToArray());
             allIslands.AddRange(goldIslands);
             foreach (var island in allIslands) {
-                var islandGoldView = new IslandGoldView(world, island, textureManager, animationManager);
-                world.NewActorViews.Add(islandGoldView);
+                var islandGoldView = new IslandGoldView(_world, island, _textureManager, _animationManager);
+                _world.NewActorViews.Add(islandGoldView);
             }
 
             var playerPositions = new[] {
@@ -227,10 +223,10 @@ namespace GameStateManagement
                 (float)(Math.PI * 1.75)
             }.ToList();
 
-            var ships = new ShipFactory(world, textureManager, animationManager)
+            var ships = new ShipFactory(_world, _textureManager, _animationManager)
                 .CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
 
-            var shipGoldViewFactory = new ShipGoldViewFactory(world, 100, textureManager, animationManager);
+            var shipGoldViewFactory = new ShipGoldViewFactory(_world, 100, _textureManager, _animationManager);
             var playerGoldViews = ships.Zip(new[] {
                 ShipGoldView.GoldViewPosition.UpperLeft,
                 ShipGoldView.GoldViewPosition.UpperRight,
@@ -238,21 +234,21 @@ namespace GameStateManagement
                 ShipGoldView.GoldViewPosition.LowerRight
             }, (s, p) => shipGoldViewFactory.CreateShipGoldView(s, p)).ToList();
             foreach (var v in playerGoldViews) {
-                world.NewActorViews.Add(v);
+                _world.NewActorViews.Add(v);
             }
 
-            var tower = new TowerFactory(world, textureManager, animationManager).CreateTower(new Vector2(width / 2, height / 2), ships.Cast<GameObject>().ToList<GameObject>());
+            var tower = new TowerFactory(_world, _textureManager, _animationManager).CreateTower(new Vector2(width / 2, height / 2), ships.Cast<GameObject>().ToList<GameObject>());
 
             var map = new Map(allIslands);
 
             var players = new PlayerFactory(map).CreatePlayers(new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four }, ships, playerIslands);
 
-            var shipActionViews = new ShipActionViewFactory(world, textureManager, animationManager).CreateShipActionsViews(players).ToList();
+            var shipActionViews = new ShipActionViewFactory(_world, _textureManager, _animationManager).CreateShipActionsViews(players).ToList();
             foreach(var av in shipActionViews) {
-                world.NewActorViews.Add(av);
+                _world.NewActorViews.Add(av);
             }
 
-            shipControllers = new ShipControllerFactory(world, textureManager, animationManager).CreateShipControllers(players).ToList();
+            _shipControllers = new ShipControllerFactory(_world, _textureManager, _animationManager).CreateShipControllers(players).ToList();
         }
     }
 }

@@ -10,48 +10,49 @@ using _2HourGame.View;
 
 namespace _2HourGame.Controller
 {
+    /// <summary>
+    /// Actions a player can perform with a ship
+    /// </summary>
+    public enum PlayerAction { FireLeftCannon, FireRightCannon, PickupGold, RepairShip };
+
     static class ShipControlBehaviours
     {
-        public enum Action { FireLeftCannon, FireRightCannon, PickupGold, RepairShip };
-
-        static Dictionary<Action, Buttons> actionKeys;
+        /// <summary>
+        /// Mapping of ship actions to buttons on the controller
+        /// </summary>
+        static readonly Dictionary<PlayerAction, Buttons> _actionButtons;
 
         static ShipControlBehaviours()
         {
-            actionKeys = new Dictionary<Action, Buttons>();
+            _actionButtons = new Dictionary<PlayerAction, Buttons>();
 
-            actionKeys.Add(Action.FireLeftCannon, Buttons.LeftTrigger);
-            actionKeys.Add(Action.FireRightCannon, Buttons.RightTrigger);
-            actionKeys.Add(Action.PickupGold, Buttons.A);
-            actionKeys.Add(Action.RepairShip, Buttons.B);
+            _actionButtons.Add(PlayerAction.FireLeftCannon, Buttons.LeftTrigger);
+            _actionButtons.Add(PlayerAction.FireRightCannon, Buttons.RightTrigger);
+            _actionButtons.Add(PlayerAction.PickupGold, Buttons.A);
+            _actionButtons.Add(PlayerAction.RepairShip, Buttons.B);
         }
 
 
-        public static void FireCannons(GamePadState gs, GamePadState previousGamePadState, Player player, GameTime gameTime)
+        public static void FireCannons(GamePadState gamePadState, GamePadState previousGamePadState, Player player, GameTime gameTime)
         {
-            if (gs.IsButtonDown(actionKeys[Action.FireLeftCannon]))
-            {
+            if (gamePadState.IsButtonDown(_actionButtons[PlayerAction.FireLeftCannon]))
                 player.FireLeftCannons(gameTime);
-            }
-            if (gs.IsButtonDown(actionKeys[Action.FireRightCannon]))
-            {
+            
+            if (gamePadState.IsButtonDown(_actionButtons[PlayerAction.FireRightCannon]))
                 player.FireRightCannons(gameTime);
-            }
         }
 
-        public static void PickupGold(GamePadState gs, GamePadState previousGamePadState, Player player, GameTime gameTime)
+        public static void PickupGold(GamePadState gamePadState, GamePadState previousGamePadState, Player player, GameTime gameTime)
         {
-            var pickupGoldButton = actionKeys[Action.PickupGold];
-            if (gs.IsButtonDown(pickupGoldButton) && previousGamePadState.IsButtonUp(pickupGoldButton))
-            {
+            var pickupGoldButton = _actionButtons[PlayerAction.PickupGold];
+            if (gamePadState.IsButtonDown(pickupGoldButton) && previousGamePadState.IsButtonUp(pickupGoldButton))
                 player.AttemptPickupGold();
-            }
         }
 
-        public static void RepairShip(GamePadState gs, GamePadState previousGamePadState, Player player, GameTime gameTime)
+        public static void RepairShip(GamePadState gamePadState, GamePadState previousGamePadState, Player player, GameTime gameTime)
         {
-            var repairButton = actionKeys[Action.RepairShip];
-            if (gs.IsButtonDown(repairButton) && previousGamePadState.IsButtonUp(repairButton))
+            var repairButton = _actionButtons[PlayerAction.RepairShip];
+            if (gamePadState.IsButtonDown(repairButton) && previousGamePadState.IsButtonUp(repairButton))
                 player.AttemptRepair();
         }
     }
