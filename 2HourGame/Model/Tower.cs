@@ -1,42 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using FarseerGames.FarseerPhysics;
-using _2HourGame.View;
 using _2HourGame.View.GameServices;
+using FarseerGames.FarseerPhysics.Collisions;
+using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    class Tower : PhysicsGameObject
+    internal class Tower : PhysicsGameObject
     {
-        List<GameObject> targets;
-        float range;
-
-        const float maxCannonRotationDegrees = 0.5f;
-        const float toleranceInDegrees = 9.0f;
+        private const float maxCannonRotationDegrees = 0.5f;
+        private const float toleranceInDegrees = 9.0f;
 
         // code so that we dont switch targets too often
-        GameObject currentTarget = null;
-        Timer minTargetFocusTimer;
+        private readonly Timer minTargetFocusTimer;
+        private readonly float range;
+        private readonly List<GameObject> targets;
+        private GameObject currentTarget;
 
-        public Cannon Cannon { get; private set; }
-
-        public Tower(PhysicsWorld world, Vector2 position, List<GameObject> targets, TextureManager tm, AnimationManager am)
+        public Tower(PhysicsWorld world, Vector2 position, List<GameObject> targets, TextureManager tm,
+                     AnimationManager am)
             : base(world, position, 40, 100, 0)
         {
             this.targets = targets;
 
-            this.minTargetFocusTimer = new Timer(10f);
-            this.range = 300;
+            minTargetFocusTimer = new Timer(10f);
+            range = 300;
             Cannon = new Cannon(world, this, new Vector2(0, -35), 0.0f, tm, am);
             base.Body.IsStatic = true;
         }
 
-        public override bool Touch(Actor other, FarseerGames.FarseerPhysics.Collisions.Contact contactPoint) {
+        public Cannon Cannon { get; private set; }
+
+        public override bool Touch(Actor other, Contact contactPoint)
+        {
             var cannonBall = other as CannonBall;
-            if (cannonBall != null) {
+            if (cannonBall != null)
+            {
                 cannonBall.Die();
             }
             return base.Touch(other, contactPoint);
@@ -44,13 +43,13 @@ namespace _2HourGame.Model
 
         public override void Update(GameTime gameTime)
         {
-            if (this.IsAlive)
+            if (IsAlive)
                 doCannonBehaviour(gameTime);
 
             base.Update(gameTime);
         }
 
-        private void doCannonBehaviour(GameTime gameTime) 
+        private void doCannonBehaviour(GameTime gameTime)
         {
             if (currentTarget == null || targetIsOutOfRange(currentTarget))
             {
@@ -65,7 +64,8 @@ namespace _2HourGame.Model
             {
                 // steer towards the target and potentially fire!
                 // get the change to make to point directly at the target.
-                var differenceToTarget = AIHelpers.GetRotationToPointInDegrees(currentTarget.Position, Cannon.Position, Cannon.Rotation);
+                float differenceToTarget = AIHelpers.GetRotationToPointInDegrees(currentTarget.Position, Cannon.Position,
+                                                                                 Cannon.Rotation);
 
                 float angleChangeInDegrees = differenceToTarget;
 
@@ -85,11 +85,11 @@ namespace _2HourGame.Model
             }
         }
 
-        private List<GameObject> getInRangeTargets(List<GameObject> allTargets) 
+        private List<GameObject> getInRangeTargets(List<GameObject> allTargets)
         {
-            List<GameObject> inRangeTargets = new List<GameObject>();
+            var inRangeTargets = new List<GameObject>();
 
-            foreach (GameObject g in allTargets) 
+            foreach (GameObject g in allTargets)
             {
                 if (getDistanceBetween(g, this) <= range)
                     inRangeTargets.Add(g);
@@ -98,18 +98,18 @@ namespace _2HourGame.Model
             return inRangeTargets;
         }
 
-        private GameObject getClosestToSelf(List<GameObject> inRangeTargets) 
+        private GameObject getClosestToSelf(List<GameObject> inRangeTargets)
         {
             GameObject closest = null;
             float closestDistance = float.MaxValue;
 
             float distanceBetween;
 
-            foreach (GameObject t in inRangeTargets) 
+            foreach (GameObject t in inRangeTargets)
             {
                 distanceBetween = getDistanceBetween(t, this);
 
-                if(distanceBetween < closestDistance)
+                if (distanceBetween < closestDistance)
                 {
                     closest = t;
                     closestDistance = distanceBetween;
@@ -119,12 +119,12 @@ namespace _2HourGame.Model
             return closest;
         }
 
-        private bool targetIsOutOfRange(GameObject target) 
+        private bool targetIsOutOfRange(GameObject target)
         {
             return getDistanceBetween(this, target) > range;
         }
 
-        private float getDistanceBetween(GameObject first, GameObject second) 
+        private float getDistanceBetween(GameObject first, GameObject second)
         {
             return Vector2.Distance(first.Position, second.Position);
         }

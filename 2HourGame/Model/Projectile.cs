@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
-namespace _2HourGame.Model {
-    class Projectile : PhysicsGameObject {
-        public Actor Owner { get; private set; }
-
-        public Projectile(PhysicsWorld world, Vector2 position, float width, float height, Actor owner) : base(world, position, width, height) {
-            this.Owner = owner;
+namespace _2HourGame.Model
+{
+    internal class Projectile : PhysicsGameObject
+    {
+        public Projectile(PhysicsWorld world, Vector2 position, float width, float height, Actor owner)
+            : base(world, position, width, height)
+        {
+            Owner = owner;
         }
 
-        public virtual void Fire(Vector2 impulse) {
-            this.Body.ApplyImpulse(impulse);
+        public Actor Owner { get; private set; }
+
+        public virtual void Fire(Vector2 impulse)
+        {
+            Body.ApplyImpulse(impulse);
         }
     }
 }

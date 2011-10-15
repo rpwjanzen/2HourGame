@@ -1,16 +1,20 @@
 #region File Description
+
 //-----------------------------------------------------------------------------
 // LoadingScreen.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
 #endregion
 
 #region Using Statements
+
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 #endregion
 
 namespace GameStateManagement
@@ -29,19 +33,18 @@ namespace GameStateManagement
     ///   next screen, which may take a long time to load its data. The loading
     ///   screen will be the only thing displayed while this load is taking place.
     /// </summary>
-    class LoadingScreen : GameScreen
+    internal class LoadingScreen : GameScreen
     {
         #region Fields
 
-        bool loadingIsSlow;
-        bool otherScreensAreGone;
+        private readonly bool loadingIsSlow;
 
-        GameScreen[] screensToLoad;
+        private readonly GameScreen[] screensToLoad;
+        private bool otherScreensAreGone;
 
         #endregion
 
         #region Initialization
-
 
         /// <summary>
         /// The constructor is private: loading screens should
@@ -69,24 +72,22 @@ namespace GameStateManagement
                 screen.ExitScreen();
 
             // Create and activate the loading screen.
-            LoadingScreen loadingScreen = new LoadingScreen(screenManager,
-                                                            loadingIsSlow,
-                                                            screensToLoad);
+            var loadingScreen = new LoadingScreen(screenManager,
+                                                  loadingIsSlow,
+                                                  screensToLoad);
 
             screenManager.AddScreen(loadingScreen, controllingPlayer);
         }
-
 
         #endregion
 
         #region Update and Draw
 
-
         /// <summary>
         /// Updates the loading screen.
         /// </summary>
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
-                                                       bool coveredByOtherScreen)
+                                    bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
@@ -143,11 +144,11 @@ namespace GameStateManagement
 
                 // Center the text in the viewport.
                 Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
-                Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
+                var viewportSize = new Vector2(viewport.Width, viewport.Height);
                 Vector2 textSize = font.MeasureString(message);
-                Vector2 textPosition = (viewportSize - textSize) / 2;
+                Vector2 textPosition = (viewportSize - textSize)/2;
 
-                Color color = new Color(255, 255, 255, TransitionAlpha);
+                var color = new Color(255, 255, 255, TransitionAlpha);
 
                 // Draw the text.
                 spriteBatch.Begin();
@@ -155,7 +156,6 @@ namespace GameStateManagement
                 spriteBatch.End();
             }
         }
-
 
         #endregion
     }

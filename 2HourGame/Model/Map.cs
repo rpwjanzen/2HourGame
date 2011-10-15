@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    class Map
+    internal class Map
     {
-        List<Island> islands;
+        private readonly List<Island> islands;
 
-        public Map(List<Island> islands) 
+        public Map(List<Island> islands)
         {
             this.islands = islands;
         }

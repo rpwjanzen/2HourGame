@@ -1,24 +1,25 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame.View.GameServices
 {
-    class TextureManager
+    internal class TextureManager
     {
-        Dictionary<string, Texture2D> loadedTextures;
-
-        public Texture2D this[string index] {
-            get {return loadedTextures[index]; }
-        }
+        private readonly Dictionary<string, Texture2D> loadedTextures;
 
         public TextureManager()
         {
             loadedTextures = new Dictionary<string, Texture2D>();
         }
 
-        public void LoadContent(ContentManager content) {
+        public Texture2D this[string index]
+        {
+            get { return loadedTextures[index]; }
+        }
+
+        public void LoadContent(ContentManager content)
+        {
             LoadTextures(content);
         }
 
@@ -53,7 +54,7 @@ namespace _2HourGame.View.GameServices
             LoadTexture("tower", content);
         }
 
-        private void LoadTexture(string textureName, ContentManager content) 
+        private void LoadTexture(string textureName, ContentManager content)
         {
             loadedTextures.Add(textureName, content.Load<Texture2D>(textureName));
         }

@@ -1,14 +1,18 @@
 #region File Description
+
 //-----------------------------------------------------------------------------
 // MainMenuScreen.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
 #endregion
 
 #region Using Statements
+
 using Microsoft.Xna.Framework;
+
 #endregion
 
 namespace GameStateManagement
@@ -16,10 +20,9 @@ namespace GameStateManagement
     /// <summary>
     /// The main menu screen is the first thing displayed when the game starts up.
     /// </summary>
-    class MainMenuScreen : MenuScreen
+    internal class MainMenuScreen : MenuScreen
     {
         #region Initialization
-
 
         /// <summary>
         /// Constructor fills in the menu contents.
@@ -28,9 +31,9 @@ namespace GameStateManagement
             : base("Main Menu")
         {
             // Create our menu entries.
-            MenuEntry playGameMenuEntry = new MenuEntry("Play Game");
-            MenuEntry optionsMenuEntry = new MenuEntry("Options");
-            MenuEntry exitMenuEntry = new MenuEntry("Exit");
+            var playGameMenuEntry = new MenuEntry("Play Game");
+            var optionsMenuEntry = new MenuEntry("Options");
+            var exitMenuEntry = new MenuEntry("Exit");
 
             // Hook up menu event handlers.
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
@@ -43,16 +46,14 @@ namespace GameStateManagement
             MenuEntries.Add(exitMenuEntry);
         }
 
-
         #endregion
 
         #region Handle Input
 
-
         /// <summary>
         /// Event handler for when the Play Game menu entry is selected.
         /// </summary>
-        void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        private void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
                                new GameplayScreen());
@@ -62,7 +63,7 @@ namespace GameStateManagement
         /// <summary>
         /// Event handler for when the Options menu entry is selected.
         /// </summary>
-        void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        private void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             ScreenManager.AddScreen(new OptionsMenuScreen(), e.PlayerIndex);
         }
@@ -75,7 +76,7 @@ namespace GameStateManagement
         {
             const string message = "Are you sure you want to exit this sample?";
 
-            MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message);
+            var confirmExitMessageBox = new MessageBoxScreen(message);
 
             confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
 
@@ -87,11 +88,10 @@ namespace GameStateManagement
         /// Event handler for when the user selects ok on the "are you sure
         /// you want to exit" message box.
         /// </summary>
-        void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
+        private void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
         {
             ScreenManager.Game.Exit();
         }
-
 
         #endregion
     }

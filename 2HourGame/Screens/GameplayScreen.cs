@@ -1,29 +1,31 @@
 #region File Description
+
 //-----------------------------------------------------------------------------
 // GameplayScreen.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
 #endregion
 
 #region Using Statements
+
 using System;
-using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
+using _2HourGame;
+using _2HourGame.Controller;
+using _2HourGame.Factories;
+using _2HourGame.Model;
+using _2HourGame.View;
+using _2HourGame.View.GameServices;
+using FarseerGames.FarseerPhysics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Linq;
 
-using _2HourGame.Model;
-using FarseerGames.FarseerPhysics;
-using _2HourGame;
-using _2HourGame.View.GameServices;
-using _2HourGame.Factories;
-using System.Collections.Generic;
-using _2HourGame.View;
-using _2HourGame.Controller;
 #endregion
 
 namespace GameStateManagement
@@ -37,14 +39,14 @@ namespace GameStateManagement
     {
         #region Fields
 
+        private AnimationManager _animationManager;
         private ContentManager _content;
         private SpriteFont _gameFont;
-        private PhysicsWorld _world;
-        private AnimationManager _animationManager;
-        private TextureManager _textureManager;
         private List<ShipController> _shipControllers;
+        private TextureManager _textureManager;
         // XXX : What a hack!
         private GameTime _updateTime;
+        private PhysicsWorld _world;
 
         #endregion
 
@@ -118,7 +120,7 @@ namespace GameStateManagement
                 throw new ArgumentNullException("input");
 
             // Look up inputs for the active player profile.
-            int controllingPlayerIndex = (int)ControllingPlayer.Value;
+            var controllingPlayerIndex = (int) ControllingPlayer.Value;
 
             KeyboardState keyboardState = input.CurrentKeyboardStates[controllingPlayerIndex];
             GamePadState gamePadState = input.CurrentGamePadStates[controllingPlayerIndex];
@@ -127,7 +129,8 @@ namespace GameStateManagement
             // they unplug the active gamepad. This requires us to keep track of
             // whether a gamepad was ever plugged in, because we don't want to pause
             // on PC if they are playing with a keyboard and have no gamepad at all!
-            bool gamePadJustDisconnected = !gamePadState.IsConnected && input.GamePadWasConnected[controllingPlayerIndex];
+            bool gamePadJustDisconnected = !gamePadState.IsConnected &&
+                                           input.GamePadWasConnected[controllingPlayerIndex];
 
             if (input.IsPauseGame(ControllingPlayer) || gamePadJustDisconnected)
             {
@@ -135,9 +138,9 @@ namespace GameStateManagement
             }
             else
             {
-                foreach (var shipController in _shipControllers)
+                foreach (ShipController shipController in _shipControllers)
                 {
-                    int playerIndex = (int)shipController.Player.PlayerIndex;
+                    var playerIndex = (int) shipController.Player.PlayerIndex;
                     GamePadState previousGamePadState = input.LastGamePadStates[playerIndex];
                     GamePadState currentGamePadState = input.CurrentGamePadStates[playerIndex];
 
@@ -171,84 +174,106 @@ namespace GameStateManagement
             float width = ScreenManager.GraphicsDevice.Viewport.Width;
             float height = ScreenManager.GraphicsDevice.Viewport.Height;
 
-            PhysicsSimulator physicsSimulator = new PhysicsSimulator(Vector2.Zero);
+            var physicsSimulator = new PhysicsSimulator(Vector2.Zero);
             _world = new PhysicsWorld(physicsSimulator);
 
-            _textureManager = new TextureManager();            
+            _textureManager = new TextureManager();
             _animationManager = new AnimationManager(_world, _textureManager, _content);
 
-            var worldBorder = new WorldBorder(new Rectangle(0, 0, (int)width, (int)height), physicsSimulator);
+            var worldBorder = new WorldBorder(new Rectangle(0, 0, (int) width, (int) height), physicsSimulator);
 
-            var playerColors = new[] {
-                Color.Blue,
-                Color.Red,
-                Color.Green,
-                Color.Yellow
-            }.ToList();
+            List<Color> playerColors = new[]
+                                           {
+                                               Color.Blue,
+                                               Color.Red,
+                                               Color.Green,
+                                               Color.Yellow
+                                           }.ToList();
 
-            var islandPositions = new[] {
-                new Vector2(width / 4 - 100, height / 4 - 50),
-                new Vector2((width / 4) * 3 + 100, (height / 4) - 50),
-                new Vector2((width / 4) - 100, (height / 4) * 3 + 50),
-                new Vector2((width / 4) * 3 + 100, (height / 4) * 3 + 50)
-            }.ToList();
+            List<Vector2> islandPositions = new[]
+                                                {
+                                                    new Vector2(width/4 - 100, height/4 - 50),
+                                                    new Vector2((width/4)*3 + 100, (height/4) - 50),
+                                                    new Vector2((width/4) - 100, (height/4)*3 + 50),
+                                                    new Vector2((width/4)*3 + 100, (height/4)*3 + 50)
+                                                }.ToList();
 
             var islandBuildingOffset = new Vector2(20, 20);
-            var islandBuildings = new HouseFactory(_world, _textureManager, _animationManager).CreateHouses(playerColors, islandPositions.Select(i => i + islandBuildingOffset).ToList());
+            List<GameObject> islandBuildings =
+                new HouseFactory(_world, _textureManager, _animationManager).CreateHouses(playerColors,
+                                                                                          islandPositions.Select(
+                                                                                              i =>
+                                                                                              i + islandBuildingOffset).
+                                                                                              ToList());
 
             var islandFactory = new IslandFactory(_world, _textureManager, _animationManager);
-            var playerIslands = islandFactory.CreatePlayerIslands(islandPositions);
+            List<Island> playerIslands = islandFactory.CreatePlayerIslands(islandPositions);
 
             var goldIslands = new List<Island>();
-            goldIslands.Add(islandFactory.CreateIsland(new Vector2(width / 2, height / 2), 16));
+            goldIslands.Add(islandFactory.CreateIsland(new Vector2(width/2, height/2), 16));
 
             var allIslands = new List<Island>(playerIslands.ToArray());
             allIslands.AddRange(goldIslands);
-            foreach (var island in allIslands) {
+            foreach (Island island in allIslands)
+            {
                 var islandGoldView = new IslandGoldView(_world, island, _textureManager, _animationManager);
                 _world.NewActorViews.Add(islandGoldView);
             }
 
-            var playerPositions = new[] {
-                new Vector2((width / 4), (height / 4) + 50),
-                new Vector2((width / 4) * 3, (height / 4) + 50),
-                new Vector2((width / 4), (height / 4) * 3 - 50),
-                new Vector2((width / 4) * 3, (height / 4) * 3 - 50)
-            }.ToList();
+            List<Vector2> playerPositions = new[]
+                                                {
+                                                    new Vector2((width/4), (height/4) + 50),
+                                                    new Vector2((width/4)*3, (height/4) + 50),
+                                                    new Vector2((width/4), (height/4)*3 - 50),
+                                                    new Vector2((width/4)*3, (height/4)*3 - 50)
+                                                }.ToList();
 
-            var playerAngles = new[] {
-                (float)(Math.PI * 0.75),
-                (float)(Math.PI * 1.25),
-                (float)(Math.PI * 0.25),
-                (float)(Math.PI * 1.75)
-            }.ToList();
+            List<float> playerAngles = new[]
+                                           {
+                                               (float) (Math.PI*0.75),
+                                               (float) (Math.PI*1.25),
+                                               (float) (Math.PI*0.25),
+                                               (float) (Math.PI*1.75)
+                                           }.ToList();
 
-            var ships = new ShipFactory(_world, _textureManager, _animationManager)
+            List<Ship> ships = new ShipFactory(_world, _textureManager, _animationManager)
                 .CreatePlayerShips(playerColors, playerPositions, playerIslands, playerAngles);
 
             var shipGoldViewFactory = new ShipGoldViewFactory(_world, 100, _textureManager, _animationManager);
-            var playerGoldViews = ships.Zip(new[] {
-                ShipGoldView.GoldViewPosition.UpperLeft,
-                ShipGoldView.GoldViewPosition.UpperRight,
-                ShipGoldView.GoldViewPosition.LowerLeft,
-                ShipGoldView.GoldViewPosition.LowerRight
-            }, (s, p) => shipGoldViewFactory.CreateShipGoldView(s, p)).ToList();
-            foreach (var v in playerGoldViews) {
+            List<ShipGoldView> playerGoldViews = ships.Zip(new[]
+                                                               {
+                                                                   ShipGoldView.GoldViewPosition.UpperLeft,
+                                                                   ShipGoldView.GoldViewPosition.UpperRight,
+                                                                   ShipGoldView.GoldViewPosition.LowerLeft,
+                                                                   ShipGoldView.GoldViewPosition.LowerRight
+                                                               }, (s, p) => shipGoldViewFactory.CreateShipGoldView(s, p))
+                .ToList();
+            foreach (ShipGoldView v in playerGoldViews)
+            {
                 _world.NewActorViews.Add(v);
             }
 
-            var tower = new TowerFactory(_world, _textureManager, _animationManager).CreateTower(new Vector2(width / 2, height / 2), ships.Cast<GameObject>().ToList<GameObject>());
+            Tower tower =
+                new TowerFactory(_world, _textureManager, _animationManager).CreateTower(
+                    new Vector2(width/2, height/2), ships.Cast<GameObject>().ToList());
 
             var map = new Map(allIslands);
 
-            var players = new PlayerFactory(map).CreatePlayers(new[] { PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four }, ships, playerIslands);
+            IEnumerable<Player> players =
+                new PlayerFactory(map).CreatePlayers(
+                    new[] {PlayerIndex.One, PlayerIndex.Two, PlayerIndex.Three, PlayerIndex.Four}, ships, playerIslands);
 
-            var shipActionViews = new ShipActionViewFactory(_world, _textureManager, _animationManager).CreateShipActionsViews(players).ToList();
-            foreach(var av in shipActionViews) {
+            List<ShipActionsView> shipActionViews =
+                new ShipActionViewFactory(_world, _textureManager, _animationManager).CreateShipActionsViews(players).
+                    ToList();
+            foreach (ShipActionsView av in shipActionViews)
+            {
                 _world.NewActorViews.Add(av);
             }
 
-            _shipControllers = new ShipControllerFactory(_world, _textureManager, _animationManager).CreateShipControllers(players).ToList();
+            _shipControllers =
+                new ShipControllerFactory(_world, _textureManager, _animationManager).CreateShipControllers(players).
+                    ToList();
         }
     }
 }

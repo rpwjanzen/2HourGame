@@ -5,7 +5,7 @@ using _2HourGame.View.GameServices;
 
 namespace _2HourGame.Factories
 {
-    class ShipControllerFactory : GameObjectFactory
+    internal class ShipControllerFactory : GameObjectFactory
     {
         public ShipControllerFactory(World world, TextureManager textureManager, AnimationManager am)
             : base(world, textureManager, am)

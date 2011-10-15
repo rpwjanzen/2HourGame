@@ -1,14 +1,18 @@
 #region File Description
+
 //-----------------------------------------------------------------------------
 // OptionsMenuScreen.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
 #endregion
 
 #region Using Statements
-using Microsoft.Xna.Framework;
+
+
+
 #endregion
 
 namespace GameStateManagement
@@ -18,35 +22,33 @@ namespace GameStateManagement
     /// screen, and gives the user a chance to configure the game
     /// in various hopefully useful ways.
     /// </summary>
-    class OptionsMenuScreen : MenuScreen
+    internal class OptionsMenuScreen : MenuScreen
     {
         #region Fields
 
-        MenuEntry ungulateMenuEntry;
-        MenuEntry languageMenuEntry;
-        MenuEntry frobnicateMenuEntry;
-        MenuEntry elfMenuEntry;
+        private static Ungulate currentUngulate = Ungulate.Dromedary;
 
-        enum Ungulate
+        private static readonly string[] languages = {"C#", "French", "Deoxyribonucleic acid"};
+        private static int currentLanguage;
+
+        private static bool frobnicate = true;
+
+        private static int elf = 23;
+        private readonly MenuEntry elfMenuEntry;
+        private readonly MenuEntry frobnicateMenuEntry;
+        private readonly MenuEntry languageMenuEntry;
+        private readonly MenuEntry ungulateMenuEntry;
+
+        private enum Ungulate
         {
             BactrianCamel,
             Dromedary,
             Llama,
         }
 
-        static Ungulate currentUngulate = Ungulate.Dromedary;
-
-        static string[] languages = { "C#", "French", "Deoxyribonucleic acid" };
-        static int currentLanguage = 0;
-
-        static bool frobnicate = true;
-
-        static int elf = 23;
-
         #endregion
 
         #region Initialization
-
 
         /// <summary>
         /// Constructor.
@@ -62,7 +64,7 @@ namespace GameStateManagement
 
             SetMenuEntryText();
 
-            MenuEntry backMenuEntry = new MenuEntry("Back");
+            var backMenuEntry = new MenuEntry("Back");
 
             // Hook up menu event handlers.
             ungulateMenuEntry.Selected += UngulateMenuEntrySelected;
@@ -70,7 +72,7 @@ namespace GameStateManagement
             frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
             elfMenuEntry.Selected += ElfMenuEntrySelected;
             backMenuEntry.Selected += OnCancel;
-            
+
             // Add entries to the menu.
             MenuEntries.Add(ungulateMenuEntry);
             MenuEntries.Add(languageMenuEntry);
@@ -83,7 +85,7 @@ namespace GameStateManagement
         /// <summary>
         /// Fills in the latest values for the options screen menu text.
         /// </summary>
-        void SetMenuEntryText()
+        private void SetMenuEntryText()
         {
             ungulateMenuEntry.Text = "Preferred ungulate: " + currentUngulate;
             languageMenuEntry.Text = "Language: " + languages[currentLanguage];
@@ -91,16 +93,14 @@ namespace GameStateManagement
             elfMenuEntry.Text = "elf: " + elf;
         }
 
-
         #endregion
 
         #region Handle Input
 
-
         /// <summary>
         /// Event handler for when the Ungulate menu entry is selected.
         /// </summary>
-        void UngulateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        private void UngulateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             currentUngulate++;
 
@@ -114,9 +114,9 @@ namespace GameStateManagement
         /// <summary>
         /// Event handler for when the Language menu entry is selected.
         /// </summary>
-        void LanguageMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        private void LanguageMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            currentLanguage = (currentLanguage + 1) % languages.Length;
+            currentLanguage = (currentLanguage + 1)%languages.Length;
 
             SetMenuEntryText();
         }
@@ -125,7 +125,7 @@ namespace GameStateManagement
         /// <summary>
         /// Event handler for when the Frobnicate menu entry is selected.
         /// </summary>
-        void FrobnicateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        private void FrobnicateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             frobnicate = !frobnicate;
 
@@ -136,13 +136,12 @@ namespace GameStateManagement
         /// <summary>
         /// Event handler for when the Elf menu entry is selected.
         /// </summary>
-        void ElfMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        private void ElfMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             elf++;
 
             SetMenuEntryText();
         }
-
 
         #endregion
     }

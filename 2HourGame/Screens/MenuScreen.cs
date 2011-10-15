@@ -1,17 +1,21 @@
 #region File Description
+
 //-----------------------------------------------------------------------------
 // MenuScreen.cs
 //
 // XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
 #endregion
 
 #region Using Statements
+
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 #endregion
 
 namespace GameStateManagement
@@ -20,18 +24,17 @@ namespace GameStateManagement
     /// Base class for screens that contain a menu of options. The user can
     /// move up and down to select an entry, or cancel to back out of the screen.
     /// </summary>
-    abstract class MenuScreen : GameScreen
+    internal abstract class MenuScreen : GameScreen
     {
         #region Fields
 
-        List<MenuEntry> menuEntries = new List<MenuEntry>();
-        int selectedEntry = 0;
-        string menuTitle;
+        private readonly List<MenuEntry> menuEntries = new List<MenuEntry>();
+        private readonly string menuTitle;
+        private int selectedEntry;
 
         #endregion
 
         #region Properties
-
 
         /// <summary>
         /// Gets the list of menu entries, so derived classes can add
@@ -42,11 +45,9 @@ namespace GameStateManagement
             get { return menuEntries; }
         }
 
-
         #endregion
 
         #region Initialization
-
 
         /// <summary>
         /// Constructor.
@@ -59,11 +60,9 @@ namespace GameStateManagement
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
         }
 
-
         #endregion
 
         #region Handle Input
-
 
         /// <summary>
         /// Responds to user input, changing the selected entry and accepting
@@ -133,17 +132,15 @@ namespace GameStateManagement
             OnCancel(e.PlayerIndex);
         }
 
-
         #endregion
 
         #region Update and Draw
-
 
         /// <summary>
         /// Updates the menu.
         /// </summary>
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
-                                                       bool coveredByOtherScreen)
+                                    bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
@@ -165,17 +162,17 @@ namespace GameStateManagement
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             SpriteFont font = ScreenManager.Font;
 
-            Vector2 position = new Vector2(100, 150);
+            var position = new Vector2(100, 150);
 
             // Make the menu slide into place during transitions, using a
             // power curve to make things look more interesting (this makes
             // the movement slow down as it nears the end).
-            float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
+            var transitionOffset = (float) Math.Pow(TransitionPosition, 2);
 
             if (ScreenState == ScreenState.TransitionOn)
-                position.X -= transitionOffset * 256;
+                position.X -= transitionOffset*256;
             else
-                position.X += transitionOffset * 512;
+                position.X += transitionOffset*512;
 
             spriteBatch.Begin();
 
@@ -192,19 +189,18 @@ namespace GameStateManagement
             }
 
             // Draw the menu title.
-            Vector2 titlePosition = new Vector2(426, 80);
-            Vector2 titleOrigin = font.MeasureString(menuTitle) / 2;
-            Color titleColor = new Color(192, 192, 192, TransitionAlpha);
+            var titlePosition = new Vector2(426, 80);
+            Vector2 titleOrigin = font.MeasureString(menuTitle)/2;
+            var titleColor = new Color(192, 192, 192, TransitionAlpha);
             float titleScale = 1.25f;
 
-            titlePosition.Y -= transitionOffset * 100;
+            titlePosition.Y -= transitionOffset*100;
 
             spriteBatch.DrawString(font, menuTitle, titlePosition, titleColor, 0,
                                    titleOrigin, titleScale, SpriteEffects.None, 0);
 
             spriteBatch.End();
         }
-
 
         #endregion
     }

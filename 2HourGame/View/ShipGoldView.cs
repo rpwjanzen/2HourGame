@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using _2HourGame.View.GameServices;
 using _2HourGame.Model;
+using _2HourGame.View.GameServices;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame.View
 {
@@ -15,50 +12,63 @@ namespace _2HourGame.View
     /// Draws gold on the corner of the screen so that we know how much gold is on the ship.
     /// TODO: update when ship gold capacity changes.
     /// </summary>
-    class ShipGoldView : ActorView
+    internal class ShipGoldView : ActorView
     {
-        public enum GoldViewPosition { UpperLeft, UpperRight, LowerLeft, LowerRight }
-        Texture2D texture;
+        #region GoldViewPosition enum
 
-        float displayWidth;
+        public enum GoldViewPosition
+        {
+            UpperLeft,
+            UpperRight,
+            LowerLeft,
+            LowerRight
+        }
 
-        float scale;
+        #endregion
 
-        Ship ship;
+        private readonly float displayWidth;
 
-        // where to display the gold
-        List<Vector2> GoldPositions { get; set; }
+        private readonly float scale;
 
-        // where is this ships goldview
-        GoldViewPosition DisplayCorner { get; set; }
+        private readonly Ship ship;
+        private Texture2D texture;
 
-        public ShipGoldView(World world, Ship ship, GoldViewPosition position, float displayWidth, TextureManager textureManager, AnimationManager am)
+        public ShipGoldView(World world, Ship ship, GoldViewPosition position, float displayWidth,
+                            TextureManager textureManager, AnimationManager am)
             : base(ship, world, textureManager, am)
         {
             this.ship = ship;
             this.displayWidth = displayWidth;
             scale = 1f;
-            this.DisplayCorner = position;
+            DisplayCorner = position;
         }
+
+        // where to display the gold
+        private List<Vector2> GoldPositions { get; set; }
+
+        // where is this ships goldview
+        private GoldViewPosition DisplayCorner { get; set; }
 
         public override void LoadContent(ContentManager content)
         {
             texture = TextureManager["gold"];
-            this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
+            GoldPositions = CalculateGoldCoinPositions(displayWidth, DisplayCorner);
             base.LoadContent(content);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (ship.Gold != GoldPositions.Count) {
-                this.GoldPositions = CalculateGoldCoinPositions(displayWidth, this.DisplayCorner);
+            if (ship.Gold != GoldPositions.Count)
+            {
+                GoldPositions = CalculateGoldCoinPositions(displayWidth, DisplayCorner);
             }
 
             for (int i = 0; i < GoldPositions.Count; i++)
             {
                 Color drawColor = i < ship.Gold ? Color.White : Color.DarkGray;
 
-                spriteBatch.Draw(texture, GoldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGoldView) + (0.001f * i));
+                spriteBatch.Draw(texture, GoldPositions[i], null, drawColor, 0, Vector2.Zero, scale, SpriteEffects.None,
+                                 ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.shipGoldView) + (0.001f*i));
             }
 
             base.Draw(gameTime, spriteBatch);
@@ -68,7 +78,8 @@ namespace _2HourGame.View
         {
             Vector2 position;
 
-            switch (displayCorner) {
+            switch (displayCorner)
+            {
                 case GoldViewPosition.UpperLeft:
                     position = new Vector2(
                         10,
@@ -93,12 +104,12 @@ namespace _2HourGame.View
                     throw new ArgumentOutOfRangeException("displayCorner", "Unknown gold position");
             }
 
-            float increment = displayWidth / ship.GoldCapacity;
+            float increment = displayWidth/ship.GoldCapacity;
 
             var goldPositions = new List<Vector2>();
             for (int i = 0; i < ship.GoldCapacity; i++)
             {
-                var offset = new Vector2(i * increment, 0);
+                var offset = new Vector2(i*increment, 0);
                 goldPositions.Add(position + offset);
             }
 

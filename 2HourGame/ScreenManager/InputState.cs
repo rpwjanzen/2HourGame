@@ -1,15 +1,19 @@
 #region File Description
+
 //-----------------------------------------------------------------------------
 // InputState.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
 #endregion
 
 #region Using Statements
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
 #endregion
 
 namespace GameStateManagement
@@ -26,18 +30,16 @@ namespace GameStateManagement
 
         public const int MaxInputs = 4;
 
-        public readonly KeyboardState[] CurrentKeyboardStates;
         public readonly GamePadState[] CurrentGamePadStates;
-
-        public readonly KeyboardState[] LastKeyboardStates;
-        public readonly GamePadState[] LastGamePadStates;
+        public readonly KeyboardState[] CurrentKeyboardStates;
 
         public readonly bool[] GamePadWasConnected;
+        public readonly GamePadState[] LastGamePadStates;
+        public readonly KeyboardState[] LastKeyboardStates;
 
         #endregion
 
         #region Initialization
-
 
         /// <summary>
         /// Constructs a new input state.
@@ -53,11 +55,9 @@ namespace GameStateManagement
             GamePadWasConnected = new bool[MaxInputs];
         }
 
-
         #endregion
 
         #region Public Methods
-
 
         /// <summary>
         /// Reads the latest state of the keyboard and gamepad.
@@ -69,8 +69,8 @@ namespace GameStateManagement
                 LastKeyboardStates[i] = CurrentKeyboardStates[i];
                 LastGamePadStates[i] = CurrentGamePadStates[i];
 
-                CurrentKeyboardStates[i] = Keyboard.GetState((PlayerIndex)i);
-                CurrentGamePadStates[i] = GamePad.GetState((PlayerIndex)i);
+                CurrentKeyboardStates[i] = Keyboard.GetState((PlayerIndex) i);
+                CurrentGamePadStates[i] = GamePad.GetState((PlayerIndex) i);
 
                 // Keep track of whether a gamepad has ever been
                 // connected, so we can detect if it is unplugged.
@@ -89,14 +89,14 @@ namespace GameStateManagement
         /// is detected, the output playerIndex reports which player pressed it.
         /// </summary>
         public bool IsNewKeyPress(Keys key, PlayerIndex? controllingPlayer,
-                                            out PlayerIndex playerIndex)
+                                  out PlayerIndex playerIndex)
         {
             if (controllingPlayer.HasValue)
             {
                 // Read input from the specified player.
                 playerIndex = controllingPlayer.Value;
 
-                int i = (int)playerIndex;
+                var i = (int) playerIndex;
 
                 return (CurrentKeyboardStates[i].IsKeyDown(key) &&
                         LastKeyboardStates[i].IsKeyUp(key));
@@ -119,14 +119,14 @@ namespace GameStateManagement
         /// is detected, the output playerIndex reports which player pressed it.
         /// </summary>
         public bool IsNewButtonPress(Buttons button, PlayerIndex? controllingPlayer,
-                                                     out PlayerIndex playerIndex)
+                                     out PlayerIndex playerIndex)
         {
             if (controllingPlayer.HasValue)
             {
                 // Read input from the specified player.
                 playerIndex = controllingPlayer.Value;
 
-                int i = (int)playerIndex;
+                var i = (int) playerIndex;
 
                 return (CurrentGamePadStates[i].IsButtonDown(button) &&
                         LastGamePadStates[i].IsButtonUp(button));
@@ -216,7 +216,6 @@ namespace GameStateManagement
                    IsNewButtonPress(Buttons.Back, controllingPlayer, out playerIndex) ||
                    IsNewButtonPress(Buttons.Start, controllingPlayer, out playerIndex);
         }
-
 
         #endregion
     }

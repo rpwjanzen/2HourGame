@@ -1,19 +1,22 @@
 #region File Description
+
 //-----------------------------------------------------------------------------
 // ScreenManager.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
 #endregion
 
 #region Using Statements
-using System;
-using System.Diagnostics;
+
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
 #endregion
 
 namespace GameStateManagement
@@ -28,23 +31,21 @@ namespace GameStateManagement
     {
         #region Fields
 
-        List<GameScreen> screens = new List<GameScreen>();
-        List<GameScreen> screensToUpdate = new List<GameScreen>();
+        private readonly InputState input = new InputState();
+        private readonly List<GameScreen> screens = new List<GameScreen>();
+        private readonly List<GameScreen> screensToUpdate = new List<GameScreen>();
 
-        InputState input = new InputState();
+        private Texture2D blankTexture;
+        private SpriteFont font;
 
-        SpriteBatch spriteBatch;
-        SpriteFont font;
-        Texture2D blankTexture;
+        private bool isInitialized;
+        private SpriteBatch spriteBatch;
 
-        bool isInitialized;
-
-        bool traceEnabled;
+        private bool traceEnabled;
 
         #endregion
 
         #region Properties
-
 
         /// <summary>
         /// A default SpriteBatch shared by all the screens. This saves
@@ -77,11 +78,9 @@ namespace GameStateManagement
             set { traceEnabled = value; }
         }
 
-
         #endregion
 
         #region Initialization
-
 
         /// <summary>
         /// Constructs a new screen manager component.
@@ -135,11 +134,9 @@ namespace GameStateManagement
             }
         }
 
-
         #endregion
 
         #region Update and Draw
-
 
         /// <summary>
         /// Allows each screen to run logic.
@@ -198,9 +195,9 @@ namespace GameStateManagement
         /// <summary>
         /// Prints a list of all the screens, for debugging.
         /// </summary>
-        void TraceScreens()
+        private void TraceScreens()
         {
-            List<string> screenNames = new List<string>();
+            var screenNames = new List<string>();
 
             foreach (GameScreen screen in screens)
                 screenNames.Add(screen.GetType().Name);
@@ -223,11 +220,9 @@ namespace GameStateManagement
             }
         }
 
-
         #endregion
 
         #region Public Methods
-
 
         /// <summary>
         /// Adds a new screen to the screen manager.
@@ -290,11 +285,10 @@ namespace GameStateManagement
 
             spriteBatch.Draw(blankTexture,
                              new Rectangle(0, 0, viewport.Width, viewport.Height),
-                             new Color(0, 0, 0, (byte)alpha));
+                             new Color(0, 0, 0, (byte) alpha));
 
             spriteBatch.End();
         }
-
 
         #endregion
     }

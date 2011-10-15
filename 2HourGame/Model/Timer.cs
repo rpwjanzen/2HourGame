@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    class Timer
+    internal class Timer
     {
-        float timerDuration;
-        public TimeSpan timerStartTime { get; private set; }
+        private readonly float timerDuration;
 
-        public Timer(float timerDuration) 
+        public Timer(float timerDuration)
         {
             this.timerDuration = timerDuration;
             timerStartTime = new TimeSpan();
         }
+
+        public TimeSpan timerStartTime { get; private set; }
 
         public void resetTimer(TimeSpan timeNow)
         {
@@ -24,7 +22,7 @@ namespace _2HourGame.Model
 
         public bool TimerHasElapsed(GameTime now)
         {
-            return now.TotalGameTime.TotalSeconds - timerStartTime.TotalSeconds > this.timerDuration;
+            return now.TotalGameTime.TotalSeconds - timerStartTime.TotalSeconds > timerDuration;
         }
     }
 }

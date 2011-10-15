@@ -7,15 +7,14 @@ namespace _2HourGame.Controller
     /// <summary>
     /// Defines some behavior that will happen based on the current game state, previous game state, player and the current game time.
     /// </summary>
-    internal delegate void ControllerBehaviour(GamePadState gamePadState, GamePadState previousGamePadState, Player player, GameTime gameTime);
+    internal delegate void ControllerBehaviour(
+        GamePadState gamePadState, GamePadState previousGamePadState, Player player, GameTime gameTime);
 
-    internal sealed class ShipController {
-
+    internal sealed class ShipController
+    {
         private readonly ShipRelativeMoveBehavior _moveShipBehavior = new ShipRelativeMoveBehavior();
-        private event ControllerBehaviour ProcessControllerBehaviours;
 
         private readonly Player _player;
-        public Player Player { get { return _player;  } }
 
         public ShipController(Player player)
         {
@@ -25,6 +24,13 @@ namespace _2HourGame.Controller
             ProcessControllerBehaviours += ShipControlBehaviours.PickupGold;
             ProcessControllerBehaviours += ShipControlBehaviours.RepairShip;
         }
+
+        public Player Player
+        {
+            get { return _player; }
+        }
+
+        private event ControllerBehaviour ProcessControllerBehaviours;
 
         public void Update(GameTime gameTime, GamePadState gamePadState, GamePadState previousGamePadState)
         {

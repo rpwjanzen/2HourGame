@@ -1,38 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using FarseerGames.FarseerPhysics;
-
-using _2HourGame.View;
+﻿using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    class Island : PhysicsGameObject
+    internal class Island : PhysicsGameObject
     {
-        public int Gold { get; private set; }
-        public bool HasGold {
-            get { return this.Gold > 0; }
-        }
-
         public Island(PhysicsWorld world, Vector2 position, int initialGold)
             : base(world, position, 128, 128)
         {
-            this.Gold = initialGold;
+            Gold = initialGold;
             base.Body.IsStatic = true;
+        }
+
+        public int Gold { get; private set; }
+
+        public bool HasGold
+        {
+            get { return Gold > 0; }
         }
 
         /// <summary>
         /// Removes one gold from the island.
         /// </summary>
-        public void RemoveGold() {
-            this.Gold--;
+        public void RemoveGold()
+        {
+            Gold--;
         }
 
-        public void AddGold(int amount) {
-            this.Gold += amount;
+        public void AddGold(int amount)
+        {
+            Gold += amount;
         }
     }
 }

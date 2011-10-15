@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    static class AIHelpers
+    internal static class AIHelpers
     {
         //public enum RotationDirection { None, Left, Right }
 
         /// <summary>
         /// The ammount to rotate in order to face the target n radians.
         /// </summary>
-        public static float GetRotationToPointInDegrees(Vector2 targetPosition, Vector2 myPosition, float initialFacingRadians)
+        public static float GetRotationToPointInDegrees(Vector2 targetPosition, Vector2 myPosition,
+                                                        float initialFacingRadians)
         {
-            var delta = myPosition - targetPosition;
-            
+            Vector2 delta = myPosition - targetPosition;
+
             // my rotation should match this angle (-180.0f to 180.0f)
-            var desiredRotationInDegrees = MathHelper.ToDegrees((float)Math.Atan2(delta.Y, delta.X));
+            float desiredRotationInDegrees = MathHelper.ToDegrees((float) Math.Atan2(delta.Y, delta.X));
             // rotation from Atan2 is in a different coordinate plane that is rotated by 90 degrees so
             desiredRotationInDegrees -= 90;
             // but now our desired rotation could be < -180 so
             if (desiredRotationInDegrees < -180)
                 desiredRotationInDegrees += 360;
 
-            var myRotationInDegrees = MathHelper.ToDegrees(initialFacingRadians);
+            float myRotationInDegrees = MathHelper.ToDegrees(initialFacingRadians);
 
             // angle difference range is from -360 to 360
-            var angleDifference = (myRotationInDegrees - desiredRotationInDegrees);
+            float angleDifference = (myRotationInDegrees - desiredRotationInDegrees);
 
             // we push angle difference into the range -180 to 180
             if (angleDifference < -180)

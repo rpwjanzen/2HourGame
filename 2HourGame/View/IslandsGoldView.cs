@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
+﻿using _2HourGame.Model;
 using _2HourGame.View.GameServices;
-using _2HourGame.Model;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame.View
 {
-    class IslandGoldView : ActorView
+    internal class IslandGoldView : ActorView
     {
-        Island island;
-        Texture2D texture;
+        private readonly Vector2 goldIslandOffset;
+        private readonly Island island;
 
-        Vector2 goldIslandOffset;
-
-        Vector2 origin;
-
-        float scale;
+        private readonly float scale;
+        private Vector2 origin;
+        private Texture2D texture;
 
         public IslandGoldView(World world, Island island, TextureManager tm, AnimationManager am)
             : base(island, world, tm, am)
@@ -33,22 +26,24 @@ namespace _2HourGame.View
         public override void LoadContent(ContentManager content)
         {
             texture = TextureManager["gold"];
-            origin = new Vector2(texture.Width / 2, texture.Height / 2);
+            origin = new Vector2(texture.Width/2, texture.Height/2);
 
             base.LoadContent(content);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            for (int i = 0; i < island.Gold && i < 10; i++) 
+            for (int i = 0; i < island.Gold && i < 10; i++)
             {
-                spriteBatch.Draw(texture, island.Position + goldIslandOffset + goldLocation(i), null, Color.White, 0, origin, scale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.islandGoldView));
+                spriteBatch.Draw(texture, island.Position + goldIslandOffset + goldLocation(i), null, Color.White, 0,
+                                 origin, scale, SpriteEffects.None,
+                                 ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.islandGoldView));
             }
-            
+
             base.Draw(gameTime, spriteBatch);
         }
 
-        private Vector2 goldLocation(int goldPieceNumber) 
+        private Vector2 goldLocation(int goldPieceNumber)
         {
             switch (goldPieceNumber)
             {
@@ -59,7 +54,7 @@ namespace _2HourGame.View
                 case 2:
                     return new Vector2(5, -4);
                 case 3:
-                    return new Vector2(8,-11);
+                    return new Vector2(8, -11);
                 case 4:
                     return new Vector2(7, 7);
                 case 5:

@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using _2HourGame.Model;
+﻿using _2HourGame.Model;
 using _2HourGame.View.GameServices;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame.View
 {
-    class HealthBarView : ActorView
+    internal class HealthBarView : ActorView
     {
-        GameObject gameObject;
-        Vector2 offset;
-        ProgressBar progressBar;
+        private readonly GameObject gameObject;
+        private readonly Vector2 offset;
+        private readonly ProgressBar progressBar;
 
         public HealthBarView(World world, GameObject gameObject, TextureManager textureManager, AnimationManager am)
-            :base(gameObject, world, textureManager, am)
+            : base(gameObject, world, textureManager, am)
         {
             this.gameObject = gameObject;
             offset = new Vector2(0, 35);
@@ -45,6 +40,5 @@ namespace _2HourGame.View
                 progressBar.Draw(spriteBatch);
             }
         }
-
     }
 }

@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using FarseerGames.FarseerPhysics;
 using Microsoft.Xna.Framework;
-using FarseerGames.FarseerPhysics;
 
-namespace _2HourGame.Model {
-    class PhysicsWorld : World {
+namespace _2HourGame.Model
+{
+    internal class PhysicsWorld : World
+    {
+        public PhysicsWorld(PhysicsSimulator physicsSimulator)
+        {
+            PhysicsSimulator = physicsSimulator;
+        }
+
         public PhysicsSimulator PhysicsSimulator { get; protected set; }
         public GameTime CollisionTime { get; protected set; }
 
-        public PhysicsWorld(PhysicsSimulator physicsSimulator) {
-            this.PhysicsSimulator = physicsSimulator;
-        }
-
-        public override void Update(GameTime gameTime) {
+        public override void Update(GameTime gameTime)
+        {
             CollisionTime = gameTime;
-            PhysicsSimulator.Update(((float)gameTime.ElapsedGameTime.Milliseconds) / 100.0f);
+            PhysicsSimulator.Update((gameTime.ElapsedGameTime.Milliseconds)/100.0f);
 
             base.Update(gameTime);
         }

@@ -1,16 +1,20 @@
 #region File Description
+
 //-----------------------------------------------------------------------------
 // MenuEntry.cs
 //
 // XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
+
 #endregion
 
 #region Using Statements
+
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 #endregion
 
 namespace GameStateManagement
@@ -21,14 +25,9 @@ namespace GameStateManagement
     /// entries in different ways. This also provides an event that will be raised
     /// when the menu entry is selected.
     /// </summary>
-    class MenuEntry
+    internal class MenuEntry
     {
         #region Fields
-
-        /// <summary>
-        /// The text rendered for this entry.
-        /// </summary>
-        string text;
 
         /// <summary>
         /// Tracks a fading selection effect on the entry.
@@ -36,12 +35,16 @@ namespace GameStateManagement
         /// <remarks>
         /// The entries transition out of the selection effect when they are deselected.
         /// </remarks>
-        float selectionFade;
+        private float selectionFade;
+
+        /// <summary>
+        /// The text rendered for this entry.
+        /// </summary>
+        private string text;
 
         #endregion
 
         #region Properties
-
 
         /// <summary>
         /// Gets or sets the text of this menu entry.
@@ -52,11 +55,9 @@ namespace GameStateManagement
             set { text = value; }
         }
 
-
         #endregion
 
         #region Events
-
 
         /// <summary>
         /// Event raised when the menu entry is selected.
@@ -73,11 +74,9 @@ namespace GameStateManagement
                 Selected(this, new PlayerIndexEventArgs(playerIndex));
         }
 
-
         #endregion
 
         #region Initialization
-
 
         /// <summary>
         /// Constructs a new menu entry with the specified text.
@@ -87,22 +86,20 @@ namespace GameStateManagement
             this.text = text;
         }
 
-
         #endregion
 
         #region Update and Draw
-
 
         /// <summary>
         /// Updates the menu entry.
         /// </summary>
         public virtual void Update(MenuScreen screen, bool isSelected,
-                                                      GameTime gameTime)
+                                   GameTime gameTime)
         {
             // When the menu selection changes, entries gradually fade between
             // their selected and deselected appearance, rather than instantly
             // popping to the new state.
-            float fadeSpeed = (float)gameTime.ElapsedGameTime.TotalSeconds * 4;
+            float fadeSpeed = (float) gameTime.ElapsedGameTime.TotalSeconds*4;
 
             if (isSelected)
                 selectionFade = Math.Min(selectionFade + fadeSpeed, 1);
@@ -119,13 +116,13 @@ namespace GameStateManagement
         {
             // Draw the selected entry in yellow, otherwise white.
             Color color = isSelected ? Color.Yellow : Color.White;
-            
+
             // Pulsate the size of the selected menu entry.
             double time = gameTime.TotalGameTime.TotalSeconds;
-            
-            float pulsate = (float)Math.Sin(time * 6) + 1;
-            
-            float scale = 1 + pulsate * 0.05f * selectionFade;
+
+            float pulsate = (float) Math.Sin(time*6) + 1;
+
+            float scale = 1 + pulsate*0.05f*selectionFade;
 
             // Modify the alpha to fade text out during transitions.
             color = new Color(color.R, color.G, color.B, screen.TransitionAlpha);
@@ -135,7 +132,7 @@ namespace GameStateManagement
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             SpriteFont font = screenManager.Font;
 
-            Vector2 origin = new Vector2(0, font.LineSpacing / 2);
+            var origin = new Vector2(0, font.LineSpacing/2);
 
             spriteBatch.DrawString(font, text, position, color, 0,
                                    origin, scale, SpriteEffects.None, 0);
@@ -149,7 +146,6 @@ namespace GameStateManagement
         {
             return screen.ScreenManager.Font.LineSpacing;
         }
-
 
         #endregion
     }

@@ -1,31 +1,35 @@
 ﻿using _2HourGame.Model;
-using Microsoft.Xna.Framework.Graphics;
+using _2HourGame.View.GameServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using _2HourGame.View.GameServices;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame.View
 {
-    class TowerView : GameObjectView
+    internal class TowerView : GameObjectView
     {
-        Tower tower;
-        CannonView cannonView;
+        private readonly CannonView cannonView;
+        private readonly Tower tower;
 
         public TowerView(World world, Color color, Tower tower, TextureManager textureManager, AnimationManager am)
-            : base(world, "tower", color, tower, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.tower), textureManager, am)
+            : base(
+                world, "tower", color, tower, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.tower),
+                textureManager, am)
         {
             this.tower = tower;
-            this.cannonView = new CannonView(world, tower.Cannon, color, textureManager, am);
+            cannonView = new CannonView(world, tower.Cannon, color, textureManager, am);
         }
 
-        public override void LoadContent(ContentManager content) {
+        public override void LoadContent(ContentManager content)
+        {
             cannonView.LoadContent(content);
             base.LoadContent(content);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (tower.IsAlive) {
+            if (tower.IsAlive)
+            {
                 cannonView.Draw(gameTime, spriteBatch);
             }
 

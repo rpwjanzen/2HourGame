@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    static class GameComponentCollectionExtensions
+    internal static class GameComponentCollectionExtensions
     {
-        public static void AddRange<T>(this GameComponentCollection collection, IEnumerable<T> items) where T : IGameComponent
+        public static void AddRange<T>(this GameComponentCollection collection, IEnumerable<T> items)
+            where T : IGameComponent
         {
-            foreach (var item in items)
+            foreach (T item in items)
             {
                 collection.Add(item);
             }
         }
-            
     }
 }

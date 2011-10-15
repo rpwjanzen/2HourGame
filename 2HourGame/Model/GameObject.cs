@@ -1,45 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-
-using _2HourGame.View;
-using _2HourGame.View.GameServices;
+﻿using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    class GameObject : Actor
+    internal class GameObject : Actor
     {
-        public float Width { get; protected set; }
-        public float Height { get; protected set; }
-
-        public float HalfWidth { get { return Width / 2.0f; } }
-        public float HalfHeight { get { return Height / 2.0f; } }
-
-        protected int MaxHealth;
         protected int Health;
-        public bool IsDamaged { get { return Health < MaxHealth; } }
-        public float HealthPercentage { get { return (float)Health / (float)MaxHealth; } }
+        protected int MaxHealth;
 
         public GameObject(World world, Vector2 position, float width, float height)
             : base(world)
         {
-            this.Position = position;
+            Position = position;
 
             Width = width;
             Height = height;
-            this.Health = 0;
-            this.MaxHealth = 0;
+            Health = 0;
+            MaxHealth = 0;
         }
 
-        public override void Spawn() {
-            this.Health = MaxHealth;
+        public float Width { get; protected set; }
+        public float Height { get; protected set; }
+
+        public float HalfWidth
+        {
+            get { return Width/2.0f; }
+        }
+
+        public float HalfHeight
+        {
+            get { return Height/2.0f; }
+        }
+
+        public bool IsDamaged
+        {
+            get { return Health < MaxHealth; }
+        }
+
+        public float HealthPercentage
+        {
+            get { return Health/(float) MaxHealth; }
+        }
+
+        public override void Spawn()
+        {
+            Health = MaxHealth;
             base.Spawn();
         }
 
-        public override void Die() {
-            this.Health = 0;
+        public override void Die()
+        {
+            Health = 0;
             base.Die();
         }
     }

@@ -1,61 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-
-using _2HourGame.View;
 
 namespace _2HourGame.Model
 {
-    class Player
+    internal class Player
     {
-        PlayerIndex _playerIndex;
-
-        public Ship Ship { get; private set; }
-        public Island ClosestInRangeIsland
-        {
-            get { return map.GetClosestInRangeIsland(Ship, inRangeIslandMinimumRange); }
-        }
-        Island homeIsland;
-        public Island HomeIsland
-        {
-            get { return homeIsland; }
-        }
-        public bool ShipIsMovingSlowly
-        {
-            get { return Ship.Speed <= maxShipSpeedForIslandInteraction; }
-        }
-        public GamePadState GamePadState
-        {
-            get { return GamePad.GetState(_playerIndex); }
-        }
-
-        public PlayerIndex PlayerIndex { get { return _playerIndex;  } }
-        Map map;
-
-        // persistant state stuff for picking up gold
-        const float inRangeIslandMinimumRange = 100;
-        const float maxShipSpeedForIslandInteraction = 0.15f;
-
-        public int numGoldButtonPresses { get; private set; }
+        private const float inRangeIslandMinimumRange = 100;
+        private const float maxShipSpeedForIslandInteraction = 0.15f;
         public const float numGoldButtonPressesRequired = 20;
-
-        public int TotalGold
-        {
-            get { return homeIsland.Gold + Ship.Gold; }
-        }
+        private readonly PlayerIndex _playerIndex;
+        private readonly Island homeIsland;
+        private readonly Map map;
 
         public Player(PlayerIndex playerIndex, Ship ship, Island homeIsland, Map map)
         {
-            this._playerIndex = playerIndex;
-            this.Ship = ship;
+            _playerIndex = playerIndex;
+            Ship = ship;
             this.homeIsland = homeIsland;
             this.map = map;
         }
 
         #region Controller Actions
+
         public void FireLeftCannons(GameTime gameTime)
         {
             Ship.FireLeftCannons(gameTime);
@@ -123,6 +89,41 @@ namespace _2HourGame.Model
                 Ship.Repair();
             }
         }
+
         #endregion
+
+        public Ship Ship { get; private set; }
+
+        public Island ClosestInRangeIsland
+        {
+            get { return map.GetClosestInRangeIsland(Ship, inRangeIslandMinimumRange); }
+        }
+
+        public Island HomeIsland
+        {
+            get { return homeIsland; }
+        }
+
+        public bool ShipIsMovingSlowly
+        {
+            get { return Ship.Speed <= maxShipSpeedForIslandInteraction; }
+        }
+
+        public GamePadState GamePadState
+        {
+            get { return GamePad.GetState(_playerIndex); }
+        }
+
+        public PlayerIndex PlayerIndex
+        {
+            get { return _playerIndex; }
+        }
+
+        public int numGoldButtonPresses { get; private set; }
+
+        public int TotalGold
+        {
+            get { return homeIsland.Gold + Ship.Gold; }
+        }
     }
 }

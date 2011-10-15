@@ -1,44 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using _2HourGame.Model;
+using _2HourGame.View.GameServices;
 using Microsoft.Xna.Framework;
-using _2HourGame.Model;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using _2HourGame.View.GameServices;
-using Microsoft.Xna.Framework.Content;
 
 namespace _2HourGame.View
 {
-    class ShipActionsView : ActorView
+    internal class ShipActionsView : ActorView
     {
-        Player player;
+        private readonly Vector2 aButtonOffset = new Vector2(-18, -30);
+        private readonly Vector2 bButtonOffset = new Vector2(10, -30);
+        private readonly Vector2 digOffset = new Vector2(-5, -35);
+        private readonly Player player;
+        private readonly Vector2 repairOffset = new Vector2(25, -30);
+        private float aButtonScale = 0.2f;
 
-        Texture2D aButtonTexture;
-        string aButtonTextureName = "ControllerImages\\xboxControllerButtonA";
-        float aButtonScale = 0.2f;
-        Vector2 aButtonOffset = new Vector2(-18, -30);
-            
-        Texture2D bButtonTexture;
-        string bButtonTextureName = "ControllerImages\\xboxControllerButtonB";
-        float bButtonScale = 0.2f;
-        Vector2 bButtonOffset = new Vector2(10, -30);
+        private Texture2D aButtonTexture;
+        private string aButtonTextureName = "ControllerImages\\xboxControllerButtonA";
+        private float bButtonScale = 0.2f;
 
-        Texture2D digTexture;
-        string digTextureName = "dig";
-        float digScale = 0.35f;
-        Vector2 digOffset = new Vector2(-5, -35);
+        private Texture2D bButtonTexture;
+        private string bButtonTextureName = "ControllerImages\\xboxControllerButtonB";
+        private float digScale = 0.35f;
 
-        Texture2D repairTexture;
-        string repairTextureName = "repair";
-        float repairScale = 0.35f;
-        Vector2 repairOffset = new Vector2(25, -30);
+        private Texture2D digTexture;
+        private string digTextureName = "dig";
+        private GoldPickupProgressView goldPickupProgressView;
+        private float repairScale = 0.35f;
 
-        GoldPickupProgressView goldPickupProgressView;
+        private Texture2D repairTexture;
+        private string repairTextureName = "repair";
 
-        public ShipActionsView(World world, Player player, TextureManager textureManager, AnimationManager am) 
-            :base(player.Ship, world, textureManager, am)
+        public ShipActionsView(World world, Player player, TextureManager textureManager, AnimationManager am)
+            : base(player.Ship, world, textureManager, am)
         {
             this.player = player;
             goldPickupProgressView = new GoldPickupProgressView(player, world, textureManager, am);
@@ -67,8 +62,12 @@ namespace _2HourGame.View
             {
                 Color drawColor = gamePadState.IsButtonUp(Buttons.A) ? Color.White : Color.DarkGray;
 
-                spriteBatch.Draw(aButtonTexture, player.Ship.Position + aButtonOffset, null, drawColor, 0, aButtonTexture.Center(aButtonScale), aButtonScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.xboxControllerButtonA));
-                spriteBatch.Draw(digTexture, player.Ship.Position + digOffset, null, Color.White, 0, digTexture.Center(digScale), digScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.dig));
+                spriteBatch.Draw(aButtonTexture, player.Ship.Position + aButtonOffset, null, drawColor, 0,
+                                 aButtonTexture.Center(aButtonScale), aButtonScale, SpriteEffects.None,
+                                 ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.xboxControllerButtonA));
+                spriteBatch.Draw(digTexture, player.Ship.Position + digOffset, null, Color.White, 0,
+                                 digTexture.Center(digScale), digScale, SpriteEffects.None,
+                                 ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.dig));
             }
 
             // repair icon display
@@ -78,8 +77,12 @@ namespace _2HourGame.View
             {
                 Color drawColor = gamePadState.IsButtonUp(Buttons.B) ? Color.White : Color.DarkGray;
 
-                spriteBatch.Draw(bButtonTexture, player.Ship.Position + bButtonOffset, null, drawColor, 0, bButtonTexture.Center(bButtonScale), aButtonScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.xboxControllerButtonB));
-                spriteBatch.Draw(repairTexture, player.Ship.Position + repairOffset, null, Color.White, 0, repairTexture.Center(repairScale), repairScale, SpriteEffects.None, ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.repair));
+                spriteBatch.Draw(bButtonTexture, player.Ship.Position + bButtonOffset, null, drawColor, 0,
+                                 bButtonTexture.Center(bButtonScale), aButtonScale, SpriteEffects.None,
+                                 ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.xboxControllerButtonB));
+                spriteBatch.Draw(repairTexture, player.Ship.Position + repairOffset, null, Color.White, 0,
+                                 repairTexture.Center(repairScale), repairScale, SpriteEffects.None,
+                                 ZIndexManager.getZIndex(ZIndexManager.drawnItemOrders.repair));
             }
             base.Draw(gameTime, spriteBatch);
         }

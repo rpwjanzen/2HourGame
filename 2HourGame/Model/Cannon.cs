@@ -1,27 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
 using _2HourGame.View;
 using _2HourGame.View.GameServices;
+using Microsoft.Xna.Framework;
 
 namespace _2HourGame.Model
 {
-    class FiredEventArgs : EventArgs {
+    internal class FiredEventArgs : EventArgs
+    {
         public Vector2 SmokePosition { get; set; }
     }
 
     /// <summary>
     /// A cannon that is mounted to another object. It's position is fixed relative to the attached to object.
     /// </summary>
-    class Cannon : PhysicsGameObject
+    internal class Cannon : PhysicsGameObject
     {
-        const float FiringSpeed = 65.0f;
-        const float CannonBallOffset = 15.0f;
-        const float SmokeOffset = 13.0f;
+        private const float FiringSpeed = 65.0f;
+        private const float CannonBallOffset = 15.0f;
+        private const float SmokeOffset = 13.0f;
+        private readonly AnimationManager animationManager;
 
-        Timer firingTimer;
+        private readonly Timer firingTimer;
+        private readonly GameObject owner;
+        private readonly Vector2 positionalOffset;
+        private readonly float rotationalOffset;
+        private readonly TextureManager textureManager;
+
+        /// <summary>
+        /// Local rotation is restricted to being between 180 and -180.
+        /// </summary>
+        private float localRotation;
+
+        public Cannon(PhysicsWorld world, PhysicsGameObject owner, Vector2 positionalOffset, float rotationalOffset,
+                      TextureManager tm, AnimationManager am)
+            : base(world, owner.Position, 12, 27, 0.0f)
+        {
+            this.owner = owner;
+            this.positionalOffset = positionalOffset;
+            this.rotationalOffset = rotationalOffset;
+
+            textureManager = tm;
+            animationManager = am;
+
+            firingTimer = new Timer(3f);
+        }
+
         public TimeSpan lastTimeFired
         {
             get { return firingTimer.timerStartTime; }
@@ -33,30 +56,27 @@ namespace _2HourGame.Model
             //protected set { throw new InvalidOperationException(); }
         }
 
-        Vector2 RotatedOffset
+        private Vector2 RotatedOffset
         {
             get
             {
-                var rotationMatrix = Matrix.CreateRotationZ(owner.Rotation);
+                Matrix rotationMatrix = Matrix.CreateRotationZ(owner.Rotation);
                 return Vector2.Transform(positionalOffset, rotationMatrix);
             }
         }
 
-        /// <summary>
-        /// Local rotation is restricted to being between 180 and -180.
-        /// </summary>
-        private float localRotation;
-        public float LocalRotation {
+        public float LocalRotation
+        {
             get { return localRotation; }
-            set 
+            set
             {
                 localRotation = value;
 
                 while (localRotation > Math.PI)
-                    localRotation -= 2f * (float)Math.PI;
+                    localRotation -= 2f*(float) Math.PI;
                 while (localRotation < -Math.PI)
-                    localRotation += 2f * (float)Math.PI;
-            } 
+                    localRotation += 2f*(float) Math.PI;
+            }
         }
 
         public override float Rotation
@@ -65,37 +85,17 @@ namespace _2HourGame.Model
             protected set { LocalRotation = value - rotationalOffset - owner.Rotation; }
         }
 
-        GameObject owner;
-        Vector2 positionalOffset;
-        float rotationalOffset;
-
 
         public event EventHandler<FiredEventArgs> Fired;
-
-        TextureManager textureManager;
-        AnimationManager animationManager;
-
-        public Cannon(PhysicsWorld world, PhysicsGameObject owner, Vector2 positionalOffset, float rotationalOffset, TextureManager tm, AnimationManager am)
-            : base(world, owner.Position, 12, 27, 0.0f)
-        {
-            this.owner = owner;
-            this.positionalOffset = positionalOffset;
-            this.rotationalOffset = rotationalOffset;
-            
-            this.textureManager = tm;
-            this.animationManager = am;
-
-            firingTimer = new Timer(3f);
-        }
 
         /// <summary>
         /// Fire the cannon if the timer has elapsed and its ready to fire again.
         /// </summary>
         /// <param name="now"></param>
         /// <returns>The amount of thrust the cannon generates from firing.</returns>
-        public Vector2? AttemptFireCannon(GameTime now) 
+        public Vector2? AttemptFireCannon(GameTime now)
         {
-            if(firingTimer.TimerHasElapsed(now))
+            if (firingTimer.TimerHasElapsed(now))
             {
                 firingTimer.resetTimer(now.TotalGameTime);
                 return FireCannon();
@@ -104,19 +104,20 @@ namespace _2HourGame.Model
             return null;
         }
 
-        private Vector2 FireCannon() 
+        private Vector2 FireCannon()
         {
             //get the direction the cannon is facing
-            Vector2 firingVector = Vector2.Transform(-Vector2.UnitY, Matrix.CreateRotationZ(this.Rotation));
-            var thrust = firingVector * FiringSpeed;
+            Vector2 firingVector = Vector2.Transform(-Vector2.UnitY, Matrix.CreateRotationZ(Rotation));
+            Vector2 thrust = firingVector*FiringSpeed;
 
             // take into account the owner's velocity
             thrust += owner.Velocity;
 
-            var cannonBallPostion = firingVector * CannonBallOffset + this.Position;
-            var smokePosition = firingVector * SmokeOffset + this.Position;
+            Vector2 cannonBallPostion = firingVector*CannonBallOffset + Position;
+            Vector2 smokePosition = firingVector*SmokeOffset + Position;
 
-            if (Fired != null) {
+            if (Fired != null)
+            {
                 var ea = new FiredEventArgs();
                 ea.SmokePosition = smokePosition;
                 Fired(this, ea);

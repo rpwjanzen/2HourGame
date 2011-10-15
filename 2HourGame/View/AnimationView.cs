@@ -1,51 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 using _2HourGame.View;
-using _2HourGame.Model;
 using _2HourGame.View.GameServices;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace _2HourGame.Model
 {
-    class AnimationView : ActorView
+    internal class AnimationView : ActorView
     {
-        AnimatedTextureInfo AnimatedTextureInfo;
-        TimeSpan AnimationStartTime;
-        bool FirstDraw;
-        GameObject GameObject;
+        private readonly AnimatedTextureInfo AnimatedTextureInfo;
+        private readonly Color Color;
+        private readonly GameObject GameObject;
+        private readonly float ZIndex;
+        private readonly string contentName;
+        private TimeSpan AnimationStartTime;
+        private bool FirstDraw;
+        private Vector2 Origin;
 
-        Vector2 Scale;
-        Texture2D Texture;
-        Color Color;
-        Vector2 Origin;
-        float ZIndex;
+        private Vector2 Scale;
+        private Texture2D Texture;
 
-        public event EventHandler AnimationFinished;
-
-        string contentName;
-
-        public AnimationView(World world, string contentName, Color color, AnimatedTextureInfo animatedTextureInfo, GameObject gameObject, float zIndex, TextureManager textureManager, AnimationManager am)
+        public AnimationView(World world, string contentName, Color color, AnimatedTextureInfo animatedTextureInfo,
+                             GameObject gameObject, float zIndex, TextureManager textureManager, AnimationManager am)
             : base(gameObject, world, textureManager, am)
         {
             this.contentName = contentName;
-            this.Color = color;
-            this.AnimatedTextureInfo = animatedTextureInfo;
-            this.GameObject = gameObject;
-            this.ZIndex = zIndex;
+            Color = color;
+            AnimatedTextureInfo = animatedTextureInfo;
+            GameObject = gameObject;
+            ZIndex = zIndex;
 
-            this.FirstDraw = this.AnimatedTextureInfo != null;
+            FirstDraw = AnimatedTextureInfo != null;
         }
+
+        public event EventHandler AnimationFinished;
 
         public override void LoadContent(ContentManager content)
         {
-            this.Texture = TextureManager[contentName];
-            this.Scale = new Vector2(AnimatedTextureInfo.Scale, AnimatedTextureInfo.Scale);
-            this.Origin = AnimatedTextureInfo.WindowCenter;   
+            Texture = TextureManager[contentName];
+            Scale = new Vector2(AnimatedTextureInfo.Scale, AnimatedTextureInfo.Scale);
+            Origin = AnimatedTextureInfo.WindowCenter;
 
             base.LoadContent(content);
         }
@@ -59,27 +54,29 @@ namespace _2HourGame.Model
             }
 
             // get the frame to draw
-            int totalFrame = (int)Math.Round(((gameTime.TotalGameTime.TotalSeconds - AnimationStartTime.TotalSeconds)
-                * AnimatedTextureInfo.FramesPerSecond));
+            var totalFrame = (int) Math.Round(((gameTime.TotalGameTime.TotalSeconds - AnimationStartTime.TotalSeconds)
+                                               *AnimatedTextureInfo.FramesPerSecond));
 
-            if (totalFrame == AnimatedTextureInfo.TotalFrames * AnimatedTextureInfo.NumAnimationIterations)
+            if (totalFrame == AnimatedTextureInfo.TotalFrames*AnimatedTextureInfo.NumAnimationIterations)
             {
                 RaiseAnimationFinishedEvent();
-            } 
+            }
             else
             {
-                int frame = totalFrame % AnimatedTextureInfo.TotalFrames;
-                int dx = (int)AnimatedTextureInfo.WindowSize.X * frame;
-                int width = (int)AnimatedTextureInfo.WindowSize.X;
-                int height = (int)AnimatedTextureInfo.WindowSize.Y;
+                int frame = totalFrame%AnimatedTextureInfo.TotalFrames;
+                int dx = (int) AnimatedTextureInfo.WindowSize.X*frame;
+                var width = (int) AnimatedTextureInfo.WindowSize.X;
+                var height = (int) AnimatedTextureInfo.WindowSize.Y;
 
-                Rectangle source = new Rectangle(dx, 0, width, height);
+                var source = new Rectangle(dx, 0, width, height);
 
-                spriteBatch.Draw(Texture, GameObject.Position + AnimatedTextureInfo.GetRotatedOffset(GameObject.Rotation), source, Color, GameObject.Rotation, Origin, Scale, SpriteEffects.None, ZIndex);
+                spriteBatch.Draw(Texture,
+                                 GameObject.Position + AnimatedTextureInfo.GetRotatedOffset(GameObject.Rotation), source,
+                                 Color, GameObject.Rotation, Origin, Scale, SpriteEffects.None, ZIndex);
             }
         }
 
-        void RaiseAnimationFinishedEvent()
+        private void RaiseAnimationFinishedEvent()
         {
             if (AnimationFinished != null)
             {
