@@ -159,7 +159,7 @@ namespace GameStateManagement
             ScreenManager.GraphicsDevice.Clear(ClearOptions.Target, Color.CornflowerBlue, 0, 0);
 
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.BackToFront, SaveStateMode.None);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             world.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 

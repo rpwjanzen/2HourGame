@@ -9,3 +9,7 @@
 **/*.bak
 **/**/*.bak
 **/*.smp
+**/_Resharper*
+**/_UpgradeReport_Files
+**/UpgradeLog.XML
+**/Backup

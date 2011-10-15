@@ -97,7 +97,7 @@ namespace GameStateManagement
             Rectangle fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
             byte fade = TransitionAlpha;
 
-            spriteBatch.Begin(SpriteBlendMode.None);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.Opaque);
 
             spriteBatch.Draw(backgroundTexture, fullscreen,
                              new Color(fade, fade, fade));
