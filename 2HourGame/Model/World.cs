@@ -9,9 +9,7 @@ namespace _2HourGame.Model
 {
     internal class World
     {
-        private readonly List<Actor> actors;
-        public List<ActorView> actorViews;
-        private ContentManager content;
+        private ContentManager _contentManager;
 
         public World()
         {
@@ -20,31 +18,29 @@ namespace _2HourGame.Model
             GarbageActors = new List<Actor>();
 
             NewActorViews = new List<ActorView>();
-            actorViews = new List<ActorView>();
+            _actorViews = new List<ActorView>();
             GarbageActorViews = new List<ActorView>();
         }
 
-        public List<Actor> NewActors { get; private set; }
-
+        private readonly List<Actor> actors;
         public ReadOnlyCollection<Actor> Actors
         {
             get { return new ReadOnlyCollection<Actor>(actors); }
         }
-
+        public List<Actor> NewActors { get; private set; }
         public List<Actor> GarbageActors { get; private set; }
 
-        public List<ActorView> NewActorViews { get; private set; }
-
+        private readonly List<ActorView> _actorViews;
         public ReadOnlyCollection<ActorView> ActorViews
         {
-            get { return new ReadOnlyCollection<ActorView>(actorViews); }
+            get { return new ReadOnlyCollection<ActorView>(_actorViews); }
         }
-
+        public List<ActorView> NewActorViews { get; private set; }
         public List<ActorView> GarbageActorViews { get; private set; }
 
-        public virtual void LoadContent(ContentManager contentManager)
+        public void LoadContent(ContentManager contentManager)
         {
-            content = contentManager;
+            _contentManager = contentManager;
             foreach (ActorView av in ActorViews)
             {
                 av.LoadContent(contentManager);
@@ -53,41 +49,35 @@ namespace _2HourGame.Model
 
         public virtual void Update(GameTime gameTime)
         {
-            foreach (Actor a in actors)
-            {
-                a.Update(gameTime);
-            }
+            foreach (Actor actor in actors)
+                actor.Update(gameTime);
 
-            foreach (Actor na in NewActors)
-            {
-                actors.Add(na);
-            }
+            foreach (Actor actor in NewActors)
+                actors.Add(actor);
             NewActors.Clear();
 
-            foreach (Actor ga in GarbageActors)
-            {
-                actors.Remove(ga);
-            }
+            foreach (Actor actor in GarbageActors)
+                actors.Remove(actor);
             GarbageActors.Clear();
         }
 
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            foreach (ActorView av in actorViews)
+            foreach (ActorView av in _actorViews)
             {
                 av.Draw(gameTime, spriteBatch);
             }
 
             foreach (ActorView nav in NewActorViews)
             {
-                nav.LoadContent(content);
-                actorViews.Add(nav);
+                nav.LoadContent(_contentManager);
+                _actorViews.Add(nav);
             }
             NewActorViews.Clear();
 
             foreach (ActorView av in GarbageActorViews)
             {
-                actorViews.Remove(av);
+                _actorViews.Remove(av);
             }
             GarbageActorViews.Clear();
         }
